@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Сборинк молодежных христианских песен",
+    "name": "Майкопский молодежный сборник",
     "slug": "SbornikNew",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,20 +8,21 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "ExpoLocalization_supportsRTL": true
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.sergeygornih.SbornikNew"
     },
     "web": {
       "bundler": "metro",
@@ -30,6 +31,15 @@
     },
     "plugins": [
       "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 100,
+          "resizeMode": "contain",
+          "backgroundColor": "#2e1076"
+        }
+      ],
       "expo-secure-store",
       "expo-font",
       "expo-localization"
@@ -38,7 +48,13 @@
       "typedRoutes": true
     },
     "extra": {
-      "supportsRTL": true
+      "supportsRTL": true,
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "d6b5ff41-dc64-4533-a6fe-c5a1022879c4"
+      }
     }
   }
 }
