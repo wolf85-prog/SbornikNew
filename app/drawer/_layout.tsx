@@ -1,6 +1,7 @@
 import { router } from 'expo-router'
 import { Drawer } from 'expo-router/drawer'
 import React from 'react'
+import { View, Text, Pressable, Image, StyleSheet } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Appbar, Menu, Tooltip, useTheme } from 'react-native-paper'
 
@@ -14,12 +15,23 @@ const DrawerLayout = () => {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer
         drawerContent={(props) => (
-          <DrawerContent
-            navProps={props}
-            showDivider={false}
-            children={undefined}
-            title="Drawer Navigation"
-          />
+          <View style={{flex: 1, padding: 0}}>
+            <Image
+              style={{height: 215, width: '100%',  marginBottom: 15}}
+              source={require('@/assets/images/drawer-header.jpg')}
+              resizeMode="cover"
+            />
+            <Text style={{position: 'absolute', top: 100, left: 20, textAlign: 'center', color: '#fff', fontWeight: 700, fontSize: 16, width: 280, backgroundColor: '#000'}}>
+              СБОРНИК МОЛОДЕЖНЫХ ХРИСТИАНСКИХ ПЕСЕН
+            </Text>
+        
+            <DrawerContent
+              navProps={props}
+              showDivider={false}
+              children={undefined}
+              title=""
+            />
+          </View>
         )}
         screenOptions={{
           drawerStyle: {
