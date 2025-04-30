@@ -41,8 +41,14 @@
         }
       ],
       "expo-secure-store",
-      "expo-font",
-      "expo-localization"
+      [
+        "expo-font",
+        {
+          "fonts": ["./assets/fonts/Poppins-Regular.ttf"]
+        }
+      ],
+      "expo-localization",
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true
