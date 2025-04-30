@@ -11,11 +11,11 @@ interface DrawerContentProps extends DrawerSectionProps {
 
 const DrawerContent = (props: DrawerContentProps) => (
   <Drawer.Section {...props}>
-    <Drawer.Item
+    {/* <Drawer.Item
       label={Locales.t('goHome')}
       icon="arrow-left"
       onPress={() => router.replace('/')}
-    />
+    /> */}
     <Drawer.Item
       label={Locales.t('titleHome')}
       icon="home"

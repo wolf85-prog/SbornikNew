@@ -16,13 +16,12 @@ import { Platform, useColorScheme } from 'react-native'
 import { adaptNavigationTheme, PaperProvider } from 'react-native-paper'
 
 import { Locales, Setting, StackHeader, Themes } from '@/lib'
-import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
 
 // Catch any errors thrown by the Layout component.
 export { ErrorBoundary } from 'expo-router'
 
 // Ensure that reloading on `/modal` keeps a back button present.
-export const unstable_settings = { initialRouteName: '(tabs)' }
+export const unstable_settings = { initialRouteName: 'drawer' }
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
@@ -109,7 +108,6 @@ const RootLayoutNav = () => {
           : { ...DarkTheme, fonts: NavDarkTheme.fonts }
       }
     >
-      <SQLiteProvider databaseName="sbornik.db" assetSource={{ assetId: require('./../assets/sbornik.db') }}>
         <PaperProvider theme={theme}>
             <Stack
               screenOptions={{
@@ -131,9 +129,7 @@ const RootLayoutNav = () => {
                 options={{ title: Locales.t('titleModal'), presentation: 'modal' }}
               />
             </Stack>
-        </PaperProvider>
-      </SQLiteProvider>
-      
+        </PaperProvider>    
 
       <StatusBar style="auto" />
     </ThemeProvider>
