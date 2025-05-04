@@ -17,6 +17,8 @@ import { adaptNavigationTheme, PaperProvider } from 'react-native-paper'
 
 import { Locales, Setting, StackHeader, Themes } from '@/lib'
 
+import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
+
 // Catch any errors thrown by the Layout component.
 export { ErrorBoundary } from 'expo-router'
 
@@ -108,28 +110,31 @@ const RootLayoutNav = () => {
           : { ...DarkTheme, fonts: NavDarkTheme.fonts }
       }
     >
+      <SQLiteProvider databaseName="sbornik.db" assetSource={{ assetId: require('./../assets/sbornik.db') }}>
         <PaperProvider theme={theme}>
-            <Stack
-              screenOptions={{
-                animation: 'slide_from_bottom',
-                header: (props) => (
-                  <StackHeader navProps={props} children={undefined} />
-                ),
-              }}
-            >
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="drawer" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="search"
-                options={{ title: Locales.t('search') }}
-              />
-              <Stack.Screen
-                name="modal"
-                options={{ title: Locales.t('titleModal'), presentation: 'modal' }}
-              />
-            </Stack>
-        </PaperProvider>    
+              <Stack
+                screenOptions={{
+                  animation: 'slide_from_bottom',
+                  header: (props) => (
+                    <StackHeader navProps={props} children={undefined} />
+                  ),
+                }}
+              >
+                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="drawer" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="search"
+                  options={{ title: Locales.t('search') }}
+                />
+                <Stack.Screen
+                  name="modal"
+                  options={{ title: Locales.t('titleModal'), presentation: 'modal' }}
+                />
+              </Stack>
+          </PaperProvider>
+      </SQLiteProvider>
+            
 
       <StatusBar style="auto" />
     </ThemeProvider>
