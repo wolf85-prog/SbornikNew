@@ -20,19 +20,31 @@ const DrawerContent = (props: DrawerContentProps) => (
       label={Locales.t('titleHome')}
       icon="home"
       active={props.navProps.state.index === 0}
-      onPress={() => router.push('/drawer')}
+      onPress={() => router.push('/(drawer)/(tabs)/home')}
     />
     <Drawer.Item
-      label={Locales.t('profile')}
+      label={Locales.t('titleFavorites')}
       icon="account"
       active={props.navProps.state.index === 1}
-      onPress={() => router.push('/drawer/profile')}
+      onPress={() => router.push('/(drawer)/favorites')}
+    />
+    <Drawer.Item
+      label={Locales.t('category')}
+      icon="account"
+      active={props.navProps.state.index === 2}
+      onPress={() => router.push('/(drawer)/categories')}
+    />   
+    <Drawer.Item
+      label={Locales.t('accords')}
+      icon="account"
+      active={props.navProps.state.index === 3}
+      onPress={() => router.push('/(drawer)/accords')}
     />
     <Drawer.Item
       label={Locales.t('titleSettings')}
       icon="cog"
-      active={props.navProps.state.index === 2}
-      onPress={() => router.push('/drawer/settings')}
+      active={props.navProps.state.index === 4}
+      onPress={() => router.push('/(drawer)/settings')}
     />
   </Drawer.Section>
 )

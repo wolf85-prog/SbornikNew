@@ -23,7 +23,9 @@ import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
 export { ErrorBoundary } from 'expo-router'
 
 // Ensure that reloading on `/modal` keeps a back button present.
-export const unstable_settings = { initialRouteName: 'drawer' }
+export const unstable_settings = { 
+  initialRouteName: '(drawer)' 
+}
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
@@ -120,9 +122,7 @@ const RootLayoutNav = () => {
                   ),
                 }}
               >
-                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="drawer" options={{ headerShown: false }} />
+                <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
                 <Stack.Screen
                   name="search"
                   options={{ title: Locales.t('search') }}

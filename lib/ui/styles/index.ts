@@ -15,6 +15,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+  emptyListTitle: {
+    color: '#7f8c8d',
+    textAlign: 'center',
+    fontSize: 22,
+  },
+
+    emptyList: {
+    color: '#b2babb',
+    textAlign: 'center',
+    fontSize: 16,
+  },
 })
 
 export { Colors, Themes, styles }

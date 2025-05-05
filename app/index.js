@@ -8,6 +8,6 @@ export default function App() {
 
 
   return (
-    <Redirect href="/drawer" /> 
+    <Redirect href="/(drawer)/(tabs)/home" /> 
   )
 }

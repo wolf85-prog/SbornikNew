@@ -1,8 +1,8 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { MaterialCommunityIcons, Ionicons, Entypo, Feather } from '@expo/vector-icons'
 import { Tabs, router } from 'expo-router'
 import React from 'react'
 import { Appbar, Menu, Tooltip } from 'react-native-paper'
-
+import { DrawerToggleButton } from "@react-navigation/drawer";
 import { Locales, TabBar, TabsHeader } from '@/lib'
 
 const TabLayout = () => {
@@ -17,7 +17,7 @@ const TabLayout = () => {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
           title: Locales.t('titleHome'),
           headerRight: () => (
@@ -59,6 +59,7 @@ const TabLayout = () => {
               </Menu>
             </>
           ),
+          headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
           tabBarIcon: (props) => (
             <MaterialCommunityIcons
               {...props}
@@ -72,6 +73,7 @@ const TabLayout = () => {
         name="profile"
         options={{
           title: Locales.t('profile'),
+          headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
           headerRight: () => (
             <>
               <Tooltip title={Locales.t('search')}>
@@ -101,6 +103,7 @@ const TabLayout = () => {
         name="settings"
         options={{
           title: Locales.t('titleSettings'),
+          headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
           headerRight: () => (
             <Tooltip title={Locales.t('drawerNav')}>
               <Appbar.Action
@@ -118,6 +121,21 @@ const TabLayout = () => {
           ),
         }}
       />
+      <Tabs.Screen
+          name="favorites"
+          options={{
+            title: 'Избранное',
+            // headerShown: true,
+            headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
+            tabBarIcon: (props) => (
+              <Entypo 
+                {...props}
+                size={24}
+                name={props.focused ? 'heart' : 'heart-outlined'} 
+              />
+            ),
+          }}
+        />
     </Tabs>
   )
 }

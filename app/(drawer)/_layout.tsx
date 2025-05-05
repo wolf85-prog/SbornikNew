@@ -34,17 +34,18 @@ const DrawerLayout = () => {
           </View>
         )}
         screenOptions={{
+          headerShown: false,
           drawerStyle: {
             backgroundColor: theme.colors.background,
             paddingTop: 32,
           },
-          header: (props) => (
-            <DrawerHeader navProps={props} children={undefined} />
-          ),
+          // header: (props) => (
+          //   <DrawerHeader navProps={props} children={undefined} />
+          // ),
         }}
       >
         <Drawer.Screen
-          name="index"
+          name="(tabs)"
           options={{
             drawerLabel: Locales.t('titleHome'),
             title: Locales.t('titleHome'),
@@ -72,7 +73,7 @@ const DrawerLayout = () => {
                   <Menu.Item
                     title={Locales.t('titleSettings')}
                     leadingIcon="cog"
-                    onPress={() => router.push('/drawer/settings')}
+                    onPress={() => router.push('/modal')}
                   />
                   <Menu.Item
                     title={Locales.t('stackNav')}
@@ -82,14 +83,14 @@ const DrawerLayout = () => {
                   <Menu.Item
                     title={Locales.t('drawerNav')}
                     leadingIcon="gesture-swipe"
-                    onPress={() => router.push('/drawer')}
+                    onPress={() => router.push('/modal')}
                   />
                 </Menu>
               </>
             ),
           }}
         />
-        <Drawer.Screen
+        {/* <Drawer.Screen
           name="profile"
           options={{
             drawerLabel: Locales.t('profile'),
@@ -126,7 +127,7 @@ const DrawerLayout = () => {
               </Tooltip>
             ),
           }}
-        />
+        /> */}
       </Drawer>
     </GestureHandlerRootView>
   )
