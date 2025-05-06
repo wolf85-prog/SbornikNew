@@ -7,6 +7,8 @@ import { useSQLiteContext } from "expo-sqlite";
 
 const NUM_ITEMS = 15;
 
+import songsData from './../../data/songsData.js';
+
 function getColor(i: number) {
     const multiplier = 255 / (NUM_ITEMS - 1);
     const colorVal = Math.abs(i) * multiplier;
@@ -56,9 +58,12 @@ export default function MyPager({ numberPage, textSong }: MyPagerProps) {
     //fetch()
   },[])
 
+  
+
   const renderPage = useCallback(({ index }: { index: number }) => {
 
-    console.log("index: ", index)
+    console.log("index: ", songsData[index]?.number)
+
 
     return (
       <View
@@ -71,7 +76,7 @@ export default function MyPager({ numberPage, textSong }: MyPagerProps) {
           },
         ]}>
         <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>
-          {index}
+          {songsData[index-1]?.song}
         </Text>
       </View>
     );
@@ -87,7 +92,8 @@ export default function MyPager({ numberPage, textSong }: MyPagerProps) {
         style={styles.flex}
         pageWrapperStyle={styles.flex}
         preset={preset}
-        pageBuffer={4}
+        pageBuffer={1}
+        minIndex={1}
         initialIndex={numberPage}
       />
     </GestureHandlerRootView>
