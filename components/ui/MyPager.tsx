@@ -58,6 +58,8 @@ export default function MyPager({ numberPage, textSong }: MyPagerProps) {
 
   const renderPage = useCallback(({ index }: { index: number }) => {
 
+    console.log("index: ", index)
+
     return (
       <View
         style={[
