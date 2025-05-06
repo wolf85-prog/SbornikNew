@@ -33,9 +33,6 @@ const IMG_HEIGHT = 300;
 const MIN_HEIGHT = 50;
 const MAX_HEIGHT = 250;
 
-// массив слов для выделения
-const chordRegex = /([A-G]{1}[A-Gmjsu0-9/#]{0,4})(?!\w)/g;
-
 
 
 export default function DetailsScreen() {
@@ -155,35 +152,6 @@ export default function DetailsScreen() {
     setTitle(id)
   }, [id])
 
-
-  useEffect(() => {
-    setIsLoading(true);
-
-    const fetch = (async()=> {
-      let pages = []//new Array(555);
-      await db.withTransactionAsync(async () => {
-        const row = await db.getFirstAsync<Todo>(`SELECT * FROM songs WHERE _id=${id}`);
-
-          const song = {
-            uid: row?._id,
-            name: row?.name,
-            text: row?.song,
-            number: row?.number,
-            onlytext: row?.song2,
-          };
-
-        setSongId(song.number)
-        setSongName(song.name)
-        setSongText(song.text)
-
-      });
-    
-    })
-
-    setIsLoading(false);
-
-    fetch()
-  }, []);
   
 
   if (isLoading) {
@@ -194,39 +162,6 @@ export default function DetailsScreen() {
       );
   }
 
-  const onPageSelected = (e: any) => {
-    let ind = Number(id) + Number(e.nativeEvent.position)
-    //console.log("onPageSelected: ", id, e.nativeEvent.position, ind)
-    let position = ind-1
-    let title = songs[position]
-
-    // const fetch = (async()=> {
-    //   let arr = []
-    //   await db.withTransactionAsync(async () => {
-    //     const row = await db.getFirstAsync<Todo>(`SELECT * FROM songs WHERE _id=${Number(id)+1}`);
-    //     //console.log("row: ", row, item)
-    //     const song = {
-    //       uid: row?._id,
-    //       name: row?.name,
-    //       text: row?.song,
-    //       number: row?.number,
-    //     };
-
-    //     setSong(song);
-    //   });
-      
-    //   songs.push(song)
-
-    //   setSongs(songs);
-
-    // })
-
-    // fetch()
-    
-    //setSongName(title?.name)
-    //setTitle(title?.uid)
-    //setSongId(e.nativeEvent.position)
-  };
 
 
 
@@ -280,57 +215,7 @@ export default function DetailsScreen() {
     
   }
 
-  const Chord = (name: any) => {
-    //console.log(name)
-    return (
-      <Text style={styles.chordName}>
-        {name}
-      </Text>
-    )
-  }
-
-  const Slova = (name: any) => {
-    //console.log(name)
-    return (
-      <Text>
-        {name}
-      </Text>
-    )
-  }
-
-  // это компонент для всего текста
-  const AllText = ({text}: any) => {
-
-    const [separators, setSeparators] = useState([])
-
-    const parsedText = text.split("\n").map((row: any) => {
-      const rowArr = row.split(chordRegex).map((charOrSpace: any) => {
-        if (chordRegex.test(charOrSpace)) {
-          //console.log({text: charOrSpace, color: 'blue'} )
-          return {text: charOrSpace.trim(), color: 'blue', id: '1', uid: Date.now()} 
-        }
-        return {text: charOrSpace, color: '', id: '', uid: Date.now()} ;
-      });
   
-      //console.log(rowArr)
-      return rowArr;
-    });
-
-    return (
-      <View>
-        {parsedText.map((row: any) => (  
-          <Text key={row.uid} style={{color: `${row[1]?.color}`, fontSize: 18}}>
-            {/* {row.map((item: any)=> (
-              
-              item?.id ? <Text key={item?.uid} onPress={()=>router.push(`/home/song/accord/${item?.id}`)}>{item ? item.text : ''}</Text>
-                : <Text key={item?.uid}>{item ? item.text : ''}</Text>
-            ))} */}
-          </Text>
-         ) 
-        )}
-      </View>
-    )
-  }
 
 
   return (
@@ -402,6 +287,9 @@ export default function DetailsScreen() {
               <MyPager
                 numberPage={songId} 
                 textSong={songText}
+                setTitleSong={setSongName}
+                setNumberSong={setTitle}
+                showSongText={showSongText}
               />
 
               {/* <PagerView
@@ -617,31 +505,10 @@ export default function DetailsScreen() {
               <MyPager
                 numberPage={songId} 
                 textSong={songText}
+                setTitleSong={setSongName}
+                setNumberSong={setTitle}
+                showSongText={showSongText}
               />
-
-              {/* <PagerView
-                ref={sliderRef}
-                testID="pager-view"
-                style={styles.pagerView}
-                initialPage={3}
-                pageMargin={10}
-                onPageScroll={onPageScroll}
-                onPageSelected={onPageSelected}
-                onPageScrollStateChanged={onPageScrollStateChanged}
-              > */}
-                {/* {songs.map((page: any) => (
-                  <View key={page.uid} collapsable={false}>      
-                    <ScrollView style={styles.scrollStyle}>       
-                      <CardSong>
-                        <View style={[styles.slide] }>
-                          <AllText text={page.text}></AllText>
-                        </View>
-                      </CardSong>        
-                    </ScrollView>
-                  </View>
-                  )
-                )} */}
-              {/* </PagerView> */}
             </View>
           </ScrollView>
           
