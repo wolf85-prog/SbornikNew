@@ -5,8 +5,9 @@ import { Ionicons, FontAwesome, Entypo, MaterialCommunityIcons, SimpleLineIcons,
 import { Stack } from "expo-router";
 import CardSong from '../../../../../components/ui/CardSong';
 import { Button, Dialog, Portal, TextInput,  Snackbar, RadioButton } from 'react-native-paper';
-//import Slider from '@react-native-community/slider';
+import Slider from '@react-native-community/slider';
 //import {Slider} from '@miblanchard/react-native-slider';
+import MyPager from './../../../../../components/ui/MyPager'
 
 
 import songsData from './../../../../../data/songsData.js';
@@ -162,8 +163,6 @@ export default function DetailsScreen() {
       let pages = []//new Array(555);
       await db.withTransactionAsync(async () => {
         const row = await db.getFirstAsync<Todo>(`SELECT * FROM songs WHERE _id=${id}`);
-        //for (const row of allRows) {
-          console.log(row);
 
           const song = {
             uid: row?._id,
@@ -173,14 +172,9 @@ export default function DetailsScreen() {
             onlytext: row?.song2,
           };
 
-          //pages[Number(row?._id)-1] = song
-          pages.push(song)
-   
-        //}
-
-        //console.log(pages)
+        setSongId(song.number)
         setSongName(song.name)
-        setSongs(pages);
+        setSongText(song.text)
 
       });
     
@@ -234,17 +228,7 @@ export default function DetailsScreen() {
     //setSongId(e.nativeEvent.position)
   };
 
-  const onPageScrollStateChanged = (e: any) => {
-    //console.log(e.nativeEvent.position);
-  };
 
-  const onPageScroll = (e: any) => {    
-    const position = e.nativeEvent.position
-    // const offset = e.nativeEvent.offset
-    //console.log("position: ", position)
-    // console.log("offset: ", offset)
-    
-  };
 
   interface Todo {
     name: string;
@@ -415,6 +399,11 @@ export default function DetailsScreen() {
             </TouchableOpacity>
 
             <View style={{height: 1000}}>
+              <MyPager
+                numberPage={songId} 
+                textSong={songText}
+              />
+
               {/* <PagerView
                 ref={sliderRef}
                 testID="pager-view"
@@ -425,7 +414,7 @@ export default function DetailsScreen() {
                 onPageSelected={onPageSelected}
                 onPageScrollStateChanged={onPageScrollStateChanged}
               > */}
-                {songs.map((page: any) => (
+                {/* {songs.map((page: any) => (
                   <View key={page.uid} collapsable={false}>      
                     <ScrollView style={styles.scrollStyle}>       
                       <CardSong>
@@ -439,7 +428,7 @@ export default function DetailsScreen() {
                     </ScrollView>
                   </View>
                   )
-                )}
+                )} */}
               {/* </PagerView> */}
             </View>
 
@@ -625,6 +614,11 @@ export default function DetailsScreen() {
           // Текст песни без аккордов
           :<ScrollView>
             <View style={{height: 1000}}>
+              <MyPager
+                numberPage={songId} 
+                textSong={songText}
+              />
+
               {/* <PagerView
                 ref={sliderRef}
                 testID="pager-view"
@@ -635,19 +629,18 @@ export default function DetailsScreen() {
                 onPageSelected={onPageSelected}
                 onPageScrollStateChanged={onPageScrollStateChanged}
               > */}
-                {songs.map((page: any) => (
+                {/* {songs.map((page: any) => (
                   <View key={page.uid} collapsable={false}>      
                     <ScrollView style={styles.scrollStyle}>       
                       <CardSong>
                         <View style={[styles.slide] }>
                           <AllText text={page.text}></AllText>
-                          {/* <Text style={[styles.text, {fontSize: 18}]}>{showSongText ? page.text : page.onlytext}</Text> */}
                         </View>
                       </CardSong>        
                     </ScrollView>
                   </View>
                   )
-                )}
+                )} */}
               {/* </PagerView> */}
             </View>
           </ScrollView>
