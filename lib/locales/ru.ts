@@ -38,6 +38,7 @@ const Russian = {
   screen404: "This screen doesn't exist",
   titleHome: 'Главная',
   titleSongs: 'Алфавитный список',
+  songs: 'Песни',
   titlePlaylist: 'Плейлисты',
   titleNotes: 'Мои заметки',
   titleFavorites: 'Избранное',

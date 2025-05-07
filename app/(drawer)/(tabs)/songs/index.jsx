@@ -11,6 +11,16 @@ import {
   Provider,
 } from "react-native-paper";
 
+import {
+  Appbar, 
+  Menu, 
+  Tooltip 
+} from "react-native-paper";
+
+import {
+  Locales,
+} from '@/lib'
+
 import filter from "lodash.filter"
 
 import songsData from './../../../../data/songsData.js';
@@ -36,8 +46,8 @@ const SongsScreen = () => {
 
     <View style={styles.container}>
       <Stack.Screen options={{ 
-        headerShown: false, 
-        title: "Песни", 
+        headerShown: true, 
+        title: Locales.t('songs'),
         // headerLeft: (() => <DrawerToggleButton tintColor={'#000'} />) 
         headerRight: headerRight,
         headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
@@ -46,11 +56,7 @@ const SongsScreen = () => {
                 //headerTitleStyle: {fontWeight: 400},
         }} 
       />
-      <Provider>
-        {/* <SQLiteProvider databaseName="sbornik.db" assetSource={{ assetId: require('./../../../../assets/sbornik.db') }}> */}
-          <Content />
-        {/* </SQLiteProvider> */}
-      </Provider>
+        <Content />
     </View>
   )
 }

@@ -19,47 +19,49 @@ const TabLayout = () => {
       <Tabs.Screen
         name="home"
         options={{
-          title: Locales.t('titleHome'),
-          headerRight: () => (
-            <>
-              <Tooltip title={Locales.t('search')}>
-                <Appbar.Action
-                  icon="magnify"
-                  onPress={() => router.push('/search')}
-                />
-              </Tooltip>
-              <Menu
-                statusBarHeight={48}
-                visible={visible}
-                onDismiss={() => setVisible(false)}
-                anchor={
-                  <Tooltip title={Locales.t('options')}>
-                    <Appbar.Action
-                      icon="dots-vertical"
-                      onPress={() => setVisible(true)}
-                    />
-                  </Tooltip>
-                }
-              >
-                <Menu.Item
-                  title={Locales.t('titleSettings')}
-                  leadingIcon="cog"
-                  onPress={() => router.push('/settings')}
-                />
-                {/* <Menu.Item
-                  title={Locales.t('stackNav')}
-                  leadingIcon="card-multiple-outline"
-                  onPress={() => router.push('/modal')}
-                />
-                <Menu.Item
-                  title={Locales.t('drawerNav')}
-                  leadingIcon="gesture-swipe"
-                  onPress={() => router.push('/drawer')}
-                /> */}
-              </Menu>
-            </>
-          ),
-          headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
+          headerShown: false, 
+          // title: Locales.t('titleHome'),
+          // headerRight: () => (
+          //   <>
+          //     <Tooltip title={Locales.t('search')}>
+          //       <Appbar.Action
+          //         icon="magnify"
+          //         onPress={() => router.push('/search')}
+          //       />
+          //     </Tooltip>
+          //     <Menu
+          //       statusBarHeight={48}
+          //       visible={visible}
+          //       onDismiss={() => setVisible(false)}
+          //       anchor={
+          //         <Tooltip title={Locales.t('options')}>
+          //           <Appbar.Action
+          //             icon="dots-vertical"
+          //             onPress={() => setVisible(true)}
+          //           />
+          //         </Tooltip>
+          //       }
+          //     >
+          //       <Menu.Item
+          //         title={Locales.t('titleSettings')}
+          //         leadingIcon="cog"
+          //         onPress={() => router.push('/settings')}
+          //       />
+          //       {/* <Menu.Item
+          //         title={Locales.t('stackNav')}
+          //         leadingIcon="card-multiple-outline"
+          //         onPress={() => router.push('/modal')}
+          //       />
+          //       <Menu.Item
+          //         title={Locales.t('drawerNav')}
+          //         leadingIcon="gesture-swipe"
+          //         onPress={() => router.push('/drawer')}
+          //       /> */}
+          //     </Menu>
+          //   </>
+          // ),
+          // headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
+
           tabBarIcon: (props) => (
             <MaterialCommunityIcons
               {...props}
@@ -125,8 +127,8 @@ const TabLayout = () => {
       <Tabs.Screen
           name="songs"
           options={{
-            title: 'Песни',
-            // headerShown: true,
+            title: Locales.t("songs"),
+            headerShown: false,
             headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
             tabBarIcon: (props) => (
               <MaterialCommunityIcons 
@@ -142,7 +144,7 @@ const TabLayout = () => {
           name="playlist"
           options={{
             title: 'Плейлисты',
-            // headerShown: true,
+            headerShown: false,
             headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
             tabBarIcon: (props) => (
               <MaterialIcons 
@@ -158,7 +160,7 @@ const TabLayout = () => {
           name="favorites"
           options={{
             title: 'Избранное',
-            // headerShown: true,
+            headerShown: false,
             headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
             tabBarIcon: (props) => (
               <Entypo 

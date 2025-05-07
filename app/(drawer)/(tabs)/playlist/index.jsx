@@ -60,14 +60,14 @@ const PlaylistScreen = () => {
     <Surface style={styles.screen}>
       {/* Header */}
       <Stack.Screen options={{ 
-        headerShown: false, 
-        title: "Плейлисты", 
+        headerShown: true, 
+        title: Locales.t("titlePlaylist"), 
         headerRight: headerRight,
         headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
         headerStyle: {backgroundColor: '#26489a'},    
         headerTintColor: 'white',
       }} />
-      <Provider>
+      {/* <Provider> */}
           <Content />
 
           <Dialog visible={visiblePlaylist} onDismiss={hideDialog}>
@@ -81,7 +81,7 @@ const PlaylistScreen = () => {
             </Dialog.Actions>
         </Dialog>
 
-      </Provider>
+      {/* </Provider> */}
     </Surface>
   )
 }
@@ -314,12 +314,13 @@ export function Content() {
         ListEmptyComponent={EmptyListMessage}
       />   
 
-      <TouchableOpacity
+      {/* Кнопка Добавить */}
+      {/* <TouchableOpacity
         style={styles.floatingButton}
         onPress={onButtonAdd}
       >
         <AntDesign name="pluscircle" size={70} color="#DE3163" />
-      </TouchableOpacity> 
+      </TouchableOpacity>  */}
 
       <Portal>
         <Dialog visible={dialog.isVisible} onDismiss={() => hideDialog(dialog.customer)}>

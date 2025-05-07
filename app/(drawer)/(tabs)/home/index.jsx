@@ -8,8 +8,13 @@ import { Snackbar } from 'react-native-paper';
 import React, { useContext, useState, useEffect } from 'react'
 
 import {
-  Provider,
+  Appbar, 
+  Menu, 
+  Tooltip 
 } from "react-native-paper";
+import {
+  Locales,
+} from '@/lib'
 
 import filter from "lodash.filter"
 
@@ -22,7 +27,9 @@ import songsData from './../../../../data/songsData.js';
 
 
 export default function TabsHome() {
-  //const {currentTheme} = useContext(ThemeContext)  
+  //const {currentTheme} = useContext(ThemeContext) 
+
+  const [visible, setVisible] = React.useState(false) 
 
   const router = useRouter();
 
@@ -44,10 +51,38 @@ export default function TabsHome() {
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ 
-        headerShown: false, 
-        title: "Главная", 
-        //headerRight: headerRight,
-        //headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
+        headerShown: true, 
+        title: Locales.t('titleHome'), 
+        headerRight: () => (
+                    <>
+                      <Tooltip title={Locales.t('search')} color={"white"}>
+                        <Appbar.Action
+                          icon="magnify"
+                          onPress={() => router.push('/search')}
+                        />
+                      </Tooltip>
+                      <Menu
+                        statusBarHeight={48}
+                        visible={visible}
+                        onDismiss={() => setVisible(false)}
+                        anchor={
+                          <Tooltip title={Locales.t('options')} color={"white"}>
+                            <Appbar.Action
+                              icon="dots-vertical"
+                              onPress={() => setVisible(true)}
+                            />
+                          </Tooltip>
+                        }  
+                      >
+                        <Menu.Item
+                          title={Locales.t('titleSettings')}
+                          leadingIcon="cog"
+                          onPress={() => router.push('/settings')}
+                        />
+                      </Menu>
+                    </>
+                  ),
+        headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
         headerStyle: {backgroundColor: '#26489a'},    
         headerTintColor: 'white',
         //headerTitleStyle: {fontWeight: 400},

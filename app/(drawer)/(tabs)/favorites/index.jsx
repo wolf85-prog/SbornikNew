@@ -55,8 +55,8 @@ const Favorites = () => {
       <Surface style={styles.screen}>
         {/* Header */}
         <Stack.Screen options={{ 
-          headerShown: false, 
-          title: "Избранное", 
+          headerShown: true, 
+          title: Locales.t("titleFavorites"), 
           headerRight: headerRight,
           headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
           headerStyle: {backgroundColor: '#26489a'},    

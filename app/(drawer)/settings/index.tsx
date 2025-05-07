@@ -70,7 +70,7 @@ const SettingsScreen = () => {
     <Surface style={{ flex: 1 }}>
        <Stack.Screen options={{ 
               headerShown: true, 
-              title: 'Настройки', 
+              title: Locales.t('titleSettings'), 
               headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />), 
               headerStyle: {backgroundColor: '#26489a'},  
               headerTintColor: 'white',
