@@ -36,7 +36,7 @@ export default function AboutScreen() {
           headerShown: true, 
           title: "О приложении", 
           headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />), 
-          headerStyle: {backgroundColor: currentTheme === 'dark' ? Colors.dark : '#26489a'},  
+          headerStyle: {backgroundColor: '#26489a'},  
           headerTintColor: 'white',
         }} />
         <Provider>

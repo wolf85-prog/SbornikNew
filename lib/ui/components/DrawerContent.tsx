@@ -23,28 +23,56 @@ const DrawerContent = (props: DrawerContentProps) => (
       onPress={() => router.push('/(drawer)/(tabs)/home')}
     />
     <Drawer.Item
-      label={Locales.t('titleFavorites')}
-      icon="account"
+      label={Locales.t('titleSongs')}
+      icon="sort-alphabetical-variant"
       active={props.navProps.state.index === 1}
-      onPress={() => router.push('/(drawer)/favorites')}
+      onPress={() => router.push('/(drawer)/(tabs)/songs')}
     />
     <Drawer.Item
-      label={Locales.t('category')}
-      icon="account"
+      label={Locales.t('titlePlaylist')}
+      icon="playlist-play"
       active={props.navProps.state.index === 2}
+      onPress={() => router.push('/(drawer)/(tabs)/playlist')}
+    />
+    
+    <Drawer.Item
+      label={Locales.t('titleFavorites')}
+      icon="heart"
+      active={props.navProps.state.index === 3}
+      onPress={() => router.push('/(drawer)/(tabs)/favorites')}
+    />
+
+    <Drawer.Item
+      label={Locales.t('titleNotes')}
+      icon="notebook"
+      active={props.navProps.state.index === 4}
+      onPress={() => router.push('/(drawer)/(tabs)/notes')}
+    />
+    
+    <Drawer.Item
+      label={Locales.t('category')}
+      icon="format-list-bulleted"
+      active={props.navProps.state.index === 5}
       onPress={() => router.push('/(drawer)/categories')}
     />   
     <Drawer.Item
       label={Locales.t('accords')}
-      icon="account"
-      active={props.navProps.state.index === 3}
+      icon="music-note"
+      active={props.navProps.state.index === 6}
       onPress={() => router.push('/(drawer)/accords')}
     />
     <Drawer.Item
       label={Locales.t('titleSettings')}
       icon="cog"
-      active={props.navProps.state.index === 4}
+      active={props.navProps.state.index === 7}
       onPress={() => router.push('/(drawer)/settings')}
+    />
+
+    <Drawer.Item
+      label={Locales.t('titleAbout')}
+      icon="information-outline"
+      active={props.navProps.state.index === 8}
+      onPress={() => router.push('/(drawer)/about')}
     />
   </Drawer.Section>
 )

@@ -1,4 +1,4 @@
-import { MaterialCommunityIcons, Ionicons, Entypo, Feather } from '@expo/vector-icons'
+import { MaterialCommunityIcons, MaterialIcons, Ionicons, Entypo, Feather } from '@expo/vector-icons'
 import { Tabs, router } from 'expo-router'
 import React from 'react'
 import { Appbar, Menu, Tooltip } from 'react-native-paper'
@@ -69,7 +69,7 @@ const TabLayout = () => {
           ),
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="profile"
         options={{
           title: Locales.t('profile'),
@@ -98,8 +98,8 @@ const TabLayout = () => {
             />
           ),
         }}
-      />
-      <Tabs.Screen
+      /> */}
+      {/* <Tabs.Screen
         name="settings"
         options={{
           title: Locales.t('titleSettings'),
@@ -120,7 +120,40 @@ const TabLayout = () => {
             />
           ),
         }}
+      /> */}
+
+      <Tabs.Screen
+          name="songs"
+          options={{
+            title: 'Песни',
+            // headerShown: true,
+            headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
+            tabBarIcon: (props) => (
+              <MaterialCommunityIcons 
+                {...props}
+                name={props.focused ? "sort-alphabetical-variant" : "sort-alphabetical-variant"} 
+                size={24} 
+              />
+            ),
+          }}
+        />
+
+      <Tabs.Screen
+          name="playlist"
+          options={{
+            title: 'Плейлисты',
+            // headerShown: true,
+            headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
+            tabBarIcon: (props) => (
+              <MaterialIcons 
+                {...props}
+                size={24}
+                name={props.focused ? 'playlist-play' : 'playlist-play'} 
+              />
+            ),
+          }}
       />
+
       <Tabs.Screen
           name="favorites"
           options={{
@@ -132,6 +165,38 @@ const TabLayout = () => {
                 {...props}
                 size={24}
                 name={props.focused ? 'heart' : 'heart-outlined'} 
+              />
+            ),
+          }}
+        />
+
+      <Tabs.Screen
+          name="notes"
+          options={{
+            title: 'Заметки',
+            // headerShown: true,
+            headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
+            headerRight: () => (
+              <>
+                <Tooltip title={Locales.t('search')}>
+                  <Appbar.Action
+                    icon="magnify"
+                    onPress={() => router.push('/search')}
+                  />
+                </Tooltip>
+                <Tooltip title={Locales.t('titleSettings')}>
+                  <Appbar.Action
+                    icon="cog"
+                    onPress={() => router.push('/(drawer)/settings')}
+                  />
+                </Tooltip>
+              </>
+            ),
+            tabBarIcon: (props) => (
+              <MaterialIcons 
+                {...props}
+                size={24}
+                name={props.focused ? 'event-note' : 'event-note'} 
               />
             ),
           }}

@@ -1,6 +1,5 @@
 import { Stack } from "expo-router";
 
-
-export default function FavoritesLayout() {
+export default function SongsLayout() {
   return <Stack />;
 }

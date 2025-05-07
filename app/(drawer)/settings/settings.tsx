@@ -265,16 +265,58 @@ const Settings = () => {
                 )}
               />
             </List.Accordion>
+
+            <List.Accordion
+              id="2"
+              title={Locales.t('aboutApp')}
+              left={(props) => <List.Icon {...props} icon="cellphone-information" />}
+            >
+              <List.Item
+                title={'Майкопский молодежный сборник'}
+                description={Locales.t('verApp')}
+                left={(props) => <List.Icon {...props} icon="translate" />}
+              />
+            </List.Accordion>
+
+            <List.Accordion
+              id="3"
+              title={Locales.t('developer')}
+              left={(props) => <List.Icon {...props} icon="dev-to" />}
+            >
+              <List.Item
+                title={'Охман Виталий'}
+                description={Locales.t('developApp')}
+                left={(props) => <List.Icon {...props} icon="account-circle" />}
+              />
+
+              <List.Item
+                title={'Охман Алла'}
+                description={Locales.t('editorApp')}
+                left={(props) => <List.Icon {...props} icon="card-account-details" />}
+              />
+            </List.Accordion>
+
+            <List.Accordion
+              id="4"
+              title={Locales.t('mailUs')}
+              left={(props) => <List.Icon {...props} icon="email" />}
+            >
+              <List.Item
+                title={Locales.t('email')}
+                description={'okhmanvit@gmail.com'}
+                left={(props) => <List.Icon {...props} icon="email" />}
+              />
+            </List.Accordion>
           </List.AccordionGroup>
         </Surface>
       )}
 
-      <Surface elevation={0} style={styles.screen}>
+      {/* <Surface elevation={0} style={styles.screen}>
         <ScreenInfo
           title={Locales.t('titleSettings')}
           path="app/(tabs)/settings.tsx"
         />
-      </Surface>
+      </Surface> */}
 
       <Button
         mode="contained"

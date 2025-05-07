@@ -91,7 +91,7 @@ const DrawerLayout = () => {
           }}
         />
         {/* <Drawer.Screen
-          name="profile"
+          name="about"
           options={{
             drawerLabel: Locales.t('profile'),
             title: Locales.t('profile'),
@@ -112,8 +112,8 @@ const DrawerLayout = () => {
               </>
             ),
           }}
-        />
-        <Drawer.Screen
+        /> */}
+        {/* <Drawer.Screen
           name="settings"
           options={{
             drawerLabel: Locales.t('titleSettings'),
