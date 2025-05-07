@@ -309,7 +309,7 @@ export function Content() {
         renderItem={({ item }) => <Item item={item}/>}
         keyExtractor={item => item.uid}
         // ItemSeparatorComponent={() => <View style={{height: 15}} />}
-        contentContainerStyle={{  flexGrow: 1,  gap: 15 }}
+        contentContainerStyle={{  flexGrow: 1, justifyContent: "center", alignItems: "center",  gap: 15 }}
         // columnWrapperStyle={{ gap: GAP_BETWEEN_COLUMNS }}
         ListEmptyComponent={EmptyListMessage}
       />   
