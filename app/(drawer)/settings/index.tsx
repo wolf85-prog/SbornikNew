@@ -1,6 +1,8 @@
 import * as SecureStore from 'expo-secure-store'
 import React from 'react'
 import { Platform, useColorScheme } from 'react-native'
+import { Stack } from 'expo-router';
+import { DrawerToggleButton } from "@react-navigation/drawer";
 import {
   Surface,
   List,
@@ -23,7 +25,8 @@ import {
   styles,
 } from '@/lib'
 
-const Settings = () => {
+
+const SettingsScreen = () => {
   const colorScheme = useColorScheme()
   const [loading, setLoading] = React.useState<boolean>(false)
   const [message, setMessage] = React.useState({ visible: false, content: '' })
@@ -65,6 +68,13 @@ const Settings = () => {
 
   return (
     <Surface style={{ flex: 1 }}>
+       <Stack.Screen options={{ 
+              headerShown: true, 
+              title: 'Настройки', 
+              headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />), 
+              headerStyle: {backgroundColor: '#26489a'},  
+              headerTintColor: 'white',
+              }} />
       {loading ? (
         <LoadingIndicator />
       ) : (
@@ -311,13 +321,6 @@ const Settings = () => {
         </Surface>
       )}
 
-      {/* <Surface elevation={0} style={styles.screen}>
-        <ScreenInfo
-          title={Locales.t('titleSettings')}
-          path="app/(tabs)/settings.tsx"
-        />
-      </Surface> */}
-
       <Button
         mode="contained"
         style={{ margin: 16 }}
@@ -356,4 +359,4 @@ const Settings = () => {
   )
 }
 
-export default Settings
+export default SettingsScreen

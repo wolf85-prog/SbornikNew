@@ -28,9 +28,7 @@ const Search = () => {
         style={{ marginTop: 16, marginHorizontal: 16 }}
       />
 
-      <Surface style={styles.screen}>
-        <ScreenInfo title={Locales.t('search')} path="app/search.tsx" />
-      </Surface>
+
     </Surface>
   )
 }

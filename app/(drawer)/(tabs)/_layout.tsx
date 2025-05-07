@@ -44,9 +44,9 @@ const TabLayout = () => {
                 <Menu.Item
                   title={Locales.t('titleSettings')}
                   leadingIcon="cog"
-                  onPress={() => router.push('/(tabs)/settings')}
+                  onPress={() => router.push('/settings')}
                 />
-                <Menu.Item
+                {/* <Menu.Item
                   title={Locales.t('stackNav')}
                   leadingIcon="card-multiple-outline"
                   onPress={() => router.push('/modal')}
@@ -55,7 +55,7 @@ const TabLayout = () => {
                   title={Locales.t('drawerNav')}
                   leadingIcon="gesture-swipe"
                   onPress={() => router.push('/drawer')}
-                />
+                /> */}
               </Menu>
             </>
           ),
