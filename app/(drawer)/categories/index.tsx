@@ -4,45 +4,95 @@ import { DrawerToggleButton } from "@react-navigation/drawer";
 import { SafeAreaView, StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ActivityIndicator, TextInput } from 'react-native'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from "react";
-import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import { Ionicons, FontAwesome, AntDesign, Entypo, MaterialIcons } from '@expo/vector-icons';
 //import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
 import Card from '../../../components/ui/Card';
-import {
-  Provider,
-} from "react-native-paper";
+
+import { 
+  Surface, 
+  Appbar, 
+  Menu, 
+  Tooltip,
+  FAB} from "react-native-paper";
+
+import { Locales, ScreenInfo, styles, TabsHeader } from '@/lib'
 
 //import filter from "lodash.filter"
 
 
 const CategoriesScreen = () => {
 
+  const router = useRouter();
+
+  const [visible, setVisible] = useState(false)
+  const [visiblePlaylist, setVisiblePlaylist] = useState(false);
+
   //const {currentTheme, toggleTheme} = useContext(ThemeContext)
 
-  // const headerRight = () => {
-  //       return (
-  //         <TouchableOpacity
-  //           // onPress={()=>router.push("/modal")}
-  //           style={{marginRight: 10}}
-  //         >
-  //           <FontAwesome name="plus-circle" size={28} color="blue" />
-  //         </TouchableOpacity>
-  //       );
-  // };
+  const headerRight = () => {
+      return (
+        <>
+          {/* <TouchableOpacity
+            // onPress={()=>router.push("/modal")}
+            onPress={()=>setVisibleFontSize(true)}
+            style={{marginRight: 20}}
+          >
+            <AntDesign name="search1" size={22} color="white" />
+          </TouchableOpacity> */}
+  
+          <TouchableOpacity
+            // onPress={()=>router.push("/modal")}
+            onPress={()=>setVisiblePlaylist(true)}
+            style={{marginRight: 15}}
+          >
+            <AntDesign name="delete" size={18} color="white" />
+          </TouchableOpacity>
+  
+          {/* <PopupMenu options={data} color={"white"}/> */}
+          <Tooltip title={Locales.t('search')} color={"white"}>
+                                <Appbar.Action
+                                  icon="magnify"
+                                  onPress={() => router.push('/search')}
+                                />
+                              </Tooltip>
+                              <Menu
+                                statusBarHeight={48}
+                                visible={visible}
+                                onDismiss={() => setVisible(false)}
+                                anchor={
+                                  <Tooltip title={Locales.t('options')} color={"white"}>
+                                    <Appbar.Action
+                                      icon="dots-vertical"
+                                      onPress={() => setVisible(true)}
+                                    />
+                                  </Tooltip>
+                                }  
+                              >
+                                <Menu.Item
+                                  title={Locales.t('titleSettings')}
+                                  leadingIcon="cog"
+                                  onPress={() => router.push('/settings')}
+                                />
+                              </Menu>
+        </>
+      );
+    };
 
   return (
 
-    <View>
+    <Surface style={styles.screen}>
       <Stack.Screen options={{ 
         headerShown: true, 
         title: "Категории песен", 
-        headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />), 
+        headerLeft: (() => <DrawerToggleButton  />), 
+        headerRight: headerRight,
         headerStyle: {backgroundColor: '#26489a'},  
         headerTintColor: 'white',
+        header: (props) => <TabsHeader navProps={props} children={undefined} />,
         }} />
-      <Provider>
-          <Content />
-      </Provider>
-    </View>
+
+        <Content />
+    </Surface>
   )
 }
 
@@ -120,6 +170,12 @@ export function Content() {
     );
   }
 
+  const onButtonAdd = ()=> {
+    console.log("press add category")
+    //showDialog()
+    
+  }
+
   return (
     <SafeAreaView style={{flex:1}}>
 
@@ -133,83 +189,17 @@ export function Content() {
         // columnWrapperStyle={{ gap: GAP_BETWEEN_COLUMNS }}
         ListEmptyComponent={() =>
           <Text>
-            Список заметок пуст
+            Список категорий пуст
           </Text>
         }
-      />       
+      /> 
+
+      {/* Кнопка Добавить */}
+      <FAB
+        icon="plus"
+        style={styles.fab}
+        onPress={onButtonAdd}
+      />      
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#25292e',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    color: '#fff',
-  },
-  emptyList: {
-    fontSize: 16,
-  },
-
-  listSongs:{
-    padding: 15,
-  },
-
-  card: {
-    height: 65,
-    backgroundColor: '#0005',
-    padding: 8,
-    paddingHorizontal: 15,
-    marginTop: 10,
-    borderRadius: 6,
-    borderColor: '#000'
-  },
-  number: {
-    width: 40,
-    height: 40,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  flex: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flex: 1,
-    flexDirection: 'row',
-    height: 55,
-  },
-
-  main_content: {
-    width: '70%'
-  },
-
-  name: {
-    color: '#000',
-    fontSize: 16, 
-    fontFamily: 'SpaceMono',
-  },
-
-  category: {
-    color: '#e5e5e5',
-    fontFamily: 'SpaceMono'
-  },
-
-
-  searchBox: {
-    height: 46,
-    marginLeft: 15,
-    marginRight: 15,
-    marginTop: 15,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-  }
-});

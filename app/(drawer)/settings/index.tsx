@@ -11,6 +11,7 @@ import {
   IconButton,
   Snackbar,
   Icon,
+  useTheme 
 } from 'react-native-paper'
 
 import {
@@ -27,6 +28,8 @@ import {
 
 
 const SettingsScreen = () => {
+  const theme = useTheme();
+
   const colorScheme = useColorScheme()
   const [loading, setLoading] = React.useState<boolean>(false)
   const [message, setMessage] = React.useState({ visible: false, content: '' })
@@ -72,7 +75,7 @@ const SettingsScreen = () => {
               headerShown: true, 
               title: Locales.t('titleSettings'), 
               headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />), 
-              headerStyle: {backgroundColor: '#26489a'},  
+              headerStyle: {backgroundColor: theme.colors.primary},  
               headerTintColor: 'white',
               }} />
       {loading ? (

@@ -218,14 +218,20 @@ const styles = StyleSheet.create({
       marginTop: 10,
     },
 
+    fab: {
+      position: 'absolute',
+      margin: 16,
+      right: 0,
+      bottom: 0,
+    },
+
 
     // about
     titleText: {
-          fontSize: 22,
-          fontWeight: "bold",
-          textAlign: "center",
-          paddingVertical: 20,
-          color: '#f3f3f3'
+      fontSize: 22,
+      fontWeight: "bold",
+      textAlign: "center",
+      paddingVertical: 20,
     },
 
     imageLogo: {
@@ -236,7 +242,14 @@ const styles = StyleSheet.create({
 
     customerName: {
       fontSize: 18,
-      color: '#f3f3f3'
+      fontWeight: 700,
+      //color: '#000'
+    },
+
+    customerCount: {
+      fontSize: 18,
+      fontWeight: 400,
+      //color: '#000'
     },
 
     heightView: {
@@ -245,7 +258,26 @@ const styles = StyleSheet.create({
 
     bottom: {
       marginTop: 25
+    },
+
+    //accords
+    containerAccords: {
+      flex: 1,
+      width: '100%',
+      paddingHorizontal: 0,
+      paddingVertical: 20,
+    },
+
+    item: {
+      padding: 10,
+      marginVertical: 8,
+      marginHorizontal: 10,
+    },
+
+    textAccord: {
+      fontSize: 22,
     }
+
 })
 
 export { Colors, Themes, styles }

@@ -85,7 +85,7 @@ const Favorites = () => {
           headerShown: true, 
           title: Locales.t("titleFavorites"), 
           headerRight: headerRight,
-          headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
+          headerLeft: (() => <DrawerToggleButton />),
           headerStyle: {backgroundColor: '#26489a'},    
           headerTintColor: 'white',
           header: (props) => <TabsHeader navProps={props} children={undefined} />,

@@ -8,8 +8,8 @@ import Card from '../../../../components/ui/Card';
 import PopupMenu from "../../../../components/ui/PopupMenu.js";
 import { Button, Menu, Divider, PaperProvider } from 'react-native-paper';
 //import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
-import { Surface } from 'react-native-paper'
-import { Locales, ScreenInfo, styles } from '@/lib'
+import { Surface, FAB, Tooltip, Appbar } from 'react-native-paper'
+import { Locales, ScreenInfo, styles, TabsHeader } from '@/lib'
 
 import filter from "lodash.filter"
 
@@ -26,7 +26,21 @@ const NotesScreen = () => {
   
   const headerRight = () => {
     return (
-        <PopupMenu options={data} color={"white"}/>
+      <>
+        <Tooltip title={Locales.t('search')}>
+                          <Appbar.Action
+                            icon="magnify"
+                            onPress={() => router.push('/search')}
+                          />
+                        </Tooltip>
+                        <Tooltip title={Locales.t('titleSettings')}>
+                          <Appbar.Action
+                            icon="cog"
+                            onPress={() => router.push('/(drawer)/settings')}
+                          />
+                        </Tooltip>
+      </>
+        // <PopupMenu options={data} color={"white"}/>
     );
   };
 
@@ -35,12 +49,13 @@ const NotesScreen = () => {
     <Surface style={styles.screen}>
       {/* Header */}
       <Stack.Screen options={{ 
-        headerShown: false, 
-        title: "Заметки", 
+        headerShown: true, 
+        title: Locales.t("titleNotes"), 
         headerRight: headerRight,
-        headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
+        headerLeft: (() => <DrawerToggleButton />),
         headerStyle: {backgroundColor: '#26489a'},    
         headerTintColor: 'white',
+        header: (props) => <TabsHeader navProps={props} children={undefined} />,
       }} />
 
         <Content />
@@ -161,12 +176,11 @@ export function Content() {
         ListEmptyComponent={EmptyListMessage}
       />  
 
-      <TouchableOpacity
-        style={styles.floatingButton}
+      <FAB
+        icon="plus"
+        style={styles.fab}
         onPress={onButtonAdd}
-      >
-        <AntDesign name="pluscircle" size={70} color="#DE3163" />
-      </TouchableOpacity>      
+      />    
     </SafeAreaView>
   );
 }

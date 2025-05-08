@@ -10,7 +10,8 @@ import {
   Surface, 
   Appbar, 
   Menu, 
-  Tooltip} from "react-native-paper";
+  Tooltip,
+  FAB} from "react-native-paper";
 import { Button, Dialog, Portal, IconButton } from 'react-native-paper';
 import asyncAlert from "./../../../../components/asyncAlert.js";
 
@@ -346,12 +347,11 @@ export function Content() {
       />   
 
       {/* Кнопка Добавить */}
-      {/* <TouchableOpacity
-        style={styles.floatingButton}
+      <FAB
+        icon="plus"
+        style={styles.fab}
         onPress={onButtonAdd}
-      >
-        <AntDesign name="pluscircle" size={70} color="#DE3163" />
-      </TouchableOpacity>  */}
+      />
 
       <Portal>
         <Dialog visible={dialog.isVisible} onDismiss={() => hideDialog(dialog.customer)}>

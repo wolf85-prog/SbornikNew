@@ -4,16 +4,16 @@
 
 const Languages = {
   ar: {
-    name: 'Arabic',
-    nativeName: 'العربية',
+    name: 'Russian',
+    nativeName: 'Русский',
   },
   en: {
     name: 'English',
     nativeName: 'English',
   },
   tr: {
-    name: 'Turkish',
-    nativeName: 'Türkçe',
+    name: 'German',
+    nativeName: 'Deutsch',
   },
 }
 

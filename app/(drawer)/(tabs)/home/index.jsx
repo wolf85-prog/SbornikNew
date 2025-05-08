@@ -85,7 +85,7 @@ export default function TabsHome() {
                       </Menu>
                     </>
                   ),
-        headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
+        headerLeft: (() => <DrawerToggleButton />),
         headerStyle: {backgroundColor: '#26489a'},    
         headerTintColor: 'white',
         //headerTitleStyle: {fontWeight: 400},

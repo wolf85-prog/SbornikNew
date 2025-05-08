@@ -4,9 +4,15 @@ import { Stack, useRouter } from 'expo-router';
 import React from 'react'
 import { useEffect, useState } from "react";
 import { DrawerToggleButton } from "@react-navigation/drawer";
-import {Provider} from "react-native-paper";
+import {Provider, Surface} from "react-native-paper";
 import { useSQLiteContext } from "expo-sqlite";
 //import filter from "lodash.filter"
+
+import {
+  Locales,
+  TabBar, TabsHeader,
+  styles, 
+} from '@/lib'
 
 export default function CategoryAccordScreen() {
 
@@ -71,7 +77,7 @@ export default function CategoryAccordScreen() {
 
   const Item = ({item}) => (
     <TouchableOpacity style={styles.item} onPress={()=> {router.push(`/accords/categoryAcc/accord/${item.uid}`)}} >
-      <Text style={styles.title}>{item.name}</Text>
+      <Text style={[styles.textAccord]}>{item.name}</Text>
     </TouchableOpacity>
   );
 
@@ -106,13 +112,14 @@ export default function CategoryAccordScreen() {
   };
 
   return (
-    <View style={styles.container} >
+    <Surface style={styles.screen} >
       <Stack.Screen options={{ 
         headerShown: true, 
         title: title, 
-        headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
+        headerLeft: (() => <DrawerToggleButton />),
         headerStyle: {backgroundColor: '#26489a'}, 
         headerTintColor: 'white',
+        header: (props) => <TabsHeader navProps={props} children={undefined} />,
       }} />
 
       <Provider>
@@ -137,33 +144,6 @@ export default function CategoryAccordScreen() {
           </SafeAreaView>
 
       </Provider>
-    </View>
+    </Surface>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f3f3f3',
-    width: '100%',
-    paddingHorizontal: 0,
-    paddingVertical: 20,
-  },
-
-  listSongs:{
-    padding: 10,
-    flex: 1,
-  },
-  text: {
-    color: '#fff',
-  },
-  item: {
-    padding: 10,
-    marginVertical: 8,
-    marginHorizontal: 5,
-  },
-  title: {
-    fontSize: 18,
-    color: '#000'
-  },
-});

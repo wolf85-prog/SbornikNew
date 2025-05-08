@@ -4,26 +4,33 @@ import { Stack, useRouter } from 'expo-router';
 import React from 'react'
 import { useEffect, useState } from "react";
 import { DrawerToggleButton } from "@react-navigation/drawer";
-import {Provider} from "react-native-paper";
+import {Provider, Surface, useTheme } from "react-native-paper";
 import { useSQLiteContext } from "expo-sqlite";
 //import filter from "lodash.filter"
+
+import {
+  Locales,
+  TabBar, TabsHeader,
+  styles, 
+} from '@/lib'
 
 export default function AccordScreen() {
 
 
   return (
-    <View style={styles.container} >
+    <Surface style={[styles.screen, styles.containerAccords]} >
       <Stack.Screen options={{ 
         headerShown: true, 
         title: "Аккорды", 
-        headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
+        headerLeft: (() => <DrawerToggleButton  />),
         headerStyle: {backgroundColor: '#26489a'}, 
         headerTintColor: 'white',
+        header: (props) => <TabsHeader navProps={props} children={undefined} />,
       }} />
-      <Provider>
-        <Content />
-      </Provider>
-    </View>
+
+      <Content />
+        
+    </Surface>
   );
 }
 
@@ -31,6 +38,8 @@ export function Content() {
   const db = useSQLiteContext();
 
   const router = useRouter();
+
+  const theme = useTheme();
 
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([])
@@ -70,7 +79,7 @@ export function Content() {
 
   const Item = ({item}) => (
     <TouchableOpacity style={styles.item} onPress={()=> {router.push(`/accords/categoryAcc/${item.uid}`)}} >
-      <Text style={styles.title}>{item.name}</Text>
+      <Text style={[styles.textAccord]}>{item.name}</Text>
     </TouchableOpacity>
   );
 
@@ -126,30 +135,3 @@ export function Content() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f3f3f3',
-    width: '100%',
-    paddingHorizontal: 0,
-    paddingVertical: 20,
-  },
-
-  listSongs:{
-    padding: 10,
-    flex: 1,
-  },
-  text: {
-    color: '#fff',
-  },
-  item: {
-    padding: 10,
-    marginVertical: 8,
-    marginHorizontal: 10,
-  },
-  title: {
-    fontSize: 18,
-    color: '#000'
-  },
-});

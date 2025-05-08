@@ -176,7 +176,7 @@ const TabLayout = () => {
           name="notes"
           options={{
             title: 'Заметки',
-            // headerShown: true,
+            headerShown: false,
             headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
             headerRight: () => (
               <>

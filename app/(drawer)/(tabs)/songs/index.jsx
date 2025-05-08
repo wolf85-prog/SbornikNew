@@ -81,7 +81,7 @@ const SongsScreen = () => {
         title: Locales.t('songs'),
         // headerLeft: (() => <DrawerToggleButton tintColor={'#000'} />) 
         headerRight: headerRight,
-        headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
+        headerLeft: (() => <DrawerToggleButton />),
         headerStyle: {backgroundColor: '#26489a'},    
         headerTintColor: 'white',
         //headerTitleStyle: {fontWeight: 400},

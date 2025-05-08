@@ -18,6 +18,7 @@ import {
   Portal,
   Dialog,
   Button,
+  useTheme 
 } from "react-native-paper";
 import { Locales, ScreenInfo, styles, TabsHeader } from '@/lib'
 
@@ -37,7 +38,7 @@ export default function AboutScreen() {
       <Stack.Screen options={{ 
           headerShown: true, 
           title: "О приложении", 
-          headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />), 
+          headerLeft: (() => <DrawerToggleButton />), 
           headerStyle: {backgroundColor: '#26489a'},  
           headerTintColor: 'white',
           header: (props) => <TabsHeader navProps={props} children={undefined} />,
@@ -55,17 +56,21 @@ export default function AboutScreen() {
 export function Content() {
   const db = useSQLiteContext();
   const [countSongs, setCountSongs] = useState(0)
+  const [countAccords, setCountAccords] = useState(0)
 
   useEffect(() => {
 
     const fetch = (async()=> {
 
-      await db.withTransactionAsync(async () => {
-        const result = await db.getFirstAsync('SELECT COUNT(*) FROM songs');
-        console.log('Count:', result.rows[0]['COUNT(*)']);
+      // await db.withTransactionAsync(async () => {
+      //   const result = await db.getFirstAsync('SELECT COUNT(*) FROM songs');
+      //   console.log('Count:', result.rows[0]['COUNT(*)']);
 
-        setCountSongs(result.rows[0]['COUNT(*)']);
-      });
+      //   setCountSongs(result.rows[0]['COUNT(*)']);
+      // });
+
+      setCountSongs(612);
+      setCountAccords(335)
     })
 
     fetch()
@@ -84,17 +89,17 @@ export function Content() {
               transition={1000}
             />
             <View style={styles.container}>
-              <Text style={styles.customerName}>Версия приложения: 2.0</Text>
-              <Text style={styles.customerName}>Доступно песен: {countSongs}</Text>
-              <Text style={styles.customerName}>Аккордов в БД: {countSongs}</Text>
+              <Text style={styles.customerName}>Версия приложения: <Text style={styles.customerCount}>2.0</Text></Text>
+              <Text style={styles.customerName}>Доступно песен: <Text style={styles.customerCount}>{countSongs}</Text></Text>
+              <Text style={styles.customerName}>Аккордов в БД: <Text style={styles.customerCount}>{countAccords}</Text></Text>
             </View>
 
-            <Divider theme={{ colors: { primary: '#fff' } }} style={{ margin: 15}}/>
+            <Divider style={{ margin: 25}}/>
 
             <View style={[{flex: 1}, styles.bottom]} />
               <View style={styles.container}>
-                <Text style={styles.customerName}>Майкоп</Text>
-                <Text style={styles.customerName}>2025</Text>
+                <Text style={styles.customerCount}>Майкоп</Text>
+                <Text style={styles.customerCount}>2025</Text>
               </View>
           </View>
         
