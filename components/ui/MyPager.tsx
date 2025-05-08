@@ -43,7 +43,7 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
         style={[styles.flex, styles.scrollStyle]}>
 
         <ScrollView style={styles.scrollStyle}>       
-          <CardSong>
+          <CardSong style={styles.cardSong}>
             <View style={[styles.slide] }>
               {showSongText ?
               // (songsData[index-1]?.song ? 
@@ -138,6 +138,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    backgroundColor: 'white',
+    
   },
+
+  cardSong: {
+    backgroundColor: 'white',
+  }
 });

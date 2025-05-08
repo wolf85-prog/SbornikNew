@@ -20,7 +20,7 @@ const TabLayout = () => {
         name="home"
         options={{
           headerShown: false, 
-          // title: Locales.t('titleHome'),
+          title: Locales.t('titleHome'),
           // headerRight: () => (
           //   <>
           //     <Tooltip title={Locales.t('search')}>

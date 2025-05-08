@@ -1,7 +1,6 @@
 import { SafeAreaView, StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ActivityIndicator, TextInput } from 'react-native'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import React from 'react'
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react'
 import { DrawerToggleButton } from "@react-navigation/drawer";
 import { Ionicons } from '@expo/vector-icons';
 import Card from '../../../../components/ui/Card';
@@ -12,6 +11,7 @@ import {
 } from "react-native-paper";
 
 import {
+  Surface,
   Appbar, 
   Menu, 
   Tooltip 
@@ -19,6 +19,8 @@ import {
 
 import {
   Locales,
+  TabsHeader,
+  styles
 } from '@/lib'
 
 import filter from "lodash.filter"
@@ -26,6 +28,8 @@ import filter from "lodash.filter"
 import songsData from './../../../../data/songsData.js';
 
 const SongsScreen = () => {
+
+  const [visible, setVisible] = useState(false) 
 
   const router = useRouter();
 
@@ -38,13 +42,40 @@ const SongsScreen = () => {
   
   const headerRight = () => {
     return (
-      <PopupMenu options={options} color={"white"} />
+      // <PopupMenu options={options} color={"white"} />
+      <>
+                            <Tooltip title={Locales.t('search')} color={"white"}>
+                              <Appbar.Action
+                                icon="magnify"
+                                onPress={() => router.push('/search')}
+                              />
+                            </Tooltip>
+                            <Menu
+                              statusBarHeight={48}
+                              visible={visible}
+                              onDismiss={() => setVisible(false)}
+                              anchor={
+                                <Tooltip title={Locales.t('options')} color={"white"}>
+                                  <Appbar.Action
+                                    icon="dots-vertical"
+                                    onPress={() => setVisible(true)}
+                                  />
+                                </Tooltip>
+                              }  
+                            >
+                              <Menu.Item
+                                title={Locales.t('titleSettings')}
+                                leadingIcon="cog"
+                                onPress={() => router.push('/settings')}
+                              />
+                            </Menu>
+                          </>
     );
   };
 
   return (
 
-    <View style={styles.container}>
+    <Surface style={styles.screen}>
       <Stack.Screen options={{ 
         headerShown: true, 
         title: Locales.t('songs'),
@@ -53,11 +84,12 @@ const SongsScreen = () => {
         headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
         headerStyle: {backgroundColor: '#26489a'},    
         headerTintColor: 'white',
-                //headerTitleStyle: {fontWeight: 400},
+        //headerTitleStyle: {fontWeight: 400},
+        header: (props) => <TabsHeader navProps={props} children={undefined} />,
         }} 
       />
         <Content />
-    </View>
+    </Surface>
   )
 }
 
@@ -133,9 +165,9 @@ export function Content() {
   
   function Item({ item }) {
     return (
-      <Card>
+      <Card style={styles.back}>
         <TouchableOpacity onPress={()=> {router.push(`/songs/song/${item.number}`)}} >
-          <View style={styles.flex}>
+          <View style={styles.card}>
             
             <View style={styles.main_content}>
               <Text style={styles.name}>{item.name}</Text>
@@ -144,7 +176,7 @@ export function Content() {
 
             <View style={styles.right_section}>
               <View style={styles.number}>
-                <Text>{item.number}</Text>
+                <Text style={styles.numberText}>{item.number}</Text>
               </View>  
               <Ionicons name="star-outline" size={24} color="#feed33" />
             </View>
@@ -188,81 +220,3 @@ export function Content() {
   );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#f3f3f3',
-        width: '100%',
-      },
-
-      listSongs:{
-        padding: 15,
-        flex: 1,
-      },
-
-      card: {
-        height: 65,
-        backgroundColor: '#0005',
-        padding: 8,
-        paddingHorizontal: 15,
-        marginTop: 10,
-        borderRadius: 6,
-        borderColor: '#000'
-      },
-      number: {
-        width: 40,
-        height: 40,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-
-      flex: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flex: 1,
-        flexDirection: 'row',
-        height: 58,
-      },
-
-      main_content: {
-        width: '70%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between'
-      },
-
-      name: {
-        color: '#000',
-        fontSize: 16, 
-        fontFamily: 'SpaceMono',
-      },
-
-      category: {
-        color: '#e5e5e5',
-        fontFamily: 'SpaceMono'
-      },
-
-      right_section: {
-        display: 'flex',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        flex: 1,
-        flexDirection: 'row',
-        gap: 10,
-      },
-
-      searchBox: {
-        height: 46,
-        marginLeft: 15,
-        marginRight: 15,
-        marginTop: 15,
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        borderRadius: 8,
-      }
-})

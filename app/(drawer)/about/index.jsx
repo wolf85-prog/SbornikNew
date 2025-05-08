@@ -13,12 +13,14 @@ import { Stack } from 'expo-router';
 import React from 'react'
 import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
 import {
-  IconButton,
+  Surface,
   Provider,
   Portal,
   Dialog,
   Button,
 } from "react-native-paper";
+import { Locales, ScreenInfo, styles, TabsHeader } from '@/lib'
+
 //import asyncAlert from "./asyncAlert";
 import { DrawerToggleButton } from "@react-navigation/drawer";
 import { images } from "../../../constants";
@@ -31,20 +33,21 @@ export default function AboutScreen() {
   
   return (
 
-    <View style={styles.container} >
+    <Surface style={styles.screen}>
       <Stack.Screen options={{ 
           headerShown: true, 
           title: "О приложении", 
           headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />), 
           headerStyle: {backgroundColor: '#26489a'},  
           headerTintColor: 'white',
+          header: (props) => <TabsHeader navProps={props} children={undefined} />,
         }} />
         <Provider>
           <SQLiteProvider databaseName="sbornik.db" assetSource={{ assetId: require('./../../../assets/sbornik.db') }}>
             <Content />
           </SQLiteProvider>
         </Provider>
-    </View>
+    </Surface>
       
   );
 }
@@ -72,90 +75,29 @@ export function Content() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
         
-          <View style={styles.container}>
+          <View style={[styles.container]}>
             <Text style={styles.titleText}>Майкопский молодежный сборник</Text>
             <Image
-              style={styles.image}
+              style={styles.imageLogo}
               source={images.logo}
               contentFit="cover"
               transition={1000}
             />
-            <View>
+            <View style={styles.container}>
               <Text style={styles.customerName}>Версия приложения: 2.0</Text>
               <Text style={styles.customerName}>Доступно песен: {countSongs}</Text>
               <Text style={styles.customerName}>Аккордов в БД: {countSongs}</Text>
             </View>
 
-            {/* <View
-              style={{
-                borderBottomColor: '#000',
-                borderBottomWidth: 1,
-              }}
-            /> */}
-            <Divider />
+            <Divider theme={{ colors: { primary: '#fff' } }} style={{ margin: 15}}/>
 
-            <View style={{flex: 1}} />
-
-            <View style={styles.container}>
-              <Text>Майкоп</Text>
-              <Text>2025</Text>
-            </View>
+            <View style={[{flex: 1}, styles.bottom]} />
+              <View style={styles.container}>
+                <Text style={styles.customerName}>Майкоп</Text>
+                <Text style={styles.customerName}>2025</Text>
+              </View>
           </View>
         
       </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: "white",
-    alignItems: "center",
-  },
-  titleText: {
-    fontSize: 22,
-    fontWeight: "bold",
-    textAlign: "center",
-    paddingVertical: 20,
-  },
-  customer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  customerName: {
-    fontSize: 18,
-  },
-  buttonStyle: {
-    fontSize: 16,
-    color: "white",
-    backgroundColor: "green",
-    padding: 5,
-    marginTop: 32,
-    minWidth: 250,
-    marginBottom: 16,
-  },
-  buttonTextStyle: {
-    padding: 5,
-    fontSize: 18,
-    color: "white",
-    textAlign: "center",
-  },
-  textInputStyle: {
-    textAlign: "center",
-    height: 40,
-    fontSize: 18,
-    width: "100%",
-    borderWidth: 1,
-    borderColor: "green",
-  },
-  icons: {
-    flexDirection: "row",
-  },
-  image: {
-    width: 100,
-    height: 100,
-    marginBottom: 20
-  }
-});

@@ -8,15 +8,17 @@ import Card from '../../../../components/ui/Card';
 import PopupMenu from "./../../../../components/ui/PopupMenu.js";
 //import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
 
-import { Surface } from 'react-native-paper'
+import { Surface, Tooltip, Appbar, Menu } from 'react-native-paper'
 
-import { Locales, ScreenInfo, styles } from '@/lib'
+import { Locales, ScreenInfo, styles, TabsHeader } from '@/lib'
 
 
 import filter from "lodash.filter"
 const Favorites = () => {
 
   const router = useRouter();
+
+  const [visible, setVisible] = useState(false) 
 
   const data = [
       {
@@ -28,23 +30,48 @@ const Favorites = () => {
   const headerRight = () => {
     return (
       <>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           // onPress={()=>router.push("/modal")}
           onPress={()=>setVisibleFontSize(true)}
           style={{marginRight: 20}}
         >
           <AntDesign name="search1" size={22} color="white" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity
           // onPress={()=>router.push("/modal")}
           onPress={()=>setVisibleFontSize(true)}
-          style={{marginRight: 20}}
+          style={{marginRight: 15}}
         >
-          <AntDesign name="delete" size={22} color="white" />
+          <AntDesign name="delete" size={18} color="white" />
         </TouchableOpacity>
 
-        <PopupMenu options={data} color={"white"}/>
+        {/* <PopupMenu options={data} color={"white"}/> */}
+        <Tooltip title={Locales.t('search')} color={"white"}>
+                              <Appbar.Action
+                                icon="magnify"
+                                onPress={() => router.push('/search')}
+                              />
+                            </Tooltip>
+                            <Menu
+                              statusBarHeight={48}
+                              visible={visible}
+                              onDismiss={() => setVisible(false)}
+                              anchor={
+                                <Tooltip title={Locales.t('options')} color={"white"}>
+                                  <Appbar.Action
+                                    icon="dots-vertical"
+                                    onPress={() => setVisible(true)}
+                                  />
+                                </Tooltip>
+                              }  
+                            >
+                              <Menu.Item
+                                title={Locales.t('titleSettings')}
+                                leadingIcon="cog"
+                                onPress={() => router.push('/settings')}
+                              />
+                            </Menu>
       </>
         
     );
@@ -61,6 +88,7 @@ const Favorites = () => {
           headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
           headerStyle: {backgroundColor: '#26489a'},    
           headerTintColor: 'white',
+          header: (props) => <TabsHeader navProps={props} children={undefined} />,
         }} />
           
           <Content />

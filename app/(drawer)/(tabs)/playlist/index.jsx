@@ -6,20 +6,25 @@ import { DrawerToggleButton } from "@react-navigation/drawer";
 import { Ionicons, FontAwesome, AntDesign, Entypo, MaterialIcons } from '@expo/vector-icons';
 import Card from '../../../../components/ui/Card';
 import { useSQLiteContext } from "expo-sqlite";
-import {Provider, Surface} from "react-native-paper";
+import { 
+  Surface, 
+  Appbar, 
+  Menu, 
+  Tooltip} from "react-native-paper";
 import { Button, Dialog, Portal, IconButton } from 'react-native-paper';
 import asyncAlert from "./../../../../components/asyncAlert.js";
 
 import filter from "lodash.filter"
 import PopupMenu from "./../../../../components/ui/PopupMenu.js";
 
-import { Locales, ScreenInfo, styles } from '@/lib'
+import { Locales, ScreenInfo, styles, TabsHeader } from '@/lib'
 
 
 const PlaylistScreen = () => {
 
   const router = useRouter();
 
+  const [visible, setVisible] = useState(false) 
   const [visiblePlaylist, setVisiblePlaylist] = useState(false);
 
   const hideDialog = () => setVisible(false);
@@ -34,23 +39,48 @@ const PlaylistScreen = () => {
   const headerRight = () => {
     return (
       <>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           // onPress={()=>router.push("/modal")}
           onPress={()=>setVisibleFontSize(true)}
           style={{marginRight: 20}}
         >
           <AntDesign name="search1" size={22} color="white" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity
           // onPress={()=>router.push("/modal")}
           onPress={()=>setVisiblePlaylist(true)}
-          style={{marginRight: 20}}
+          style={{marginRight: 15}}
         >
-          <AntDesign name="delete" size={22} color="white" />
+          <AntDesign name="delete" size={18} color="white" />
         </TouchableOpacity>
 
-        <PopupMenu options={data} color={"white"}/>
+        {/* <PopupMenu options={data} color={"white"}/> */}
+        <Tooltip title={Locales.t('search')} color={"white"}>
+                              <Appbar.Action
+                                icon="magnify"
+                                onPress={() => router.push('/search')}
+                              />
+                            </Tooltip>
+                            <Menu
+                              statusBarHeight={48}
+                              visible={visible}
+                              onDismiss={() => setVisible(false)}
+                              anchor={
+                                <Tooltip title={Locales.t('options')} color={"white"}>
+                                  <Appbar.Action
+                                    icon="dots-vertical"
+                                    onPress={() => setVisible(true)}
+                                  />
+                                </Tooltip>
+                              }  
+                            >
+                              <Menu.Item
+                                title={Locales.t('titleSettings')}
+                                leadingIcon="cog"
+                                onPress={() => router.push('/settings')}
+                              />
+                            </Menu>
       </>
     );
   };
@@ -66,6 +96,7 @@ const PlaylistScreen = () => {
         headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
         headerStyle: {backgroundColor: '#26489a'},    
         headerTintColor: 'white',
+        header: (props) => <TabsHeader navProps={props} children={undefined} />,
       }} />
       {/* <Provider> */}
           <Content />

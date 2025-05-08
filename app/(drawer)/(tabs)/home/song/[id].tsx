@@ -16,8 +16,13 @@ import { images } from "../../../../../constants";
 import { COLORS } from '../../../../../constants/colors.js';
 import { useSQLiteContext } from "expo-sqlite";
 import {
-  Provider,
+  Surface, 
+  Appbar, 
+  Menu, 
+  Tooltip,
 } from "react-native-paper";
+import { Locales, ScreenInfo, styles, TabsHeader } from '@/lib'
+
 import { ScrollView } from 'react-native-gesture-handler';
 
 import PopupMenu from "../../../../../components/ui/PopupMenu.js";
@@ -219,7 +224,7 @@ export default function DetailsScreen() {
 
 
   return (
-    <View style={styles.container}>
+    <Surface style={styles.screen}>
       <Stack.Screen options={{ 
         headerTransparent: true,
         headerBackground: ()=> <Animated.View style={[styles.header, headerAnimatedStyle]} />,
@@ -230,8 +235,8 @@ export default function DetailsScreen() {
         }} 
       />
 
-      <Provider>
-        <SafeAreaView style={styles.container}> 
+
+        <SafeAreaView style={styles.screen}> 
           <StatusBar
             animated={true}
             backgroundColor= {COLORS.darkBlue}
@@ -528,121 +533,117 @@ export default function DetailsScreen() {
           </Snackbar>
 
         </SafeAreaView>
-      </Provider>
-    </View>
+    </Surface>
   );
 }
 
 
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  page: {
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  header: {
-    backgroundColor: COLORS.darkBlue,
-    height: 100,
-  },
-  scrollStyle: {
-    padding: 5,
-  },
-  slide: {
-    flex: 1,
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    backgroundColor: 'white',
-  },
-  image: {
-    width: width, 
-    height: IMG_HEIGHT,
-    //marginVertical: 32,
-  },
-  text: {
-    color: 'rgba(0, 0, 0, 0.8)',
-    textAlign: 'left',
-  },
-  title: {
-    fontSize: 22,
-    color: 'rgba(255, 255, 255, 0.8)',
-    textAlign: 'center',
-  },
-  // pagerView: {
-  //   flex: 1,
-  //   backgroundColor: '#e5e5e5',
-  // },
-  floatingButton: {
-    position: 'absolute',
-    width: 100,
-    height: 100,
-    alignItems: 'center',
-    justifyContent: 'center',
-    bottom: 0,
-    right: 0,
-  },
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//   },
+//   page: {
+//     justifyContent: 'center',
+//     alignItems: 'center'
+//   },
+//   header: {
+//     backgroundColor: COLORS.darkBlue,
+//     height: 100,
+//   },
+//   scrollStyle: {
+//     padding: 5,
+//   },
+//   slide: {
+//     flex: 1,
+//     alignItems: 'flex-start',
+//     justifyContent: 'flex-start',
+//     backgroundColor: 'white',
+//   },
+//   image: {
+//     width: width, 
+//     height: IMG_HEIGHT,
+//     //marginVertical: 32,
+//   },
+//   text: {
+//     color: 'rgba(0, 0, 0, 0.8)',
+//     textAlign: 'left',
+//   },
+//   title: {
+//     fontSize: 22,
+//     color: 'rgba(255, 255, 255, 0.8)',
+//     textAlign: 'center',
+//   },
 
-  floatingButtonNote: {
-    backgroundColor:'#DE3163',
-    borderRadius:'50%',
-    position: 'absolute',
-    width: 60,
-    height: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
-    top: 270,
-    right: 90,
-    zIndex: 100,
-  },
+//   floatingButton: {
+//     position: 'absolute',
+//     width: 100,
+//     height: 100,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     bottom: 0,
+//     right: 0,
+//   },
 
-  floatingButtonBemol: {
-    backgroundColor:'#DE3163',
-    borderRadius:'50%',
-    position: 'absolute',
-    width: 45,
-    height: 45,
-    alignItems: 'center',
-    justifyContent: 'center',
-    top: 280,
-    right: 170,
-    zIndex: 100,
-  },
+//   floatingButtonNote: {
+//     backgroundColor:'#DE3163',
+//     borderRadius:'50%',
+//     position: 'absolute',
+//     width: 60,
+//     height: 60,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     top: 270,
+//     right: 90,
+//     zIndex: 100,
+//   },
 
-  floatingButtonDiez: {
-    backgroundColor:'#DE3163',
-    borderRadius:'50%',
-    position: 'absolute',
-    width: 45,
-    height: 45,
-    alignItems: 'center',
-    justifyContent: 'center',
-    top: 280,
-    right: 20,
-    zIndex: 100,
-  },
+//   floatingButtonBemol: {
+//     backgroundColor:'#DE3163',
+//     borderRadius:'50%',
+//     position: 'absolute',
+//     width: 45,
+//     height: 45,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     top: 280,
+//     right: 170,
+//     zIndex: 100,
+//   },
 
-  chordName: {
-    color: 'red',
-  },
+//   floatingButtonDiez: {
+//     backgroundColor:'#DE3163',
+//     borderRadius:'50%',
+//     position: 'absolute',
+//     width: 45,
+//     height: 45,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     top: 280,
+//     right: 20,
+//     zIndex: 100,
+//   },
 
-  rowTone: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
-    width: '90%',
-    marginLeft: 25,
-  },
+//   chordName: {
+//     color: 'red',
+//   },
 
-  textTone: {
-    color: '#fff',
-  },
+//   rowTone: {
+//     display: 'flex',
+//     justifyContent: 'space-between',
+//     alignItems: 'center',
+//     flexDirection: 'row',
+//     width: '90%',
+//     marginLeft: 25,
+//   },
 
-  slider: {
-    width: 300,
-    opacity: 1,
-    marginTop: 10,
-  },
-});
+//   textTone: {
+//     color: '#fff',
+//   },
+
+//   slider: {
+//     width: 300,
+//     opacity: 1,
+//     marginTop: 10,
+//   },
+// });

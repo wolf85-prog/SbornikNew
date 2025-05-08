@@ -8,12 +8,15 @@ import { Snackbar } from 'react-native-paper';
 import React, { useContext, useState, useEffect } from 'react'
 
 import {
+  Surface,
   Appbar, 
   Menu, 
   Tooltip 
 } from "react-native-paper";
 import {
   Locales,
+  TabBar, TabsHeader,
+  styles, 
 } from '@/lib'
 
 import filter from "lodash.filter"
@@ -49,7 +52,7 @@ export default function TabsHome() {
 
 
   return (
-    <View style={styles.container}>
+    <Surface style={styles.screen}>
       <Stack.Screen options={{ 
         headerShown: true, 
         title: Locales.t('titleHome'), 
@@ -86,12 +89,13 @@ export default function TabsHome() {
         headerStyle: {backgroundColor: '#26489a'},    
         headerTintColor: 'white',
         //headerTitleStyle: {fontWeight: 400},
+        header: (props) => <TabsHeader navProps={props} children={undefined} />,
         }}
       />
       
       <Content />
       
-    </View>
+    </Surface>
   );
 }
 
@@ -181,11 +185,11 @@ export function Content() {
   
   function Item({ item }) {
     return (
-      <Card>
+      <Card style={styles.back}>
         <TouchableOpacity onPress={()=> {router.push(`/home/song/${item.number}`)}} >
-          <View style={styles.flex}>
+          <View style={styles.card}>
             <View style={styles.number}>
-              <Text>{item.number}</Text>
+              <Text style={styles.numberText}>{item.number}</Text>
             </View>   
             
             <View style={styles.main_content}>
@@ -215,13 +219,14 @@ export function Content() {
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar
         animated={true}
-        backgroundColor = '#26489a'
+        backgroundColor = '#060606' //'#26489a'
         //barStyle={statusBarStyle}
         //showHideTransition={statusBarTransition}
         //hidden={hidden}
       />
       <TextInput 
         placeholder="Поиск..." 
+        placeholderTextColor="#f3f3f3"
         clearButtonMode='always' 
         style={styles.searchBox}
         autoCapitalize="none"
@@ -254,70 +259,3 @@ export function Content() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f3f3f3',
-    width: '100%',
-  },
-
-  header: {
-    backgroundColor: '#F3F3F3', //COLORS.darkBlue,
-  },
-
-  listSongs:{
-    padding: 15,
-    flex: 1,
-  },
-
-  number: {
-    width: 40,
-    height: 40,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: 18, 
-  },
-
-  flex: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flex: 1,
-    flexDirection: 'row',
-    height: 58,
-  },
-
-  main_content: {
-    width: '70%',
-    //position: 'relative',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between'
-  },
-
-  name: {
-    color: '#000',
-    fontSize: 16, 
-    fontFamily: 'SpaceMono',
-  },
-
-  category: {
-    color: '#e5e5e5',
-    fontFamily: 'SpaceMono'
-  },
-
-  searchBox: {
-    height: 46,
-    marginLeft: 15,
-    marginRight: 15,
-    marginTop: 15,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-  }
-});
