@@ -39,7 +39,10 @@ const styles = StyleSheet.create({
   },
 
   listSongs:{
-    padding: 15,
+    marginTop: 15,
+    paddingBottom: 15,
+    paddingLeft: 15,
+    paddingRight: 15,
     flex: 1,
   },
 

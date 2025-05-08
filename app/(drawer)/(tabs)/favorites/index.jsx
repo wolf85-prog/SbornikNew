@@ -30,24 +30,16 @@ const Favorites = () => {
   const headerRight = () => {
     return (
       <>
-        {/* <TouchableOpacity
-          // onPress={()=>router.push("/modal")}
-          onPress={()=>setVisibleFontSize(true)}
-          style={{marginRight: 20}}
-        >
-          <AntDesign name="search1" size={22} color="white" />
-        </TouchableOpacity> */}
-
         <TouchableOpacity
           // onPress={()=>router.push("/modal")}
           onPress={()=>setVisibleFontSize(true)}
           style={{marginRight: 15}}
         >
-          <AntDesign name="delete" size={18} color="white" />
+          <AntDesign name="delete" size={18} />
         </TouchableOpacity>
 
         {/* <PopupMenu options={data} color={"white"}/> */}
-        <Tooltip title={Locales.t('search')} color={"white"}>
+        <Tooltip title={Locales.t('search')}>
                               <Appbar.Action
                                 icon="magnify"
                                 onPress={() => router.push('/search')}
@@ -58,7 +50,7 @@ const Favorites = () => {
                               visible={visible}
                               onDismiss={() => setVisible(false)}
                               anchor={
-                                <Tooltip title={Locales.t('options')} color={"white"}>
+                                <Tooltip title={Locales.t('options')} >
                                   <Appbar.Action
                                     icon="dots-vertical"
                                     onPress={() => setVisible(true)}

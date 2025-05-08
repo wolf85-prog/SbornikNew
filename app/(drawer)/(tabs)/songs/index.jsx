@@ -44,7 +44,7 @@ const SongsScreen = () => {
     return (
       // <PopupMenu options={options} color={"white"} />
       <>
-                            <Tooltip title={Locales.t('search')} color={"white"}>
+                            <Tooltip title={Locales.t('search')}>
                               <Appbar.Action
                                 icon="magnify"
                                 onPress={() => router.push('/search')}
@@ -55,7 +55,7 @@ const SongsScreen = () => {
                               visible={visible}
                               onDismiss={() => setVisible(false)}
                               anchor={
-                                <Tooltip title={Locales.t('options')} color={"white"}>
+                                <Tooltip title={Locales.t('options')}>
                                   <Appbar.Action
                                     icon="dots-vertical"
                                     onPress={() => setVisible(true)}

@@ -53,11 +53,11 @@ const PlaylistScreen = () => {
           onPress={()=>setVisiblePlaylist(true)}
           style={{marginRight: 15}}
         >
-          <AntDesign name="delete" size={18} color="white" />
+          <AntDesign name="delete" size={18} />
         </TouchableOpacity>
 
         {/* <PopupMenu options={data} color={"white"}/> */}
-        <Tooltip title={Locales.t('search')} color={"white"}>
+        <Tooltip title={Locales.t('search')}>
                               <Appbar.Action
                                 icon="magnify"
                                 onPress={() => router.push('/search')}
@@ -68,7 +68,7 @@ const PlaylistScreen = () => {
                               visible={visible}
                               onDismiss={() => setVisible(false)}
                               anchor={
-                                <Tooltip title={Locales.t('options')} color={"white"}>
+                                <Tooltip title={Locales.t('options')}>
                                   <Appbar.Action
                                     icon="dots-vertical"
                                     onPress={() => setVisible(true)}
@@ -94,7 +94,7 @@ const PlaylistScreen = () => {
         headerShown: true, 
         title: Locales.t("titlePlaylist"), 
         headerRight: headerRight,
-        headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
+        headerLeft: (() => <DrawerToggleButton  />),
         headerStyle: {backgroundColor: '#26489a'},    
         headerTintColor: 'white',
         header: (props) => <TabsHeader navProps={props} children={undefined} />,
