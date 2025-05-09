@@ -200,6 +200,7 @@ export function Content() {
     <SafeAreaView style={{ flex: 1 }}>
       <TextInput 
         placeholder="Поиск..." 
+        placeholderTextColor="#f3f3f3"
         clearButtonMode='always' 
         style={styles.searchBox}
         autoCapitalize="none"

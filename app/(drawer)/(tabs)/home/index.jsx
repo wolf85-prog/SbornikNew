@@ -5,7 +5,7 @@ import { DrawerToggleButton } from "@react-navigation/drawer";
 import { Ionicons, FontAwesome, Entypo } from '@expo/vector-icons';
 import { Snackbar } from 'react-native-paper';
 
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, useMemo } from 'react'
 
 import {
   Surface,
@@ -28,9 +28,7 @@ import songsData from './../../../../data/songsData.js';
 // import PopupMenu from "../../../../components/ui/PopupMenu.js";
 
 
-
 export default function TabsHome() {
-  //const {currentTheme} = useContext(ThemeContext) 
 
   const [visible, setVisible] = React.useState(false) 
 
@@ -130,11 +128,11 @@ export function Content() {
     setData(filteredData)
   }
 
-  const contains = ({name, email}, query) => {
+  const contains = ({name}, query) => {
     console.log("name: ", fullData)
     console.log("query: ", query)
 
-    if (name.includes(query) || email.includes(query)) {
+    if (name.includes(query)) {
       return true
     }
 
@@ -183,7 +181,10 @@ export function Content() {
     setFavorite(arr)
   }
   
-  function Item({ item }) {
+  const memoizedValue = useMemo(() => _renderitem, [data]);
+  const _renderitem = ({item}) => <SongCard item={item} />;
+
+  function SongCard({ item }) {
     return (
       <Card style={styles.back}>
         <TouchableOpacity onPress={()=> {router.push(`/home/song/${item.number}`)}} >
@@ -215,6 +216,8 @@ export function Content() {
     );
   }
 
+  
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar
@@ -236,8 +239,8 @@ export function Content() {
         <FlatList
           style={styles.listSongs}
           data={data}
-          renderItem={({ item }) => <Item item={item}/>}
-          keyExtractor={item => item.number}
+          renderItem={memoizedValue}
+          keyExtractor={item => item._id}
           // ItemSeparatorComponent={() => <View style={{height: 15}} />}
           contentContainerStyle={{ gap: 15 }}
           // columnWrapperStyle={{ gap: GAP_BETWEEN_COLUMNS }}
