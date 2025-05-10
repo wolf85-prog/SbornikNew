@@ -203,14 +203,14 @@ export function Content() {
         style={[styles.back]}
       >
         <Card.Title 
-          title="Card Title" 
-          subtitle="Card Subtitle" 
+          title={item.name} 
+          subtitle="Название песни" 
           left={(props) => <Avatar.Icon {...props} icon="folder" />}
           right={(props) => <IconButton {...props} icon="dots-vertical" onPress={() => {}} />}
         />
         <Card.Content>
-          <Text variant="titleLarge">Card title</Text>
-          <Text variant="bodyMedium">Card content</Text>
+          <Text variant="titleLarge">{item.name}</Text>
+          <Text variant="bodyMedium">Название песни</Text>
         </Card.Content>
         
       </Card>

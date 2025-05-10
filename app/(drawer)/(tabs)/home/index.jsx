@@ -105,6 +105,7 @@ export function Content() {
   const router = useRouter();
 
   //const {songs, setSongs} = useUserContext()
+  let arr = []
 
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('')
@@ -170,13 +171,18 @@ export function Content() {
     fetch()
   }, []);
 
+  useEffect(() => {
+    console.log("favorite: ", favorite)
+  },[favorite])
+
   const pressStar = (item, fav) => {
     onToggleSnackBar()
     console.log("press: ", item.number)
-    let arr = []
-    arr[item.number-1] = !fav
-    //console.log(arr)
-    setFavorite(arr)
+
+    favorite[item.number-1] = !fav
+    //console.log(favorite)
+    //favorite.push(arr)
+    setFavorite(favorite)
   }
   
   //const _renderitem = ({item}) => <SongCard item={item} />;
@@ -197,7 +203,7 @@ export function Content() {
             </View>
 
             <View style={styles.right_section}>
-              <Ionicons onPress={()=> pressStar(item, favorite[item.number-1])} name={favorite[item.number-1] ? "star" : "star-outline"} size={24} color="#feed33" />
+              <Ionicons onPress={()=> pressStar(item, favorite[Number(item.number)-1])} name={favorite[Number(item.number)-1] ? "star" : "star-outline"} size={24} color="#feed33" />
             </View>
           </View>
           
@@ -251,12 +257,12 @@ export function Content() {
         visible={visible}
         onDismiss={onDismissSnackBar}
         action={{
-          label: 'Undo',
+          label: 'Отмена',
           onPress: () => {
             // Do something
           },
         }}>
-        Hey there! I'm a Snackbar.
+        Песня добавлена в избранное!
       </Snackbar>
             
     </SafeAreaView>

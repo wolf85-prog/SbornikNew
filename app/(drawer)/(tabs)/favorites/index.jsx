@@ -12,6 +12,7 @@ import { Surface, Dialog, Tooltip, Appbar, Menu, Button } from 'react-native-pap
 
 import { Locales, ScreenInfo, styles, TabsHeader } from '@/lib'
 
+import songsData from './../../../../data/songsData.js';
 
 import filter from "lodash.filter"
 const Favorites = () => {
@@ -138,11 +139,23 @@ export function Content() {
   
         //   setIsLoading(false);
         // });
+
+        songsData.map((item, index)=> {
+          if (index === 0) {
+            let arr = []
+            arr.push(item)
+          }
+          setSongs(arr)
+        })
       })
   
       fetch()
       setIsLoading(false);
     }, []);
+
+    useEffect(() => {
+      console.log("songs: ", songs)
+    }, [songs])
     
     function Item({ item }) {
       return (
