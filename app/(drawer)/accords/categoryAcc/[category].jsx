@@ -86,9 +86,9 @@ export default function CategoryAccordScreen() {
     return (
       <View
         style={{
-          height: 1,
+          height: 0.5,
           width: "95%",
-          backgroundColor: "#CED0CE",
+          backgroundColor: "#050505",
           marginLeft: "2%",
         }}
       />
@@ -103,7 +103,7 @@ export default function CategoryAccordScreen() {
         style={{
           paddingVertical: 10,
           borderTopWidth: 1,
-          borderColor: "#CED0CE",
+          borderColor: "#050505",
         }}
       >
         <ActivityIndicator animating size="large" />
@@ -116,7 +116,7 @@ export default function CategoryAccordScreen() {
       <Stack.Screen options={{ 
         headerShown: true, 
         title: title, 
-        headerLeft: (() => <DrawerToggleButton />),
+        headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
         headerStyle: {backgroundColor: '#26489a'}, 
         headerTintColor: 'white',
         header: (props) => <TabsHeader navProps={props} children={undefined} />,

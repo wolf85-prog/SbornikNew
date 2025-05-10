@@ -1,7 +1,7 @@
 const songsData = [
     {
         "_id": 1,
-        "favorite": 0,
+        "favorite": 1,
         "font": "0",
         "name": "Я на жизнь рассчитывать не вправе",
         "number": 1,

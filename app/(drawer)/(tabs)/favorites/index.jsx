@@ -3,7 +3,7 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react'
 import { useEffect, useState } from "react";
 import { DrawerToggleButton } from "@react-navigation/drawer";
-import { Ionicons, FontAwesome, Entypo, AntDesign } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons, Entypo, AntDesign } from '@expo/vector-icons';
 import Card from '../../../../components/ui/Card';
 import PopupMenu from "./../../../../components/ui/PopupMenu.js";
 //import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
@@ -81,7 +81,7 @@ const Favorites = () => {
           headerShown: true, 
           title: Locales.t("titleFavorites"), 
           headerRight: headerRight,
-          headerLeft: (() => <DrawerToggleButton />),
+          headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
           headerStyle: {backgroundColor: '#26489a'},    
           headerTintColor: 'white',
           header: (props) => <TabsHeader navProps={props} children={undefined} />,
@@ -139,19 +139,25 @@ export function Content() {
   
         //   setIsLoading(false);
         // });
-
+        let arr = []
         songsData.map((item, index)=> {
-          if (index === 0) {
-            let arr = []
+          if (item.favorite === 1) {
+            
             arr.push(item)
+            //console.log(arr)
           }
+          
           setSongs(arr)
         })
       })
   
       fetch()
-      setIsLoading(false);
-    }, []);
+
+      setTimeout(()=> {
+        setIsLoading(false);
+      }, 2000)
+      
+    }, [songsData]);
 
     useEffect(() => {
       console.log("songs: ", songs)
@@ -159,17 +165,21 @@ export function Content() {
     
     function Item({ item }) {
       return (
-        <Card>
-          <TouchableOpacity onPress={()=> {router.push(`/songs/song/${item.number}`)}} >
+        <Card style={styles.back}>
+          <TouchableOpacity onPress={()=> {router.push(`/favorites/song/${item.number}`)}} >
             <View style={styles.card}>
               
+              <View style={styles.number}>
+                <Text style={styles.numberText}>{item.number}</Text>
+              </View>   
+                          
               <View style={styles.main_content}>
                 <Text style={styles.name}>{item.name}</Text>
-                {/* <Text style={styles.category}>{item.email}</Text>      */}
+                <Text style={styles.category}>Без категории</Text>     
               </View>
   
               <View style={styles.right_section}>  
-                {/* <Ionicons name="star-outline" size={24} color="#feed33" /> */}
+                <Ionicons name="close-sharp"onPress={() => console.log("Удаление...")} size={24} color='white' />
               </View>
             </View>
             
@@ -210,106 +220,10 @@ export function Content() {
             renderItem={({ item }) => <Item item={item}/>}
             keyExtractor={item => item.number}
             // ItemSeparatorComponent={() => <View style={{height: 15}} />}
-            contentContainerStyle={{  flexGrow: 1, justifyContent: "center", alignItems: "center", gap: 15 }}
+            contentContainerStyle={{  flexGrow: 1,  gap: 15 }}
             // columnWrapperStyle={{ gap: GAP_BETWEEN_COLUMNS }}
             ListEmptyComponent={EmptyListMessage}
           />       
     </SafeAreaView>
   );
 }
-
-
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     //backgroundColor: '#f3f3f3',
-//     width: '100%',
-//   },
-
-//   containerList: {
-//     flex: 1,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     backgroundColor: '#d6d5d5',
-//     width: '100%',
-//     margin: 0
-//   },
-
-//   emptyListTitle: {
-//     color: '#7f8c8d',
-//     textAlign: 'center',
-//     fontSize: 22,
-//   },
-
-//   emptyList: {
-//     color: '#b2babb',
-//     textAlign: 'center',
-//     fontSize: 16,
-//   },
-
-//   listSongs:{
-//     padding: 0,
-//   },
-
-//   card: {
-//     height: 65,
-//     backgroundColor: '#0005',
-//     padding: 8,
-//     paddingHorizontal: 15,
-//     marginTop: 10,
-//     borderRadius: 6,
-//     borderColor: '#000'
-//   },
-//   number: {
-//     width: 40,
-//     height: 40,
-//     display: 'flex',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-
-//   flex: {
-//     display: 'flex',
-//     justifyContent: 'space-between',
-//     alignItems: 'center',
-//     flex: 1,
-//     flexDirection: 'row',
-//     height: 55,
-//   },
-
-//   main_content: {
-//     width: '70%'
-//   },
-
-//   name: {
-//     color: '#000',
-//     fontSize: 16, 
-//     fontFamily: 'SpaceMono',
-//   },
-
-//   category: {
-//     color: '#e5e5e5',
-//     fontFamily: 'SpaceMono'
-//   },
-
-//   right_section: {
-//     display: 'flex',
-//     justifyContent: 'end',
-//     alignItems: 'center',
-//     flex: 1,
-//     flexDirection: 'row'
-//   },
-
-//   searchBox: {
-//     height: 46,
-//     marginLeft: 15,
-//     marginRight: 15,
-//     marginTop: 15,
-//     paddingHorizontal: 20,
-//     paddingVertical: 10,
-//     borderColor: '#ccc',
-//     borderWidth: 1,
-//     borderRadius: 8,
-//   }
-// })

@@ -15,8 +15,8 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 16,
     //padding: 32,
-    // alignItems: 'center',
-    // justifyContent: 'center',
+    // justifyContent: "center", 
+    // alignItems: "center",
     width: '100%',
   },
 
@@ -24,6 +24,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
+  },
+
+  containerList: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    margin: 0
   },
 
   emptyListTitle: {
@@ -44,6 +52,8 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
     flex: 1,
+    // justifyContent: "center", 
+    // alignItems: "center",
   },
 
   back: {
@@ -93,6 +103,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     gap: 10,
+    width: 50
   },
 
   name: {
@@ -284,6 +295,7 @@ const styles = StyleSheet.create({
 
     textAccord: {
       fontSize: 22,
+      color: 'white'
     }
 
 })

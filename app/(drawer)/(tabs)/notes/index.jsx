@@ -61,7 +61,7 @@ const NotesScreen = () => {
         headerShown: true, 
         title: Locales.t("titleNotes"), 
         headerRight: headerRight,
-        headerLeft: (() => <DrawerToggleButton />),
+        headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
         headerStyle: {backgroundColor: '#26489a'},    
         headerTintColor: 'white',
         header: (props) => <TabsHeader navProps={props} children={undefined} />,
@@ -209,8 +209,8 @@ export function Content() {
           right={(props) => <IconButton {...props} icon="dots-vertical" onPress={() => {}} />}
         />
         <Card.Content>
-          <Text variant="titleLarge">{item.name}</Text>
-          <Text variant="bodyMedium">Название песни</Text>
+          {/* <Text variant="titleLarge">{item.name}</Text> */}
+          <Text variant="bodyMedium">Контент</Text>
         </Card.Content>
         
       </Card>
@@ -256,7 +256,7 @@ export function Content() {
         renderItem={({ item }) => <Item item={item}/>}
         keyExtractor={item => item.uid}
         // ItemSeparatorComponent={() => <View style={{height: 15}} />}
-        contentContainerStyle={{  flexGrow: 1, justifyContent: "center", alignItems: "center", gap: 15 }}
+        contentContainerStyle={{  flexGrow: 1,  gap: 15 }}
         // columnWrapperStyle={{ gap: GAP_BETWEEN_COLUMNS }}
         ListEmptyComponent={EmptyListMessage}
       />  

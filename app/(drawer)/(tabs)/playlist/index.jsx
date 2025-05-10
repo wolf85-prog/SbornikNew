@@ -84,7 +84,7 @@ const PlaylistScreen = () => {
         headerShown: true, 
         title: Locales.t("titlePlaylist"), 
         headerRight: headerRight,
-        headerLeft: (() => <DrawerToggleButton  />),
+        headerLeft: (() => <DrawerToggleButton tintColor={'#fff'}  />),
         headerStyle: {backgroundColor: '#26489a'},    
         headerTintColor: 'white',
         header: (props) => <TabsHeader navProps={props} children={undefined} />,
@@ -263,34 +263,39 @@ export function Content() {
   
   function Item({ item }) {
     return (
-      <Card key={item.uid}>
-        <TouchableOpacity onPress={()=> {router.push(`/`)}} >
-          <View style={styles.flex}>
-            
-            <View style={styles.main_content}>
-              <Text style={styles.name}>{item.name}</Text>
-              {/* <Text style={styles.category}>{item.email}</Text>      */}
-            </View>
+      <TouchableOpacity style={styles.item} onPress={()=> {router.push(`/accords/categoryAcc/${item.uid}`)}} >
+        <View style={styles.main_content}>
+          <Text style={styles.name}>{item.name}</Text>
+        </View>
 
-            <View style={styles.right_section}>
-              <View style={styles.number}>
-                <Text>0</Text>
-              </View> 
-              <IconButton
-                icon="delete"
-                size={24}
-                onPress={() => deleteCustomer(item)}
-              /> 
-              {/* <Entypo name="dots-three-vertical" size={24} color="gray" /> */}
-              <PopupMenu color={"black"} options={dataMenu} id={item.uid}/>
-            </View>
-          </View>
-          
-        </TouchableOpacity >
-      </Card>
-      
+        <View style={styles.right_section}>
+          <View style={styles.number}>
+            <Text>0</Text>
+          </View> 
+          <IconButton
+            icon="delete"
+            size={24}
+            onPress={() => deleteCustomer(item)}
+          /> 
+          {/* <Entypo name="dots-three-vertical" size={24} color="gray" /> */}
+          <PopupMenu color={"black"} options={dataMenu} id={item.uid}/>
+        </View>
+      </TouchableOpacity> 
     );
   }
+
+  const renderSeparator = () => {
+      return (
+        <View
+          style={{
+            height: 0.5,
+            width: "95%",
+            backgroundColor: "#c3c3c3",
+            marginLeft: "2%",
+          }}
+        />
+      );
+  };
 
 
   const EmptyListMessage = ({item}) => {
@@ -330,8 +335,8 @@ export function Content() {
         data={playlists}
         renderItem={({ item }) => <Item item={item}/>}
         keyExtractor={item => item.uid}
-        // ItemSeparatorComponent={() => <View style={{height: 15}} />}
-        contentContainerStyle={{  flexGrow: 1, justifyContent: "center", alignItems: "center",  gap: 15 }}
+        ItemSeparatorComponent={renderSeparator}
+        contentContainerStyle={{  flexGrow: 1,  gap: 15 }}
         // columnWrapperStyle={{ gap: GAP_BETWEEN_COLUMNS }}
         ListEmptyComponent={EmptyListMessage}
       />   
@@ -368,108 +373,3 @@ export function Content() {
     </SafeAreaView>
   );
 }
-
-
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         backgroundColor: '#f3f3f3',
-//         width: '100%',
-//       },
-
-//       containerList: {
-//         flex: 1,
-//         alignItems: 'center',
-//         justifyContent: 'center',
-//         backgroundColor: '#d6d5d5',
-//         width: '100%',
-//         margin: 0
-//       },
-
-//       emptyListTitle: {
-//         color: '#7f8c8d',
-//         textAlign: 'center',
-//         fontSize: 22,
-//       },
-
-//       emptyList: {
-//         color: '#b2babb',
-//         textAlign: 'center',
-//         fontSize: 16,
-//       },
-
-//       listSongs:{
-//         padding: 0,
-//         flex: 1,
-//       },
-
-//       card: {
-//         height: 65,
-//         backgroundColor: '#0005',
-//         padding: 8,
-//         paddingHorizontal: 15,
-//         marginTop: 10,
-//         borderRadius: 6,
-//         borderColor: '#000'
-//       },
-//       number: {
-//         width: 40,
-//         height: 40,
-//         display: 'flex',
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//       },
-
-//       flex: {
-//         display: 'flex',
-//         justifyContent: 'space-between',
-//         alignItems: 'center',
-//         flex: 1,
-//         flexDirection: 'row',
-//         height: 55,
-//       },
-
-//       main_content: {
-//         width: '70%'
-//       },
-
-//       name: {
-//         color: '#000',
-//         fontSize: 16, 
-//         fontFamily: 'SpaceMono',
-//       },
-
-//       category: {
-//         color: '#e5e5e5',
-//         fontFamily: 'SpaceMono'
-//       },
-
-//       right_section: {
-//         display: 'flex',
-//         justifyContent: 'flex-end',
-//         alignItems: 'center',
-//         flex: 1,
-//         flexDirection: 'row'
-//       },
-
-//       searchBox: {
-//         height: 46,
-//         marginLeft: 15,
-//         marginRight: 15,
-//         marginTop: 15,
-//         paddingHorizontal: 20,
-//         paddingVertical: 10,
-//         borderColor: '#ccc',
-//         borderWidth: 1,
-//         borderRadius: 8,
-//       },
-//       floatingButton: {
-//         position: 'absolute',
-//         width: 150,
-//         height: 150,
-//         alignItems: 'center',
-//         justifyContent: 'center',
-//         bottom: 0,
-//         right: 0,
-//       },
-// })

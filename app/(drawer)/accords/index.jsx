@@ -22,7 +22,7 @@ export default function AccordScreen() {
       <Stack.Screen options={{ 
         headerShown: true, 
         title: "Аккорды", 
-        headerLeft: (() => <DrawerToggleButton  />),
+        headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
         headerStyle: {backgroundColor: '#26489a'}, 
         headerTintColor: 'white',
         header: (props) => <TabsHeader navProps={props} children={undefined} />,
@@ -88,9 +88,9 @@ export function Content() {
     return (
       <View
         style={{
-          height: 1,
+          height: 0.5,
           width: "95%",
-          backgroundColor: "#CED0CE",
+          backgroundColor: "#c3c3c3",
           marginLeft: "2%",
         }}
       />
