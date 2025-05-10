@@ -59,6 +59,11 @@ const styles = StyleSheet.create({
     height: 58,
   },
 
+  cardNote: {
+    width: '100%',
+    borderRadius: 10
+  },
+
   number: {
     width: 60,
     height: 50,

@@ -4,12 +4,11 @@ import React from 'react'
 import { useEffect, useState } from "react";
 import { DrawerToggleButton } from "@react-navigation/drawer";
 import { Ionicons, FontAwesome, Entypo, AntDesign, MaterialIcons } from '@expo/vector-icons';
-import Card from '../../../../components/ui/Card';
+//import Card from '../../../../components/ui/Card';
 import PopupMenu from "../../../../components/ui/PopupMenu.js";
-import { Button, Menu, Divider, PaperProvider, Dialog, Portal } from 'react-native-paper';
-
-//import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
-import { Surface, FAB, Tooltip, Appbar } from 'react-native-paper'
+import { Button, Dialog, Portal, Surface, FAB, Tooltip, Appbar,
+  Avatar, Card, IconButton
+ } from 'react-native-paper'
 import { Locales, ScreenInfo, styles, TabsHeader } from '@/lib'
 
 import filter from "lodash.filter"
@@ -17,6 +16,9 @@ import filter from "lodash.filter"
 const NotesScreen = () => {
 
   const router = useRouter();
+
+  const [visibleNote, setVisibleNote] = useState(false);
+  const hideDialog = () => setVisibleNote(false);
 
   const data = [
       {
@@ -29,17 +31,23 @@ const NotesScreen = () => {
     return (
       <>
         <Tooltip title={Locales.t('search')}>
-                          <Appbar.Action
-                            icon="magnify"
-                            onPress={() => router.push('/search')}
-                          />
-                        </Tooltip>
-                        <Tooltip title={Locales.t('titleSettings')}>
-                          <Appbar.Action
-                            icon="cog"
-                            onPress={() => router.push('/(drawer)/settings')}
-                          />
-                        </Tooltip>
+                  <Appbar.Action
+                    icon="delete"
+                    onPress={()=>setVisibleNote(true)}
+                  />
+        </Tooltip>
+        <Tooltip title={Locales.t('search')}>
+                  <Appbar.Action
+                    icon="magnify"
+                    onPress={() => router.push('/search')}
+                  />
+        </Tooltip>
+        <Tooltip title={Locales.t('titleSettings')}>
+          <Appbar.Action
+            icon="cog"
+            onPress={() => router.push('/(drawer)/settings')}
+          />
+        </Tooltip>
       </>
         // <PopupMenu options={data} color={"white"}/>
     );
@@ -60,6 +68,18 @@ const NotesScreen = () => {
       }} />
 
         <Content />
+
+
+        <Dialog visible={visibleNote} onDismiss={hideDialog}>
+          <Dialog.Title>Удаление</Dialog.Title>
+          <Dialog.Content>
+            <Text>Вы хотите очистить список заметок?</Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={() => setVisibleNote(false)}>Отмена</Button>
+            <Button onPress={() => setVisibleNote(false)}>ОК</Button>
+          </Dialog.Actions>
+        </Dialog>
     </Surface>
   )
 }
@@ -171,24 +191,28 @@ export function Content() {
   
   function Item({ item }) {
     return (
-      <Card>
-        <TouchableOpacity onPress={()=> {router.push(`/songs/song/${item.number}`)}} >
-          <View style={styles.flex}>
-            
-            <View style={styles.main_content}>
-              <Text style={styles.name}>{item.name}</Text>
-              {/* <Text style={styles.category}>{item.email}</Text>      */}
-            </View>
+      // <Card.Title
+      //   style={[styles.back, styles.cardNote]}
+      //           title={item.name}
+      //           subtitle="Card Subtitle"
+      //           left={(props) => <Avatar.Icon {...props} icon="folder" />}
+      //           right={(props) => <IconButton {...props} icon="dots-vertical" onPress={() => {}} />}
+      // />
 
-            <View style={styles.right_section}>
-              <View style={styles.number}>
-                <Text>{item.number}</Text>
-              </View>  
-              <Ionicons name="star-outline" size={24} color="#feed33" />
-            </View>
-          </View>
-          
-        </TouchableOpacity >
+      <Card 
+        style={[styles.back]}
+      >
+        <Card.Title 
+          title="Card Title" 
+          subtitle="Card Subtitle" 
+          left={(props) => <Avatar.Icon {...props} icon="folder" />}
+          right={(props) => <IconButton {...props} icon="dots-vertical" onPress={() => {}} />}
+        />
+        <Card.Content>
+          <Text variant="titleLarge">Card title</Text>
+          <Text variant="bodyMedium">Card content</Text>
+        </Card.Content>
+        
       </Card>
       
     );

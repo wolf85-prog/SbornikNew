@@ -1,6 +1,6 @@
 import { SafeAreaView, StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ActivityIndicator, TextInput } from 'react-native'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { DrawerToggleButton } from "@react-navigation/drawer";
 import { Ionicons } from '@expo/vector-icons';
 import Card from '../../../../components/ui/Card';
@@ -117,11 +117,12 @@ export function Content() {
     setData(filteredData)
   }
   
-  const contains = ({name, email}, query) => {
-    if (name.includes(query) || email.includes(query)) {
+  const contains = ({name, number}, query) => {
+
+    if (name.toLowerCase().includes(query) || number.toString().includes(query)) {
       return true
     }
-  
+
     return false
   }
 
@@ -162,9 +163,10 @@ export function Content() {
 
     fetch()
   }, []);
-  
-  function Item({ item }) {
-    return (
+
+
+  const renderItem = useMemo(()=> {
+    return ({ item }) => (
       <Card style={styles.back}>
         <TouchableOpacity onPress={()=> {router.push(`/songs/song/${item.number}`)}} >
           <View style={styles.card}>
@@ -183,10 +185,10 @@ export function Content() {
           </View>
           
         </TouchableOpacity >
-      </Card>
-      
-    );
-  }
+      </Card> 
+      );
+    }, [data]);
+  
 
   if (isLoading) {
     return (
@@ -211,7 +213,8 @@ export function Content() {
       <FlatList
         style={styles.listSongs}
         data={data}
-        renderItem={({ item }) => <Item item={item}/>}
+        renderItem={renderItem}
+        removeClippedSubviews={true}
         keyExtractor={item => item.number}
         // ItemSeparatorComponent={() => <View style={{height: 15}} />}
         contentContainerStyle={{ gap: 15 }}

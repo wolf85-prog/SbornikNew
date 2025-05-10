@@ -40,29 +40,19 @@ const PlaylistScreen = () => {
   const headerRight = () => {
     return (
       <>
-        {/* <TouchableOpacity
-          // onPress={()=>router.push("/modal")}
-          onPress={()=>setVisibleFontSize(true)}
-          style={{marginRight: 20}}
-        >
-          <AntDesign name="search1" size={22} color="white" />
-        </TouchableOpacity> */}
-
-        <TouchableOpacity
-          // onPress={()=>router.push("/modal")}
-          onPress={()=>setVisiblePlaylist(true)}
-          style={{marginRight: 15}}
-        >
-          <AntDesign name="delete" size={18} />
-        </TouchableOpacity>
-
         {/* <PopupMenu options={data} color={"white"}/> */}
         <Tooltip title={Locales.t('search')}>
-                              <Appbar.Action
-                                icon="magnify"
-                                onPress={() => router.push('/search')}
-                              />
-                            </Tooltip>
+          <Appbar.Action
+            icon="delete"
+            onPress={()=>setVisiblePlaylist(true)}
+          />
+        </Tooltip>
+        <Tooltip title={Locales.t('search')}>
+          <Appbar.Action
+            icon="magnify"
+            onPress={() => router.push('/search')}
+          />
+        </Tooltip>
                             <Menu
                               statusBarHeight={48}
                               visible={visible}

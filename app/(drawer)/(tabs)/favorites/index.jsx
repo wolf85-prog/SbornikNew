@@ -8,7 +8,7 @@ import Card from '../../../../components/ui/Card';
 import PopupMenu from "./../../../../components/ui/PopupMenu.js";
 //import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
 
-import { Surface, Tooltip, Appbar, Menu } from 'react-native-paper'
+import { Surface, Dialog, Tooltip, Appbar, Menu, Button } from 'react-native-paper'
 
 import { Locales, ScreenInfo, styles, TabsHeader } from '@/lib'
 
@@ -19,6 +19,9 @@ const Favorites = () => {
   const router = useRouter();
 
   const [visible, setVisible] = useState(false) 
+  const [visibleSongs, setVisibleSongs] = useState(false);
+
+  const hideDialog = () => setVisibleSongs(false);
 
   const data = [
       {
@@ -30,40 +33,40 @@ const Favorites = () => {
   const headerRight = () => {
     return (
       <>
-        <TouchableOpacity
-          // onPress={()=>router.push("/modal")}
-          onPress={()=>setVisibleFontSize(true)}
-          style={{marginRight: 15}}
-        >
-          <AntDesign name="delete" size={18} />
-        </TouchableOpacity>
 
         {/* <PopupMenu options={data} color={"white"}/> */}
         <Tooltip title={Locales.t('search')}>
-                              <Appbar.Action
-                                icon="magnify"
-                                onPress={() => router.push('/search')}
-                              />
-                            </Tooltip>
-                            <Menu
-                              statusBarHeight={48}
-                              visible={visible}
-                              onDismiss={() => setVisible(false)}
-                              anchor={
-                                <Tooltip title={Locales.t('options')} >
-                                  <Appbar.Action
-                                    icon="dots-vertical"
-                                    onPress={() => setVisible(true)}
-                                  />
-                                </Tooltip>
-                              }  
-                            >
+                          <Appbar.Action
+                            icon="delete"
+                            onPress={()=>setVisibleSongs(true)}
+                          />
+        </Tooltip>
+        <Tooltip title={Locales.t('search')}>
+                          <Appbar.Action
+                            icon="magnify"
+                            onPress={() => router.push('/search')}
+                          />
+        </Tooltip>
+        
+        <Menu
+          statusBarHeight={48}
+          visible={visible}
+          onDismiss={() => setVisible(false)}
+          anchor={
+            <Tooltip title={Locales.t('options')} >
+              <Appbar.Action
+                icon="dots-vertical"
+                onPress={() => setVisible(true)}
+              />
+            </Tooltip>
+          }  
+        >
                               <Menu.Item
                                 title={Locales.t('titleSettings')}
                                 leadingIcon="cog"
                                 onPress={() => router.push('/settings')}
                               />
-                            </Menu>
+          </Menu>
       </>
         
     );
@@ -84,6 +87,17 @@ const Favorites = () => {
         }} />
           
           <Content />
+
+          <Dialog visible={visibleSongs} onDismiss={hideDialog}>
+                    <Dialog.Title>Удаление</Dialog.Title>
+                    <Dialog.Content>
+                      <Text>Вы хотите очистить список избранного?</Text>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                      <Button onPress={() => setVisibleSongs(false)}>Отмена</Button>
+                      <Button onPress={() => setVisibleSongs(false)}>ОК</Button>
+                    </Dialog.Actions>
+          </Dialog>
 
       </Surface>
   )
@@ -134,18 +148,15 @@ export function Content() {
       return (
         <Card>
           <TouchableOpacity onPress={()=> {router.push(`/songs/song/${item.number}`)}} >
-            <View style={styles.flex}>
+            <View style={styles.card}>
               
               <View style={styles.main_content}>
                 <Text style={styles.name}>{item.name}</Text>
                 {/* <Text style={styles.category}>{item.email}</Text>      */}
               </View>
   
-              <View style={styles.right_section}>
-                <View style={styles.number}>
-                  <Text>{item.number}</Text>
-                </View>  
-                <Ionicons name="star-outline" size={24} color="#feed33" />
+              <View style={styles.right_section}>  
+                {/* <Ionicons name="star-outline" size={24} color="#feed33" /> */}
               </View>
             </View>
             

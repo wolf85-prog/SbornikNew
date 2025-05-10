@@ -128,11 +128,9 @@ export function Content() {
     setData(filteredData)
   }
 
-  const contains = ({name}, query) => {
-    console.log("name: ", fullData)
-    console.log("query: ", query)
+  const contains = ({name, number}, query) => {
 
-    if (name.includes(query)) {
+    if (name.toLowerCase().includes(query) || number.toString().includes(query)) {
       return true
     }
 
@@ -181,11 +179,11 @@ export function Content() {
     setFavorite(arr)
   }
   
-  const memoizedValue = useMemo(() => _renderitem, [data]);
-  const _renderitem = ({item}) => <SongCard item={item} />;
-
-  function SongCard({ item }) {
-    return (
+  //const _renderitem = ({item}) => <SongCard item={item} />;
+  const renderItem = useMemo(()=> {
+  return ({ item }) => (
+  // SongCard({ item }) {
+  //   return (
       <Card style={styles.back}>
         <TouchableOpacity onPress={()=> {router.push(`/home/song/${item.number}`)}} >
           <View style={styles.card}>
@@ -206,7 +204,8 @@ export function Content() {
         </TouchableOpacity >
       </Card>  
     );
-  }
+  }, [data]);
+
 
   if (isLoading) {
     return (
@@ -239,7 +238,8 @@ export function Content() {
         <FlatList
           style={styles.listSongs}
           data={data}
-          renderItem={memoizedValue}
+          renderItem={renderItem}
+          removeClippedSubviews={true}
           keyExtractor={item => item._id}
           // ItemSeparatorComponent={() => <View style={{height: 15}} />}
           contentContainerStyle={{ gap: 15 }}
