@@ -111,7 +111,7 @@ const PlaylistScreen = () => {
 export default PlaylistScreen
 
 export function Content() {
-  //const db = useSQLiteContext();
+  const db = useSQLiteContext();
 
   const router = useRouter();
   
@@ -151,9 +151,9 @@ export function Content() {
 
     const fetch = (async()=> {
 
-      const db = await SQLite.openDatabaseAsync('myLocalDatabase');
+      const local_db = await SQLite.openDatabaseAsync('myLocalDatabase');
 
-      await db.execAsync(`
+      await local_db.execAsync(`
         PRAGMA journal_mode = WAL;
         CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY NOT NULL, uid TEXT, nameList TEXT NOT NULL);
       `);

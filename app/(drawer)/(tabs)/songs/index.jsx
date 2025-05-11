@@ -5,11 +5,8 @@ import { DrawerToggleButton } from "@react-navigation/drawer";
 import { Ionicons } from '@expo/vector-icons';
 import Card from '../../../../components/ui/Card';
 import PopupMenu from "../../../../components/ui/PopupMenu.js";
-//import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
-import {
-  Provider,
-} from "react-native-paper";
-
+import { useSQLiteContext } from "expo-sqlite";
+import * as SQLite from 'expo-sqlite';
 import {
   Surface,
   Appbar, 
@@ -81,7 +78,7 @@ const SongsScreen = () => {
         title: Locales.t('songs'),
         // headerLeft: (() => <DrawerToggleButton tintColor={'#000'} />) 
         headerRight: headerRight,
-        headerLeft: (() => <DrawerToggleButton />),
+        headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
         headerStyle: {backgroundColor: '#26489a'},    
         headerTintColor: 'white',
         //headerTitleStyle: {fontWeight: 400},
@@ -96,7 +93,7 @@ const SongsScreen = () => {
 export default SongsScreen
 
 export function Content() {
-  //const db = useSQLiteContext();
+  const db = useSQLiteContext();
 
   const router = useRouter();
   
@@ -107,6 +104,75 @@ export function Content() {
   const [error, setError] = useState(null)
   const [fullData, setFullData] = useState([])
   const [textInputValue, setTextInputValue] = useState("");
+
+
+  useEffect(() => {
+    setIsLoading(true);
+    const fetch = (async()=> {
+      try {
+        const my_db = await SQLite.openDatabaseAsync('myLocalDatabase2', 	{
+            useNewConnection: true
+        });
+
+        await my_db.execAsync(`
+          PRAGMA journal_mode = WAL;
+          CREATE TABLE IF NOT EXISTS songs (id INTEGER PRIMARY KEY NOT NULL, 
+          uid TEXT, 
+          favorite INTEGER NOT NULL, 
+          font TEXT NOT NULL, 
+          name TEXT NOT NULL,
+          number INTEGER NOT NULL,
+          song TEXT NOT NULL,
+          song2 TEXT NOT NULL,
+          song_accord INTEGER NOT NULL,
+          song_temp TEXT,
+          song_ton TEXT NOT NULL);
+        `);
+
+        let allRows
+        allRows = await my_db.getAllAsync('SELECT * FROM songs');
+        if (allRows.length === 0) {
+          songsData.map(async(item)=> {
+            await my_db.runAsync('INSERT INTO songs (favorite, font, name, number, song, song2, song_accord, song_temp, song_ton) VALUES (?,?,?,?,?,?,?,?,?)', 
+              item.favorite, 
+              item.font, 
+              item.name, 
+              item.number, 
+              item.song, 
+              item.song2,
+              item.song_accord, 
+              item.song_temp, 
+              item.song_ton
+            );
+          })
+
+          allRows = await my_db.getAllAsync('SELECT * FROM songs');
+          console.log(allRows.length);
+        } else {
+          console.log(allRows.length);
+        } 
+
+        const sortedSongs = [...allRows].sort((a, b) => {       
+          var songA = a.name, songB = b.name
+          return (songA < songB) ? -1 : (songA > songB) ? 1 : 0;  //сортировка по возрастанию 
+        })
+
+        setData(sortedSongs)
+        setFullData(sortedSongs)
+
+        setIsLoading(false);
+
+      } catch (error) {
+          setError(error)
+          console.log(error)
+      }  
+
+    })
+
+    fetch()
+  }, []);
+
+
 
   const handleSearch = (query) => {
     setSearchQuery(query)
@@ -125,44 +191,6 @@ export function Content() {
 
     return false
   }
-
-  useEffect(() => {
-    setIsLoading(true);
-    const fetch = (async()=> {
-
-      // await db.withTransactionAsync(async () => {
-      //   const allRows = await db.getAllAsync('SELECT * FROM songs');
-      //   const songs = allRows.map((row) => ({
-      //     uid: row._id,
-      //     name: row.name,
-      //     number: row.number,
-      //   }));
-
-      //   const sortedSongs = [...songs].sort((a, b) => {       
-      //     var songA = a.name, songB = b.name
-      //     return (songA < songB) ? -1 : (songA > songB) ? 1 : 0;  //сортировка по возрастанию 
-      //   })
-    
-      //   setSongs(sortedSongs);
-
-      //   setIsLoading(false);
-      // });
-
-      const sortedSongs = [...songsData].sort((a, b) => {       
-          var songA = a.name, songB = b.name
-          return (songA < songB) ? -1 : (songA > songB) ? 1 : 0;  //сортировка по возрастанию 
-      })
-    
-      //setSongs(sortedSongs);
-
-      setData(sortedSongs)
-      setFullData(sortedSongs)
-      setIsLoading(false);
-      
-    })
-
-    fetch()
-  }, []);
 
 
   const renderItem = useMemo(()=> {

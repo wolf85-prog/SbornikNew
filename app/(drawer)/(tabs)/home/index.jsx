@@ -4,7 +4,8 @@ import { Stack, useRouter } from 'expo-router';
 import { DrawerToggleButton } from "@react-navigation/drawer";
 import { Ionicons, FontAwesome, Entypo } from '@expo/vector-icons';
 import { Snackbar } from 'react-native-paper';
-
+import * as SQLite from 'expo-sqlite';
+import { useSQLiteContext } from "expo-sqlite";
 import React, { useContext, useState, useEffect, useMemo } from 'react'
 
 import {
@@ -22,32 +23,11 @@ import {
 import filter from "lodash.filter"
 
 import songsData from './../../../../data/songsData.js';
-// import { ThemeContext } from "./../../../../context/ThemeContext.tsx"
-// import { useUserContext } from "./../../../../context/SongContext.tsx"
-// import { COLORS } from "../../../../constants/colors.js";
-// import PopupMenu from "../../../../components/ui/PopupMenu.js";
-
 
 export default function TabsHome() {
 
   const [visible, setVisible] = React.useState(false) 
-
   const router = useRouter();
-
-  // const options = [
-  //         {
-  //             title: "Настройки",
-  //             action: ()=>router.push("/settings")
-  //         },
-  //     ]
-
-  // const headerRight = () => {
-  //   return (
-  //     <PopupMenu options={options} color={"white"} />
-  //   );
-  // };
-
-
 
   return (
     <Surface style={styles.screen}>
@@ -100,7 +80,7 @@ export default function TabsHome() {
 //---------------------------------------------------------------------------------
 
 export function Content() {
-  //const db = useSQLiteContext();
+  const db = useSQLiteContext();
 
   const router = useRouter();
 
@@ -114,12 +94,113 @@ export function Content() {
   const [fullData, setFullData] = useState([])
   const [textInputValue, setTextInputValue] = useState("");
   const [favorite, setFavorite] = useState([])
+  const [numSong, setNumSong] = useState("");
 
   const [visible, setVisible] = React.useState(false);
 
   const onToggleSnackBar = () => setVisible(!visible);
   const onDismissSnackBar = () => setVisible(false);
 
+
+  useEffect(() => {
+    setIsLoading(true);
+    const fetch = (async()=> {
+      try {
+        const my_db = await SQLite.openDatabaseAsync('myLocalDatabase2', 	{
+            useNewConnection: true
+        });
+
+        await my_db.execAsync(`
+          PRAGMA journal_mode = WAL;
+          CREATE TABLE IF NOT EXISTS songs (id INTEGER PRIMARY KEY NOT NULL, 
+          uid TEXT, 
+          favorite INTEGER NOT NULL, 
+          font TEXT NOT NULL, 
+          name TEXT NOT NULL,
+          number INTEGER NOT NULL,
+          song TEXT NOT NULL,
+          song2 TEXT NOT NULL,
+          song_accord INTEGER NOT NULL,
+          song_temp TEXT,
+          song_ton TEXT NOT NULL);
+        `);
+
+        let allRows
+        allRows = await my_db.getAllAsync('SELECT * FROM songs');
+        if (allRows.length === 0) {
+          songsData.map(async(item)=> {
+            await my_db.runAsync('INSERT INTO songs (favorite, font, name, number, song, song2, song_accord, song_temp, song_ton) VALUES (?,?,?,?,?,?,?,?,?)', 
+              item.favorite, 
+              item.font, 
+              item.name, 
+              item.number, 
+              item.song, 
+              item.song2,
+              item.song_accord, 
+              item.song_temp, 
+              item.song_ton
+            );
+          })
+
+          allRows = await my_db.getAllAsync('SELECT * FROM songs');
+          console.log(allRows.length);
+        } else {
+          console.log(allRows.length);
+        } 
+
+        setData(allRows)
+        setFullData(allRows)
+
+        setIsLoading(false);
+
+      } catch (error) {
+          setError(error)
+          console.log(error)
+      }  
+
+    })
+
+    fetch()
+  }, []);
+
+  useEffect(() => {
+    //console.log("favorite: ", favorite)
+  },[favorite])
+
+  const pressStar = (item, fav) => {
+    onToggleSnackBar()
+    setNumSong(item.number)
+    console.log("press: ", item.number)
+
+    setData((data) => {
+      let userIndex = data.findIndex((item2) => item2.number === item.id);
+      const usersCopy = JSON.parse(JSON.stringify(data));
+
+      const userObject = usersCopy[userIndex];
+			usersCopy[userIndex] = { ...userObject, ['favorite']: fav === 1 ? 0 : 1};
+
+      return usersCopy;
+    });
+
+    // const editSong = data.map((song) => {
+    //   if (song.id !== item.id) {
+    //     return song;
+    //   }
+
+    //   const updatedSong = {
+    //     favorite: 1,
+    //   }
+    //   return updatedSong;
+    // });
+
+    // setData(editSong);
+
+    //favorite[item.number-1] = !fav
+    //console.log(favorite)
+    //favorite.push(arr)
+    //setFavorite(favorite)
+  }
+  
   const handleSearch = (query) => {
     setSearchQuery(query)
     const formattedQuery = query.toLowerCase()
@@ -137,59 +218,9 @@ export function Content() {
 
     return false
   }
-
-  useEffect(() => {
-    setIsLoading(true);
-
-    const fetch = (async()=> {
-      try {
-        // await db.withTransactionAsync(async () => {
-        //   const allRows = await db.getAllAsync('SELECT * FROM songs');
-        //   const songs = allRows.map((row) => ({
-        //     uid: row._id,
-        //     name: row.name,
-        //     number: row.number,
-        //   }));
-
-        //   setData(songs)
-
-        //   setFullData(songs)
-        //   setIsLoading(false);
-        // });
-
-        setData(songsData)
-
-        setFullData(songsData)
-        setIsLoading(false);
-        
-      } catch (error) {
-        setError(error)
-        console.log(error)
-      }    
-    })
-
-    fetch()
-  }, []);
-
-  useEffect(() => {
-    console.log("favorite: ", favorite)
-  },[favorite])
-
-  const pressStar = (item, fav) => {
-    onToggleSnackBar()
-    console.log("press: ", item.number)
-
-    favorite[item.number-1] = !fav
-    //console.log(favorite)
-    //favorite.push(arr)
-    setFavorite(favorite)
-  }
   
-  //const _renderitem = ({item}) => <SongCard item={item} />;
   const renderItem = useMemo(()=> {
   return ({ item }) => (
-  // SongCard({ item }) {
-  //   return (
       <Card style={styles.back}>
         <TouchableOpacity onPress={()=> {router.push(`/home/song/${item.number}`)}} >
           <View style={styles.card}>
@@ -203,7 +234,7 @@ export function Content() {
             </View>
 
             <View style={styles.right_section}>
-              <Ionicons onPress={()=> pressStar(item, favorite[Number(item.number)-1])} name={favorite[Number(item.number)-1] ? "star" : "star-outline"} size={24} color="#feed33" />
+              <Ionicons onPress={()=> pressStar(item, item.favorite)} name={item.favorite === 1 ? "star" : "star-outline"} size={24} color="#feed33" />
             </View>
           </View>
           
@@ -246,7 +277,7 @@ export function Content() {
           data={data}
           renderItem={renderItem}
           removeClippedSubviews={true}
-          keyExtractor={item => item._id}
+          keyExtractor={item => item.number}
           // ItemSeparatorComponent={() => <View style={{height: 15}} />}
           contentContainerStyle={{ gap: 15 }}
           // columnWrapperStyle={{ gap: GAP_BETWEEN_COLUMNS }}
@@ -255,6 +286,7 @@ export function Content() {
 
       <Snackbar
         visible={visible}
+        duration={1000}
         onDismiss={onDismissSnackBar}
         action={{
           label: 'Отмена',
@@ -262,7 +294,7 @@ export function Content() {
             // Do something
           },
         }}>
-        Песня добавлена в избранное!
+        <Text>Песня №{numSong} добавлена в избранное!</Text>
       </Snackbar>
             
     </SafeAreaView>
