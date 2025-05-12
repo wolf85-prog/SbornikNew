@@ -296,7 +296,14 @@ const styles = StyleSheet.create({
     textAccord: {
       fontSize: 22,
       color: 'white'
-    }
+    },
+
+    skia: {
+      // flex:  1,
+      // alignItems: "center",
+      width: 300,
+      height: 300
+  },
 
 })
 

@@ -90,7 +90,7 @@ export function Content() {
         style={{
           height: 0.5,
           width: "95%",
-          backgroundColor: "#c3c3c3",
+          backgroundColor: "#050505",
           marginLeft: "2%",
         }}
       />

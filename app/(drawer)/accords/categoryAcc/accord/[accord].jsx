@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
 import {Canvas} from "@shopify/react-native-skia";
 import Star from "@/components/Star";
 import Setka from "@/components/Setka";
@@ -7,6 +7,13 @@ import { useLocalSearchParams } from 'expo-router';
 import React from 'react'
 import { useEffect, useState } from "react";
 import { useSQLiteContext } from "expo-sqlite";
+import { 
+  Surface, 
+  Appbar, 
+  Menu, 
+  Tooltip,
+  FAB} from "react-native-paper";
+import { Locales, ScreenInfo, styles, TabsHeader } from '@/lib'
 
 
 export default function AccordPage() {
@@ -17,6 +24,7 @@ export default function AccordPage() {
   const [bareAcc, setBareAcc] = useState('');
   const [ladAcc, setLadAcc] = useState('');
   const { accord } = useLocalSearchParams(); 
+  const [isLoading, setIsLoading] = useState(false);
   
   useEffect(() => {
       console.log("codeAcc: ", codeAcc)
@@ -24,6 +32,8 @@ export default function AccordPage() {
     }, [codeAcc])
 
   useEffect(() => {
+    setIsLoading(true);
+
     const fetch = (async()=> {
 
       await db.withTransactionAsync(async () => {
@@ -38,36 +48,31 @@ export default function AccordPage() {
 
     fetch()
 
+    setIsLoading(false);
+
   }, []);
 
+  if (isLoading) {
+      return (
+        <View style={{flex:1, justifyContent:'center',alignItems:'center'}}>
+          <ActivityIndicator size={"large"} color="#5500dc"/>
+        </View>
+      );
+  }
+
   return (
-    <View style={styles.container}>
+    <Surface style={[styles.screen, styles.container]}>
       <Stack.Screen options={{ 
         headerShown: true, 
         title: titleAcc,
-        headerStyle: {backgroundColor: '#26489a'}, 
+        headerStyle: {backgroundColor: 'rgb(25, 24, 28)'}, 
         headerTintColor: 'white',
+        
         }} 
       />
       <Canvas style={styles.skia}>
         <Setka data={codeAcc}/>
       </Canvas>
-    </View>
+    </Surface>
   );
 }
-
-
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#fff",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    skia: {
-      // flex:  1,
-      // alignItems: "center",
-      width: 300,
-      height: 300
-  },
-});
