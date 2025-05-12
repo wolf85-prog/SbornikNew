@@ -8,6 +8,9 @@ import {Provider, Surface} from "react-native-paper";
 import { useSQLiteContext } from "expo-sqlite";
 //import filter from "lodash.filter"
 
+import accordsData from './../../../../data/accord_new.js';
+import catAccordData from './../../../../data/categories_accords.js';
+
 import {
   Locales,
   TabBar, TabsHeader,
@@ -38,27 +41,36 @@ export default function CategoryAccordScreen() {
     setIsLoading(true);
     const fetch = (async()=> {
 
-      await db.withTransactionAsync(async () => {
-        const row = await db.getFirstAsync(`SELECT * FROM categories_accords WHERE _id=${category}`);
-        console.log("row: ", row)
+      // await db.withTransactionAsync(async () => {
+      //   const row = await db.getFirstAsync(`SELECT * FROM categories_accords WHERE _id=${category}`);
+      //   console.log("row: ", row)
 
-        setTitle(row.accord)
-      });
+      //   setTitle(row.accord)
+      // });
+      const resTitle = catAccordData.find((item)=> item._id === Number(category) )
+      console.log("resTitle: ", resTitle)
+      setTitle(resTitle ? resTitle.accord : '')
 
-      await db.withTransactionAsync(async () => {
-        const allRows = await db.getAllAsync(`SELECT * FROM accord_new WHERE _id_cat_acc=${category}`);
-        const accords = allRows.map((row) => ({
-          uid: row?._id,
-          name: row?.name,
-          code: row?.code,
-          bare: row?.bare,
-          lad: row?.lad,
-        }));
+      // await db.withTransactionAsync(async () => {
+      //   const allRows = await db.getAllAsync(`SELECT * FROM accord_new WHERE _id_cat_acc=${category}`);
+      //   const accords = allRows.map((row) => ({
+      //     _id: row?._id,
+      //     name: row?.name,
+      //     code: row?.code,
+      //     bare: row?.bare,
+      //     lad: row?.lad,
+      //   }));
 
-        setAccords(accords);
+      //   setAccords(accords);
+
+      //   setIsLoading(false);
+      // });
+
+        const resAccords = accordsData.filter(item=> item._id_cat_acc === Number(category))
+        console.log(resAccords.length)
+        setAccords(resAccords);
 
         setIsLoading(false);
-      });
 
     })
 
@@ -76,7 +88,7 @@ export default function CategoryAccordScreen() {
   
 
   const Item = ({item}) => (
-    <TouchableOpacity style={styles.item} onPress={()=> {router.push(`/accords/categoryAcc/accord/${item.uid}`)}} >
+    <TouchableOpacity style={styles.item} onPress={()=> {router.push(`/accords/categoryAcc/accord/${item._id}`)}} >
       <Text style={[styles.textAccord]}>{item.name}</Text>
     </TouchableOpacity>
   );
@@ -129,7 +141,7 @@ export default function CategoryAccordScreen() {
             style={styles.listSongs}
             data={accords}
             renderItem={({ item }) => <Item item={item}/>}
-            keyExtractor={item => item.uid}
+            keyExtractor={item => item._id}
             // ItemSeparatorComponent={() => <View style={{height: 15}} />}
             ItemSeparatorComponent={renderSeparator}
             contentContainerStyle={{  flexGrow: 1,  gap: 15 }}

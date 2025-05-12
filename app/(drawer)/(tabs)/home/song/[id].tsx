@@ -154,10 +154,27 @@ export default function DetailsScreen() {
   
 
   useEffect(() => {
+    console.log("id: ", id)
     setTitle(id)
+    setSongId(id)
   }, [id])
 
   
+  useEffect(() => {
+      setIsLoading(true);
+  
+      const fetch = (async()=> {
+
+          const resSong = songsData.find(item => item._id === Number(id))
+          setSongName(resSong ? resSong.name : '')
+          setSongs(songsData);
+      
+      })
+  
+      setIsLoading(false);
+  
+      fetch()
+    }, []);
 
   if (isLoading) {
       return (

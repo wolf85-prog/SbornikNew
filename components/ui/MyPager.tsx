@@ -21,20 +21,23 @@ type MyPagerProps = {
   showSongText: boolean;
 };
 
+function getColor(i: number) {
+    const multiplier = 255 / (NUM_ITEMS - 1);
+    const colorVal = Math.abs(i) * multiplier;
+    return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`;
+  }
+
+function getTextSong(page: number) {
+    const resSong = songsData.find(item=> item._id === page)
+    return resSong ? resSong.song2 : '';
+  }
+
 export default function MyPager({ numberPage, textSong, setTitleSong, setNumberSong, showSongText }: MyPagerProps) {
   const [preset, setPreset] = useState<Preset>(Preset.SLIDE);
   const pagerRef = useRef(null);
   const [songText, setSongText] = useState<any>('');
 
-  const db = useSQLiteContext();
-
-  interface Todo {
-    name: string;
-    song: string;
-    song2: string;
-    _id: number;
-    number: number;
-  }
+  //console.log("numberPage: ", getTextSong(Number(numberPage)))
 
   const renderPage = useCallback(({ index }: { index: number }) => {
 
@@ -49,8 +52,8 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
               // (songsData[index-1]?.song ? 
               // <AllText text={songsData[index-1]?.song}></AllText> 
               // : '')
-              <Text style={{ color: 'black', fontSize: 20 }}>{songsData[index-1]?.song2}</Text>
-              :<Text style={{ color: 'black', fontSize: 20 }}>{songsData[index-1]?.song2}</Text>
+              <Text style={{ color: 'black', fontSize: 20 }}>{songsData[index-1]?.song}</Text>
+              :<Text style={{ color: 'black', fontSize: 20 }}>{songsData[index-1]?.song}</Text>
               }
 
               {/* <Text style={{ color: 'black', fontSize: 20 }}>
@@ -60,12 +63,26 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
           </CardSong>        
         </ScrollView>
       </View>
+      // <View
+      //   style={[
+      //     styles.flex,
+      //     {
+      //       alignItems: 'center',
+      //       justifyContent: 'center',
+      //       backgroundColor: getColor(index),
+      //     },
+      //   ]}>
+      //   <Text style={{ color: 'white', fontSize: 80, fontWeight: 'bold' }}>
+      //     {index}
+      //   </Text>
+      // </View>
     );
   }, []);
 
   const changePage = (page: number)=> {
     setTitleSong(songsData[page-1]?.name)
     setNumberSong(songsData[page-1]?.number)
+    console.log("change page: ", page)
   }
 
   return (
@@ -78,9 +95,9 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
         style={styles.flex}
         pageWrapperStyle={styles.flex}
         preset={preset}
-        pageBuffer={1}
+        pageBuffer={4}
         minIndex={1}
-        initialIndex={numberPage}
+        initialIndex={Number(numberPage)}
         onPageChange={(page)=>changePage(page)}
       />
     </GestureHandlerRootView>

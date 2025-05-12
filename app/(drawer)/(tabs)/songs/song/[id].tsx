@@ -6,6 +6,7 @@ import { Stack } from "expo-router";
 import CardSong from '../../../../../components/ui/CardSong';
 import { Button, Dialog, Portal, TextInput, Text, Snackbar } from 'react-native-paper';
 //import Slider from '@react-native-community/slider';
+import MyPager from './../../../../../components/ui/MyPager'
 
 import songsData from './../../../../../data/songsData.js';
 import { PAGES, createPage } from './../../../../../constants/utils';
@@ -120,7 +121,9 @@ export default function DetailsScreen() {
   const { id } = useLocalSearchParams(); 
 
   useEffect(() => {
+    console.log("id: ", id)
     setTitle(id)
+    setSongId(id)
   }, [id])
 
 
@@ -128,30 +131,9 @@ export default function DetailsScreen() {
     setIsLoading(true);
 
     const fetch = (async()=> {
-      let pages = []//new Array(555);
-      await db.withTransactionAsync(async () => {
-        const row = await db.getFirstAsync<Todo>(`SELECT * FROM songs WHERE _id=${id}`);
-        //for (const row of allRows) {
-          //console.log(row?.number, row?.name);
-
-          const song = {
-            uid: row?._id,
-            name: row?.name,
-            text: row?.song,
-            number: row?.number,
-            onlytext: row?.song2,
-          };
-
-          //pages[Number(row?._id)-1] = song
-          pages.push(song)
-   
-        //}
-
-        //console.log(pages)
-        setSongName(song.name)
-        setSongs(pages);
-
-      });
+      const resSong = songsData.find(item => item._id === Number(id))
+      setSongName(resSong ? resSong.name : '')
+      setSongs(songsData);
     
     })
 
@@ -286,9 +268,16 @@ export default function DetailsScreen() {
             >
               <Fontisto name="hashtag" size={20} color="white" />
             </TouchableOpacity>
-
+            
+            {/* Текст песни */}
             <View style={{height: 1000}}>
-
+              <MyPager
+                numberPage={songId} 
+                textSong={songText}
+                setTitleSong={setSongName}
+                setNumberSong={setTitle}
+                showSongText={showSongText}
+              />
             </View>
 
           </Animated.ScrollView>  

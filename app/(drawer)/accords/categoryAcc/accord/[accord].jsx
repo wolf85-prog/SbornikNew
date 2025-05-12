@@ -15,6 +15,8 @@ import {
   FAB} from "react-native-paper";
 import { Locales, ScreenInfo, styles, TabsHeader } from '@/lib'
 
+import accordsData from './../../../../../data/accord_new.js';
+
 
 export default function AccordPage() {
   const db = useSQLiteContext();
@@ -36,13 +38,18 @@ export default function AccordPage() {
 
     const fetch = (async()=> {
 
-      await db.withTransactionAsync(async () => {
-        const row = await db.getFirstAsync(`SELECT * FROM accord_new WHERE _id=${accord}`);
-        console.log("row: ", row)
+      // await db.withTransactionAsync(async () => {
+      //   const row = await db.getFirstAsync(`SELECT * FROM accord_new WHERE _id=${accord}`);
+      //   console.log("row: ", row)
 
-        setTitleAcc(row.name)
-        setCodeAcc(row.code)
-      });
+      //   setTitleAcc(row.name)
+      //   setCodeAcc(row.code)
+      // });
+
+      const resAcc = accordsData.find(item=> item._id === Number(accord))
+
+      setTitleAcc(resAcc.name)
+      setCodeAcc(resAcc.code)
 
     })
 

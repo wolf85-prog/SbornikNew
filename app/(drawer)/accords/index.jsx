@@ -8,6 +8,9 @@ import {Provider, Surface, useTheme } from "react-native-paper";
 import { useSQLiteContext } from "expo-sqlite";
 //import filter from "lodash.filter"
 
+import catAccordData from './../../../data/categories_accords.js';
+
+
 import {
   Locales,
   TabBar, TabsHeader,
@@ -51,17 +54,20 @@ export function Content() {
     setIsLoading(true);
     const fetch = (async()=> {
 
-      await db.withTransactionAsync(async () => {
-        const allRows = await db.getAllAsync('SELECT * FROM categories_accords');
-        const accords = allRows.map((row) => ({
-          uid: row?._id,
-          name: row?.accord,
-        }));
+      // await db.withTransactionAsync(async () => {
+      //   const allRows = await db.getAllAsync('SELECT * FROM categories_accords');
+      //   const accords = allRows.map((row) => ({
+      //     _id: row?._id,
+      //     accord: row?.accord,
+      //   }));
     
-        setAccords(accords);
+      //   setAccords(accords);
 
-        setIsLoading(false);
-      });
+      //   setIsLoading(false);
+      // });
+
+      setAccords(catAccordData)
+      setIsLoading(false);
     })
 
     fetch()
@@ -78,8 +84,8 @@ export function Content() {
   
 
   const Item = ({item}) => (
-    <TouchableOpacity style={styles.item} onPress={()=> {router.push(`/accords/categoryAcc/${item.uid}`)}} >
-      <Text style={[styles.textAccord]}>{item.name}</Text>
+    <TouchableOpacity style={styles.item} onPress={()=> {router.push(`/accords/categoryAcc/${item._id}`)}} >
+      <Text style={[styles.textAccord]}>{item.accord}</Text>
     </TouchableOpacity>
   );
 
@@ -120,7 +126,7 @@ export function Content() {
         style={styles.listSongs}
         data={accords}
         renderItem={({ item }) => <Item item={item}/>}
-        keyExtractor={item => item.uid}
+        keyExtractor={item => item._id}
         // ItemSeparatorComponent={() => <View style={{height: 15}} />}
         ItemSeparatorComponent={renderSeparator}
         contentContainerStyle={{  flexGrow: 1,  gap: 15 }}
