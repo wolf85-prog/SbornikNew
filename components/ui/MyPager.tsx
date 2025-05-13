@@ -20,6 +20,8 @@ type MyPagerProps = {
   setNumberSong: any;
   showSongText: boolean;
   textSize: number;
+  setShowFullPage: any;
+  selectedPage: number;
 };
 
 function getColor(i: number) {
@@ -33,14 +35,17 @@ function getTextSong(page: number) {
     return resSong ? resSong.song2 : '';
   }
 
-export default function MyPager({ numberPage, textSong, setTitleSong, setNumberSong, showSongText, textSize }: MyPagerProps) {
+export default function MyPager({ numberPage, textSong, setTitleSong, setNumberSong, showSongText, textSize, setShowFullPage, selectedPage }: MyPagerProps) {
   const [preset, setPreset] = useState<Preset>(Preset.SLIDE);
   const pagerRef = useRef(null);
   const [songText, setSongText] = useState<any>('');
 
-  //console.log("numberPage: ", getTextSong(Number(numberPage)))
+  console.log("selectedPage: ", selectedPage)
 
-  const renderPage = useCallback(({ index }: { index: number }) => {
+
+  const renderPage = useCallback(({index}: {index: number}, showSongText: boolean, textSize: number) => {
+
+    //console.log("showSongText: ", showSongText)textSize
 
     return (
       <View
@@ -49,12 +54,14 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
         <ScrollView style={styles.scrollStyle}>       
           <CardSong style={styles.cardSong}>
             <View style={[styles.slide] }>
-              {showSongText ?
+              {
               // (songsData[index-1]?.song ? 
               // <AllText text={songsData[index-1]?.song}></AllText> 
               // : '')
-              <Text style={{ color: 'white', fontSize: textSize }}>{songsData[index-1]?.song2}</Text>
-              :<Text style={{ color: 'white', fontSize: textSize }}>{songsData[index-1]?.song}</Text>
+              <Text onPress={()=>setShowFullPage(false)} style={{ color: 'white', fontSize: textSize }}>
+                {showSongText ? songsData[index-1]?.song2 : songsData[index-1]?.song}
+              </Text>
+          
               }
 
             </View>
@@ -76,7 +83,7 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
       <InfinitePager
         key={`infinite-pager-${preset}`}
         ref={pagerRef}
-        renderPage={renderPage}
+        renderPage={(i)=>renderPage(i, showSongText, textSize)}
         style={styles.flex}
         pageWrapperStyle={styles.flex}
         preset={preset}

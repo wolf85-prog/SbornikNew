@@ -61,6 +61,7 @@ export default function DetailsScreen() {
   
   const [visibleNumber, setVisibleNumber] = useState(false);
   const [songNumber, setSongNumber] = useState<any>('');
+  const [selectedPage, setSelectedPage] = useState<number>(0);
   const [playlistName, setPlaylistName] = useState<any>('');
   const [categoryName, setCategoryName] = useState<any>('');
   const [noteText, setNoteText] = useState<any>('');
@@ -77,6 +78,7 @@ export default function DetailsScreen() {
 
   const [visibleFontSize, setVisibleFontSize] = useState(false);
   const [textSize, setTextSize] = useState(15);
+  const [previewValue, setPreviewValue] = useState(15)
 
   //const sliderRef = useRef<PagerView>(null);
   const scrollRef = useAnimatedRef<Animated.ScrollView>()
@@ -159,6 +161,14 @@ export default function DetailsScreen() {
     setSongId(id)
   }, [id])
 
+  useEffect(() => {
+    console.log("textSize: ", textSize)
+  }, [textSize])
+
+  useEffect(()=> {
+     console.log("songNumber: ", songNumber)
+  }, [songNumber])
+
   
   useEffect(() => {
       setIsLoading(true);
@@ -185,6 +195,10 @@ export default function DetailsScreen() {
   }
 
 
+  const pressFullPage = ()=> {
+    console.log("Нажили кнопку Полный экран")
+    setShowFullPage(true)
+  }
 
 
   interface Todo {
@@ -215,7 +229,7 @@ export default function DetailsScreen() {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={()=>setShowFullPage(true)}
+              onPress={pressFullPage}
               style={{marginRight: 20}}
             >
               <SimpleLineIcons name="size-fullscreen" size={20} color="white" />
@@ -232,12 +246,15 @@ export default function DetailsScreen() {
   }
 
   const onChangeSong = ()=> {
-    console.log(!showSongText)
+    console.log("Нажали кнопку Убрать аккорды", !showSongText)
     setShowSongText(!showSongText)
     
   }
 
-  
+  const selectPage = () => {
+    setSelectedPage(Number(songNumber))
+    setVisibleNumber(false)
+  }
 
 
   return (
@@ -245,7 +262,7 @@ export default function DetailsScreen() {
       <Stack.Screen options={{ 
         headerTransparent: true,
         headerBackground: ()=> <Animated.View style={[styles.header, headerAnimatedStyle]} />,
-        headerShown: true, 
+        headerShown: !showFullPage, 
         title: `№ ${title}` ,
         headerTintColor: '#fff',
         headerRight: headerRight,
@@ -313,34 +330,9 @@ export default function DetailsScreen() {
                 setNumberSong={setTitle}
                 showSongText={showSongText}
                 textSize={textSize}
+                setShowFullPage={setShowFullPage}
+                selectedPage={selectedPage}
               />
-
-              {/* <PagerView
-                ref={sliderRef}
-                testID="pager-view"
-                style={styles.pagerView}
-                initialPage={3}
-                pageMargin={10}
-                onPageScroll={onPageScroll}
-                onPageSelected={onPageSelected}
-                onPageScrollStateChanged={onPageScrollStateChanged}
-              > */}
-                {/* {songs.map((page: any) => (
-                  <View key={page.uid} collapsable={false}>      
-                    <ScrollView style={styles.scrollStyle}>       
-                      <CardSong>
-                        <View style={[styles.slide] }>
-                         {showSongText ?
-                          <AllText text={page.text}></AllText>
-                          :<Text style={[styles.text, {fontSize: 18}]}>{page.onlytext}</Text>
-                         }
-                        </View>
-                      </CardSong>        
-                    </ScrollView>
-                  </View>
-                  )
-                )} */}
-              {/* </PagerView> */}
             </View>
 
           </Animated.ScrollView>  
@@ -356,6 +348,7 @@ export default function DetailsScreen() {
             {/* <Ionicons name="heart-circle-sharp" size={80} color="red" /> */}
           </TouchableOpacity> 
 
+        {/* Переход к песне по номеру */}
           <Dialog visible={visibleNumber} onDismiss={hideDialog}>
               <Dialog.Content>
                 <Text>Введите номер в данном сборнике, на который желаете перейти</Text>
@@ -363,12 +356,12 @@ export default function DetailsScreen() {
                         label="Номер"
                         placeholder="1-555"
                         value={songNumber}
-                        onChangeText={text => setSongNumber(text)}
+                        onChangeText={value => setSongNumber(value)}
                       />
               </Dialog.Content>
               <Dialog.Actions>
                 <Button onPress={() => setVisibleNumber(false)}>Отмена</Button>
-                <Button onPress={() => setVisibleNumber(false)}>ОК</Button>
+                <Button onPress={selectPage}>ОК</Button>
               </Dialog.Actions>
           </Dialog>
  
@@ -493,7 +486,7 @@ export default function DetailsScreen() {
               <Dialog.Title>Размер текста</Dialog.Title>
               <Dialog.Content>
                 <View style={{alignItems: 'center'}}>
-                  <Text style={styles.text}>{textSize}</Text>
+                  <Text style={styles.text}>{previewValue}</Text>
                   <Slider
                     style={styles.slider}
                     minimumValue={10}
@@ -501,8 +494,10 @@ export default function DetailsScreen() {
                     minimumTrackTintColor="#9a5871"
                     maximumTrackTintColor="#000000"
                     step={1}
-                    onValueChange={(value) => setTextSize(value)}
-                    value={textSize}
+                    //onValueChange={(value) => setTextSize(value)}
+                    onValueChange={value => setPreviewValue(value)}
+                    onSlidingComplete={value => setTextSize(value)}
+                    value={15}
                   />   
                 </View>
               </Dialog.Content>
@@ -513,9 +508,9 @@ export default function DetailsScreen() {
           </Dialog>
           </>
 
-          // Текст песни без аккордов
+          // Текст песни на весь экран
           :<ScrollView>
-            <View style={{height: 1000}}>
+            <View style={{height: 1000, marginTop: 50}}>
               <MyPager
                 numberPage={songId} 
                 textSong={songText}
@@ -523,6 +518,8 @@ export default function DetailsScreen() {
                 setNumberSong={setTitle}
                 showSongText={showSongText}
                 textSize={textSize}
+                setShowFullPage={setShowFullPage}
+                selectedPage={selectedPage}
               />
             </View>
           </ScrollView>
@@ -546,114 +543,3 @@ export default function DetailsScreen() {
     </Surface>
   );
 }
-
-
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//   },
-//   page: {
-//     justifyContent: 'center',
-//     alignItems: 'center'
-//   },
-//   header: {
-//     backgroundColor: COLORS.darkBlue,
-//     height: 100,
-//   },
-//   scrollStyle: {
-//     padding: 5,
-//   },
-//   slide: {
-//     flex: 1,
-//     alignItems: 'flex-start',
-//     justifyContent: 'flex-start',
-//     backgroundColor: 'white',
-//   },
-//   image: {
-//     width: width, 
-//     height: IMG_HEIGHT,
-//     //marginVertical: 32,
-//   },
-//   text: {
-//     color: 'rgba(0, 0, 0, 0.8)',
-//     textAlign: 'left',
-//   },
-//   title: {
-//     fontSize: 22,
-//     color: 'rgba(255, 255, 255, 0.8)',
-//     textAlign: 'center',
-//   },
-
-//   floatingButton: {
-//     position: 'absolute',
-//     width: 100,
-//     height: 100,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     bottom: 0,
-//     right: 0,
-//   },
-
-//   floatingButtonNote: {
-//     backgroundColor:'#DE3163',
-//     borderRadius:'50%',
-//     position: 'absolute',
-//     width: 60,
-//     height: 60,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     top: 270,
-//     right: 90,
-//     zIndex: 100,
-//   },
-
-//   floatingButtonBemol: {
-//     backgroundColor:'#DE3163',
-//     borderRadius:'50%',
-//     position: 'absolute',
-//     width: 45,
-//     height: 45,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     top: 280,
-//     right: 170,
-//     zIndex: 100,
-//   },
-
-//   floatingButtonDiez: {
-//     backgroundColor:'#DE3163',
-//     borderRadius:'50%',
-//     position: 'absolute',
-//     width: 45,
-//     height: 45,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     top: 280,
-//     right: 20,
-//     zIndex: 100,
-//   },
-
-//   chordName: {
-//     color: 'red',
-//   },
-
-//   rowTone: {
-//     display: 'flex',
-//     justifyContent: 'space-between',
-//     alignItems: 'center',
-//     flexDirection: 'row',
-//     width: '90%',
-//     marginLeft: 25,
-//   },
-
-//   textTone: {
-//     color: '#fff',
-//   },
-
-//   slider: {
-//     width: 300,
-//     opacity: 1,
-//     marginTop: 10,
-//   },
-// });
