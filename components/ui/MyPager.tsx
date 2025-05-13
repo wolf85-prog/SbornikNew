@@ -40,7 +40,13 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
   const pagerRef = useRef(null);
   const [songText, setSongText] = useState<any>('');
 
-  console.log("selectedPage: ", selectedPage)
+
+  useEffect(()=> {
+      console.log("selectedPage: ", selectedPage)
+      setTitleSong(songsData[selectedPage-1]?.name)
+      setNumberSong(songsData[selectedPage-1]?.number)
+
+  }, [selectedPage])
 
 
   const renderPage = useCallback(({index}: {index: number}, showSongText: boolean, textSize: number) => {

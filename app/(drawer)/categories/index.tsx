@@ -84,7 +84,7 @@ const CategoriesScreen = () => {
       <Stack.Screen options={{ 
         headerShown: true, 
         title: "Категории песен", 
-        headerLeft: (() => <DrawerToggleButton  />), 
+        headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />), 
         headerRight: headerRight,
         headerStyle: {backgroundColor: '#26489a'},  
         headerTintColor: 'white',
