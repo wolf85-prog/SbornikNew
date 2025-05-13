@@ -4,6 +4,7 @@
 
 import { StyleSheet, Dimensions } from 'react-native'
 import Colors from '@/lib/ui/styles/colors'
+import { COLORS } from '../../../constants/colors.js';
 import Themes from '@/lib/ui/styles/themes'
 
 const { width } = Dimensions.get('window');
@@ -136,12 +137,14 @@ const styles = StyleSheet.create({
       alignItems: 'center'
     },
     header: {
-      backgroundColor: 'black',
+      backgroundColor: COLORS.darkHeader,
       height: 100,
     },
+
     scrollStyle: {
       padding: 5,
     },
+
     slide: {
       flex: 1,
       alignItems: 'flex-start',
@@ -154,7 +157,7 @@ const styles = StyleSheet.create({
       //marginVertical: 32,
     },
     text: {
-      color: 'rgba(0, 0, 0, 0.8)',
+      color: '#f3f3f3',
       textAlign: 'left',
     },
     title: {

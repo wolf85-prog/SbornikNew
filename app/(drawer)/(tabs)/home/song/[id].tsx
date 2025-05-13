@@ -35,8 +35,8 @@ import Animated, { interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewO
 const { width } = Dimensions.get('window');
 const IMG_HEIGHT = 300;
 
-const MIN_HEIGHT = 50;
-const MAX_HEIGHT = 250;
+const MIN_HEIGHT = 10;
+const MAX_HEIGHT = 50;
 
 
 
@@ -76,7 +76,7 @@ export default function DetailsScreen() {
   const [visibleTone, setVisibleTone] = useState(false);
 
   const [visibleFontSize, setVisibleFontSize] = useState(false);
-  const [textSize, setTextSize] = useState<any>(0.2);
+  const [textSize, setTextSize] = useState(15);
 
   //const sliderRef = useRef<PagerView>(null);
   const scrollRef = useAnimatedRef<Animated.ScrollView>()
@@ -232,7 +232,7 @@ export default function DetailsScreen() {
   }
 
   const onChangeSong = ()=> {
-    console.log(songs[0])
+    console.log(!showSongText)
     setShowSongText(!showSongText)
     
   }
@@ -253,10 +253,10 @@ export default function DetailsScreen() {
       />
 
 
-        <SafeAreaView style={styles.screen}> 
+        <SafeAreaView style={[styles.screen, {backgroundColor: '#000'}]}> 
           <StatusBar
             animated={true}
-            backgroundColor= {COLORS.darkBlue}
+            backgroundColor= {COLORS.black}
             //barStyle={statusBarStyle}
             //showHideTransition={statusBarTransition}
             //hidden={hidden}
@@ -312,6 +312,7 @@ export default function DetailsScreen() {
                 setTitleSong={setSongName}
                 setNumberSong={setTitle}
                 showSongText={showSongText}
+                textSize={textSize}
               />
 
               {/* <PagerView
@@ -488,30 +489,21 @@ export default function DetailsScreen() {
               </Dialog.Actions>
           </Dialog>
   
-          <Dialog visible={visibleFontSize} onDismiss={hideDialog} style={{backgroundColor: '#fff'}}>
+          <Dialog visible={visibleFontSize} onDismiss={hideDialog}>
               <Dialog.Title>Размер текста</Dialog.Title>
               <Dialog.Content>
                 <View style={{alignItems: 'center'}}>
                   <Text style={styles.text}>{textSize}</Text>
-                  {/* <Slider
+                  <Slider
                     style={styles.slider}
-                    minimumValue={MIN_HEIGHT}
-                    maximumValue={MAX_HEIGHT}
+                    minimumValue={10}
+                    maximumValue={50}
                     minimumTrackTintColor="#9a5871"
                     maximumTrackTintColor="#000000"
-                    onValueChange={(value) => setTextSize(Math.round(value))}
-                    value={textSize}
-                  /> */}
-                  {/* <Slider
-                    minimumValue={0}
-                    maximumValue={50}
-                    minimumTrackTintColor="#3f3f3f"
-                    maximumTrackTintColor="#000"
                     step={1}
+                    onValueChange={(value) => setTextSize(value)}
                     value={textSize}
-                    onValueChange={value => setTextSize(value)}
-                  /> */}
-                  {/* <Slider style={{width: 200, height: 40}} minimumValue={0} maximumValue={1}/> */}
+                  />   
                 </View>
               </Dialog.Content>
               <Dialog.Actions>
@@ -530,6 +522,7 @@ export default function DetailsScreen() {
                 setTitleSong={setSongName}
                 setNumberSong={setTitle}
                 showSongText={showSongText}
+                textSize={textSize}
               />
             </View>
           </ScrollView>

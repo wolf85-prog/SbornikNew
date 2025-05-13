@@ -19,6 +19,7 @@ type MyPagerProps = {
   setTitleSong: any;
   setNumberSong: any;
   showSongText: boolean;
+  textSize: number;
 };
 
 function getColor(i: number) {
@@ -32,7 +33,7 @@ function getTextSong(page: number) {
     return resSong ? resSong.song2 : '';
   }
 
-export default function MyPager({ numberPage, textSong, setTitleSong, setNumberSong, showSongText }: MyPagerProps) {
+export default function MyPager({ numberPage, textSong, setTitleSong, setNumberSong, showSongText, textSize }: MyPagerProps) {
   const [preset, setPreset] = useState<Preset>(Preset.SLIDE);
   const pagerRef = useRef(null);
   const [songText, setSongText] = useState<any>('');
@@ -52,30 +53,14 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
               // (songsData[index-1]?.song ? 
               // <AllText text={songsData[index-1]?.song}></AllText> 
               // : '')
-              <Text style={{ color: 'black', fontSize: 20 }}>{songsData[index-1]?.song}</Text>
-              :<Text style={{ color: 'black', fontSize: 20 }}>{songsData[index-1]?.song}</Text>
+              <Text style={{ color: 'white', fontSize: textSize }}>{songsData[index-1]?.song2}</Text>
+              :<Text style={{ color: 'white', fontSize: textSize }}>{songsData[index-1]?.song}</Text>
               }
 
-              {/* <Text style={{ color: 'black', fontSize: 20 }}>
-                {songsData[index-1]?.song}
-              </Text> */}
             </View>
           </CardSong>        
         </ScrollView>
       </View>
-      // <View
-      //   style={[
-      //     styles.flex,
-      //     {
-      //       alignItems: 'center',
-      //       justifyContent: 'center',
-      //       backgroundColor: getColor(index),
-      //     },
-      //   ]}>
-      //   <Text style={{ color: 'white', fontSize: 80, fontWeight: 'bold' }}>
-      //     {index}
-      //   </Text>
-      // </View>
     );
   }, []);
 
@@ -145,7 +130,10 @@ const AllText = ({text}: any) => {
 }
 
 const styles = StyleSheet.create({
-  flex: { flex: 1, height: 350 },
+  flex: { 
+    flex: 1,
+    backgroundColor: '#3e3b3e'
+  },
 
   scrollStyle: {
     padding: 5,
@@ -159,6 +147,6 @@ const styles = StyleSheet.create({
   },
 
   cardSong: {
-    backgroundColor: 'white',
+    backgroundColor: '#5b585b',
   }
 });

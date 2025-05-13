@@ -72,7 +72,7 @@ export default function AccordPage() {
       <Stack.Screen options={{ 
         headerShown: true, 
         title: titleAcc,
-        headerStyle: {backgroundColor: 'rgb(25, 24, 28)'}, 
+        headerStyle: {backgroundColor: '#19181c'}, 
         headerTintColor: 'white',
         
         }} 
