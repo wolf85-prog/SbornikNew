@@ -1,17 +1,13 @@
 import React, { useRef, useCallback, useState, useEffect } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
-import InfinitePager, { Preset } from 'react-native-infinite-pager';
+import InfinitePager, { InfinitePagerImperativeApi, Preset } from 'react-native-infinite-pager';
 import { useSQLiteContext } from "expo-sqlite";
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
 import CardSong from '../../components/ui/CardSong';
 
-const NUM_ITEMS = 15;
-
-
 import songsData from './../../data/songsData.js';
-
 
 type MyPagerProps = {
   numberPage: number;
@@ -25,18 +21,12 @@ type MyPagerProps = {
   setSelectedPage: any;
 };
 
-function getColor(i: number) {
-    const multiplier = 255 / (NUM_ITEMS - 1);
-    const colorVal = Math.abs(i) * multiplier;
-    return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`;
-  }
-
-
 
 export default function MyPager({ numberPage, textSong, setTitleSong, setNumberSong, showSongText, textSize, setShowFullPage, selectedPage, setSelectedPage }: MyPagerProps) {
   const [preset, setPreset] = useState<Preset>(Preset.SLIDE);
-  const pagerRef = useRef(null);
+  const pagerRef = useRef<InfinitePagerImperativeApi>(null);
   const [songText, setSongText] = useState<any>('');
+
 
   function getTextSong(page: number, show: boolean) {
     let text = ''
@@ -46,7 +36,16 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
   }   
 
   useEffect(()=> {
-      //console.log("selectedPage: ", selectedPage)
+      console.log("selectedPage: ", selectedPage)
+
+      if (selectedPage) {
+        const timeout = setTimeout(() => {
+          pagerRef.current?.setPage(selectedPage, {animated: false})
+        }, 300);
+
+        return () => clearTimeout(timeout);
+      }
+      
       setTitleSong(songsData[selectedPage-1]?.name)
       setNumberSong(songsData[selectedPage-1]?.number)
 
@@ -86,10 +85,6 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
     setNumberSong(songsData[page-1]?.number)
     console.log("change page: ", page)
     //setSelectedPage(0)
-  }
-
-  const setPage = (index: number) => {
-    
   }
 
   return (

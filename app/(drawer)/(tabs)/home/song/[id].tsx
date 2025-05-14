@@ -8,7 +8,7 @@ import { Button, Dialog, Portal, TextInput,  Snackbar, RadioButton } from 'react
 import Slider from '@react-native-community/slider';
 //import {Slider} from '@miblanchard/react-native-slider';
 import MyPager from './../../../../../components/ui/MyPager'
-
+import * as SQLite from 'expo-sqlite';
 
 import songsData from './../../../../../data/songsData.js';
 import { PAGES, createPage } from './../../../../../constants/utils';
@@ -184,9 +184,11 @@ export default function DetailsScreen() {
   
       const fetch = (async()=> {
 
-          const resSong = songsData.find(item => item._id === Number(id))
-          setSongName(resSong ? resSong.name : '')
-          setSongs(songsData);
+        const local_db = await SQLite.openDatabaseAsync('myLocalDatabase');
+
+        const resSong = songsData.find(item => item._id === Number(id))
+        setSongName(resSong ? resSong.name : '')
+        setSongs(songsData);
       
       })
   
@@ -292,6 +294,63 @@ export default function DetailsScreen() {
     setVisibleNumber(false)
   }
 
+  // Добавить песню в плейлист
+  const pressAddInPlaylist = async(songId: number, playlistId: number)=> {
+    setVisiblePlaylist(false)
+    const db = await SQLite.openDatabaseAsync('myLocalDatabase2');
+    // Insert new customer into the database
+    await db.withTransactionAsync(async () => {
+      await db.execAsync(
+        `INSERT INTO playlist_songs (id_song, id_playlist) values (?, ?)`, 
+        [songId, playlistId]
+      );
+    })
+  }
+
+  //Добавить плейлист
+  const pressAddPlaylist = async()=> {
+    setVisibleNewPlaylist(false)
+    const db = await SQLite.openDatabaseAsync('myLocalDatabase2');
+
+    // Insert new customer into the database
+    await db.withTransactionAsync(async () => {
+      await db.execAsync(
+        `INSERT INTO playlists (nameList) values (?)`, 
+        [playlistName]
+      );
+    })
+  }
+
+
+
+
+  // Добавить песню в категорию
+  const pressAddInCategory = async(songId: number, categoryId: number)=> {
+    setVisiblePlaylist(false)
+    const db = await SQLite.openDatabaseAsync('myLocalDatabase2');
+    // Insert new customer into the database
+    await db.withTransactionAsync(async () => {
+      await db.execAsync(
+        `INSERT INTO categories_songs (id_song, id_playlist) values (?, ?)`, 
+        [songId, categoryId]
+      );
+    })
+  }
+
+  //Добавить категорию
+  const pressAddCategory = async()=> {
+    setVisibleNewPlaylist(false)
+    const db = await SQLite.openDatabaseAsync('myLocalDatabase2');
+
+    // Insert new customer into the database
+    await db.withTransactionAsync(async () => {
+      await db.execAsync(
+        `INSERT INTO categories (nameList) values (?)`, 
+        [categoryName]
+      );
+    })
+  }
+
 
   return (
     <Surface style={styles.screen}>
@@ -350,7 +409,7 @@ export default function DetailsScreen() {
               <Entypo name="note" size={30} color="white" />
             </TouchableOpacity>  */}
             <FAB
-              icon={showNote ? 'music-note' : 'music-note-off'}
+              icon={showNote ? 'music-note-off' : 'music-note'}
               style={styles.floatingButtonNote}
               onPress={onChangeSong}
             />
@@ -364,10 +423,8 @@ export default function DetailsScreen() {
             </TouchableOpacity>
 
             <View style={{height: 1000}}>
-              {selectedPage !== 0 ? 
               <MyPager
-                numberPage={selectedPage}
-                //numberPage={songId}  
+                numberPage={songId}  
                 textSong={songText}
                 setTitleSong={setSongName}
                 setNumberSong={setTitle}
@@ -377,18 +434,6 @@ export default function DetailsScreen() {
                 selectedPage={selectedPage}
                 setSelectedPage={setSelectedPage}
               />
-              :<MyPager
-                numberPage={songId} 
-                textSong={songText}
-                setTitleSong={setSongName}
-                setNumberSong={setTitle}
-                showSongText={showSongText}
-                textSize={textSize}
-                setShowFullPage={setShowFullPage}
-                selectedPage={selectedPage}
-                setSelectedPage={setSelectedPage}
-              />
-              }
             </View>
 
           </Animated.ScrollView>  
@@ -432,14 +477,20 @@ export default function DetailsScreen() {
           <Dialog visible={visiblePlaylist} onDismiss={hideDialog}>
               <Dialog.Title>Добавить в плейлист</Dialog.Title>
               <Dialog.Content>
-                <View style={{flex: 1, flexDirection: 'row'}}>
-                  <Checkbox
-                    status={checkedPlaylist ? 'checked' : 'unchecked'}
-                    onPress={() => {
+                <Checkbox.Item 
+                  label="Новый плейлист" 
+                  status={checkedPlaylist ? 'checked' : 'unchecked'} 
+                  onPress={() => {
                       setCheckedPlaylist(!checkedPlaylist);
                     }}
-                  /><Text>Новый плейлист</Text>
-                </View>
+                />
+                <Checkbox.Item 
+                  label="Новый плейлист 2" 
+                  status={checkedPlaylist ? 'checked' : 'unchecked'} 
+                  onPress={() => {
+                      setCheckedPlaylist(!checkedPlaylist);
+                    }}
+                />
                 
               </Dialog.Content>
               <Dialog.Actions>
@@ -449,12 +500,12 @@ export default function DetailsScreen() {
                 }}>Новый</Button>
 
                 <Button onPress={() => setVisiblePlaylist(false)}>Отмена</Button>
-                <Button onPress={() => setVisiblePlaylist(false)}>ОК</Button>
+                <Button onPress={pressAddInPlaylist}>ОК</Button>
               </Dialog.Actions>
           </Dialog>
 
           <Dialog visible={visibleNewPlaylist} onDismiss={hideDialogNewPlaylst}>
-              <Dialog.Title>Новый</Dialog.Title>
+              <Dialog.Title>Новый плейлист</Dialog.Title>
               <Dialog.Content>
                 <TextInput
                   label="Введите название"
@@ -465,7 +516,7 @@ export default function DetailsScreen() {
               </Dialog.Content>
               <Dialog.Actions>
                 <Button onPress={() => setVisibleNewPlaylist(false)}>Отмена</Button>
-                <Button onPress={() => setVisibleNewPlaylist(false)}>Добавить</Button>
+                <Button onPress={pressAddPlaylist}>Добавить</Button>
               </Dialog.Actions>
           </Dialog>
 

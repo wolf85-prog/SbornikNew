@@ -168,22 +168,34 @@ export function Content() {
     setIsLoading(true);
     const fetch = (async()=> {
 
-      // await db.withTransactionAsync(async () => {
-      //   const allRows = await db.getAllAsync('SELECT * FROM notes');
-      //   const notes = allRows.map((row) => ({
-      //     uid: row._id,
-      //     name: row.note,
-      //   }));
+      const local_db = await SQLite.openDatabaseAsync('myLocalDatabase2');
+      
+      await local_db.execAsync(`
+              PRAGMA journal_mode = WAL;
+              CREATE TABLE IF NOT EXISTS notes (
+                _id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+                id_song	INTEGER,
+                note	TEXT,
+                text_note	TEXT
+              )`
+      );
 
-      //   const sortedSongs = [...notes].sort((a, b) => {       
-      //     var songA = a.name, songB = b.name
-      //     return (songA < songB) ? -1 : (songA > songB) ? 1 : 0;  //сортировка по возрастанию 
-      //   })
+      await db.withTransactionAsync(async () => {
+        const allRows = await db.getAllAsync('SELECT * FROM notes');
+        const notes = allRows.map((row) => ({
+          uid: row._id,
+          name: row.note,
+        }));
+
+        const sortedSongs = [...notes].sort((a, b) => {       
+          var songA = a.name, songB = b.name
+          return (songA < songB) ? -1 : (songA > songB) ? 1 : 0;  //сортировка по возрастанию 
+        })
     
-      //   setNotes(sortedSongs);
+        setNotes(sortedSongs);
 
-         setIsLoading(false);
-      // });
+        setIsLoading(false);
+      });
     })
 
     fetch()
@@ -199,9 +211,7 @@ export function Content() {
       //           right={(props) => <IconButton {...props} icon="dots-vertical" onPress={() => {}} />}
       // />
 
-      <Card 
-        style={[styles.back]}
-      >
+      <Card style={[styles.back]}>
         <Card.Title 
           title={item.name} 
           subtitle="Название песни" 

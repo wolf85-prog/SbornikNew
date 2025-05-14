@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { DrawerToggleButton } from "@react-navigation/drawer";
 import { Ionicons, FontAwesome, AntDesign, Entypo, MaterialIcons } from '@expo/vector-icons';
 import Card from '../../../../components/ui/Card';
+import * as SQLite from 'expo-sqlite';
 import { useSQLiteContext } from "expo-sqlite";
 import { 
   Surface, 
@@ -151,12 +152,24 @@ export function Content() {
 
     const fetch = (async()=> {
 
-      const local_db = await SQLite.openDatabaseAsync('myLocalDatabase');
+      const local_db = await SQLite.openDatabaseAsync('myLocalDatabase2');
 
       await local_db.execAsync(`
         PRAGMA journal_mode = WAL;
-        CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY NOT NULL, uid TEXT, nameList TEXT NOT NULL);
-      `);
+        CREATE TABLE IF NOT EXISTS playlists (
+          _id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+          nameList	TEXT NOT NULL
+        )`
+      );
+
+      await local_db.execAsync(`
+        PRAGMA journal_mode = WAL;
+        CREATE TABLE playlist_songs (
+          _id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+          id_song	INTEGER NOT NULL,
+          id_playlist	INTEGER NOT NULL
+        )`
+      );
 
       await db.withTransactionAsync(async () => {
         const allRows = await db.getAllAsync('SELECT * FROM playlists');
