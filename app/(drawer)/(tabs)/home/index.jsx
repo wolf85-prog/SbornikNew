@@ -104,52 +104,18 @@ export function Content() {
 
   useEffect(() => {
     setIsLoading(true);
+
     const fetch = (async()=> {
       try {
-        const my_db = await SQLite.openDatabaseAsync('myLocalDatabase2', 	{
+        const my_db4 = await SQLite.openDatabaseAsync('myLocalDatabase4', 	{
             useNewConnection: true
         });
 
-        await my_db.execAsync(`
-          PRAGMA journal_mode = WAL;
-          CREATE TABLE IF NOT EXISTS songs (id INTEGER PRIMARY KEY NOT NULL, 
-          uid TEXT, 
-          favorite INTEGER NOT NULL, 
-          font TEXT NOT NULL, 
-          name TEXT NOT NULL,
-          number INTEGER NOT NULL,
-          song TEXT NOT NULL,
-          song2 TEXT NOT NULL,
-          song_accord INTEGER NOT NULL,
-          song_temp TEXT,
-          song_ton TEXT NOT NULL);
-        `);
-
-        let allRows
-        allRows = await my_db.getAllAsync('SELECT * FROM songs');
-        if (allRows.length === 0) {
-          songsData.map(async(item)=> {
-            await my_db.runAsync('INSERT INTO songs (favorite, font, name, number, song, song2, song_accord, song_temp, song_ton) VALUES (?,?,?,?,?,?,?,?,?)', 
-              item.favorite, 
-              item.font, 
-              item.name, 
-              item.number, 
-              item.song, 
-              item.song2,
-              item.song_accord, 
-              item.song_temp, 
-              item.song_ton
-            );
-          })
-
-          allRows = await my_db.getAllAsync('SELECT * FROM songs');
-          console.log(allRows.length);
-        } else {
-          console.log(allRows.length);
-        } 
-
-        setData(allRows)
-        setFullData(allRows)
+        const allRows2 = await my_db4.getAllAsync('SELECT * FROM songs');
+        console.log("Кол-во песен: ", allRows2.length);
+          
+        setData(allRows2)
+        setFullData(allRows2)
 
         setIsLoading(false);
 

@@ -152,42 +152,54 @@ export function Content() {
 
     const fetch = (async()=> {
 
-      const local_db = await SQLite.openDatabaseAsync('myLocalDatabase2');
+      try {
+        const local_db = await SQLite.openDatabaseAsync('myLocalDatabase4');
 
-      await local_db.execAsync(`
-        PRAGMA journal_mode = WAL;
-        CREATE TABLE IF NOT EXISTS playlists (
-          _id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-          nameList	TEXT NOT NULL
-        )`
-      );
+        await local_db.execAsync(`
+          PRAGMA journal_mode = WAL;
+          CREATE TABLE IF NOT EXISTS playlists2 (
+            _id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+            uid	TEXT NOT NULL,
+            nameList	TEXT NOT NULL
+          );`
+        );
 
-      await local_db.execAsync(`
-        PRAGMA journal_mode = WAL;
-        CREATE TABLE playlist_songs (
-          _id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-          id_song	INTEGER NOT NULL,
-          id_playlist	INTEGER NOT NULL
-        )`
-      );
+        await local_db.execAsync(`
+          PRAGMA journal_mode = WAL;
+          CREATE TABLE IF NOT EXISTS playlist_songs (
+            _id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+            id_song	INTEGER NOT NULL,
+            id_playlist	INTEGER NOT NULL
+          )`
+        );
 
-      await db.withTransactionAsync(async () => {
-        const allRows = await db.getAllAsync('SELECT * FROM playlists');
-        console.log("allRows: ", allRows)
-        const playlist = allRows.map((row) => ({
-          uid: row._id,
-          name: row.nameList,
-        }));
+        await local_db.withTransactionAsync(async () => {
+          const allRows = await local_db.getAllAsync('SELECT * FROM playlists2');
+          console.log("allRows: ", allRows)
+          const playlist = allRows.map((row) => ({
+            id: row._id,
+            uid: row.uid,
+            name: row.nameList,
+          }));
 
-        const sortedSongs = [...playlist].sort((a, b) => {       
-          var songA = a.name, songB = b.name
-          return (songA < songB) ? -1 : (songA > songB) ? 1 : 0;  //сортировка по возрастанию 
-        })
-    
-        setPlaylists([]);
+          const sortedSongs = [...playlist].sort((a, b) => {       
+            var songA = a.name, songB = b.name
+            return (songA < songB) ? -1 : (songA > songB) ? 1 : 0;  //сортировка по возрастанию 
+          })
+      
+          setPlaylists(sortedSongs);
 
-        setIsLoading(false);
-      });
+          setIsLoading(false);
+         });
+
+        // setPlaylists([]);
+
+        // setIsLoading(false);
+
+      } catch (error) {
+        console.log(error.message)
+      }
+      
     })
 
     fetch()
@@ -230,6 +242,11 @@ export function Content() {
     // })
   };
 
+  useEffect(() => {
+    console.log("Плейлисты: ", playlists)
+  }, [playlists])
+
+  // Добавить плейлист
   const addPlaylist = async (textInputValue)=> {
     const newValue = {
       uid: Date.now().toString(),
@@ -237,18 +254,26 @@ export function Content() {
     };
     setPlaylists([...playlists, newValue]);
 
+    //скрыть диалоговое окно
     setDialog({
       isVisible: false,
       customer: {},
     });
 
-    // Insert new customer into the database
-    await db.withTransactionAsync(async () => {
-      await db.execAsync(
-        `INSERT INTO playlists (uid, name) values (?, ?)`, 
-        [newValue.uid, newValue.name]
-      );
-    })
+    const local_db = await SQLite.openDatabaseAsync('myLocalDatabase4');
+
+    try {
+      // Insert new customer into the database
+      await local_db.withTransactionAsync(async () => {
+        await local_db.execAsync(
+          `INSERT INTO playlists (uid, nameList) values (?, ?)`, 
+          [newValue.uid, newValue.name]
+        );
+      })
+    } catch (error) {
+        console.log(error.message)
+    }
+    
   }
 
   // Function to delete a customer
@@ -276,7 +301,7 @@ export function Content() {
   
   function Item({ item }) {
     return (
-      <TouchableOpacity style={styles.item} onPress={()=> {router.push(`/accords/categoryAcc/${item.uid}`)}} >
+      <TouchableOpacity style={styles.item} onPress={()=> {router.push(`/accords/categoryAcc/${item.id}`)}} >
         <View style={styles.main_content}>
           <Text style={styles.name}>{item.name}</Text>
         </View>
@@ -344,10 +369,10 @@ export function Content() {
     <SafeAreaView style={{ flex: 1 }}>
 
       <FlatList
-        style={styles.listSongs}
+        //style={styles.listSongs}
         data={playlists}
         renderItem={({ item }) => <Item item={item}/>}
-        keyExtractor={item => item.uid}
+        keyExtractor={item => item.id}
         ItemSeparatorComponent={renderSeparator}
         contentContainerStyle={{  flexGrow: 1,  gap: 15 }}
         // columnWrapperStyle={{ gap: GAP_BETWEEN_COLUMNS }}

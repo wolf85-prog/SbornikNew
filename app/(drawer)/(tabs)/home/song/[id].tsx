@@ -310,13 +310,18 @@ export default function DetailsScreen() {
   //Добавить плейлист
   const pressAddPlaylist = async()=> {
     setVisibleNewPlaylist(false)
+    const newValue = {
+      uid: Date.now().toString(),
+      name: playlistName,
+    };
+
     const db = await SQLite.openDatabaseAsync('myLocalDatabase2');
 
     // Insert new customer into the database
     await db.withTransactionAsync(async () => {
       await db.execAsync(
-        `INSERT INTO playlists (nameList) values (?)`, 
-        [playlistName]
+        `INSERT INTO playlists (uid, nameList) values (?, ?)`, 
+        [newValue.uid, newValue.name]
       );
     })
   }

@@ -16,8 +16,9 @@ import { Platform, useColorScheme } from 'react-native'
 import { adaptNavigationTheme, PaperProvider } from 'react-native-paper'
 
 import { Locales, Setting, StackHeader, Themes } from '@/lib'
-
-import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
+import * as SQLite from 'expo-sqlite';
+import { SQLiteDatabase, SQLiteProvider, useSQLiteContext } from "expo-sqlite";
+import songsData from './../data/songsData.js';
 
 // Catch any errors thrown by the Layout component.
 export { ErrorBoundary } from 'expo-router'
@@ -36,6 +37,58 @@ const RootLayout = () => {
     JetBrainsMono_400Regular,
     ...MaterialCommunityIcons.font,
   })
+
+  //const db = useSQLiteContext();
+
+  // Load db songs
+  React.useEffect(() => {
+    
+    const fetch = async()=> {
+      const my_db4 = await SQLite.openDatabaseAsync('myLocalDatabase4', 	{
+                  useNewConnection: true
+              });
+
+        await my_db4.execAsync(`
+          DROP TABLE IF EXISTS songs;
+          PRAGMA journal_mode = WAL;
+          CREATE TABLE IF NOT EXISTS songs (id INTEGER PRIMARY KEY NOT NULL, 
+          uid TEXT, 
+          favorite INTEGER NOT NULL, 
+          font TEXT NOT NULL, 
+          name TEXT NOT NULL,
+          number INTEGER NOT NULL,
+          song TEXT NOT NULL,
+          song2 TEXT NOT NULL,
+          song_accord INTEGER NOT NULL,
+          song_temp TEXT,
+          song_ton TEXT NOT NULL);
+        `);
+
+      //const allRows = await my_db4.getAllAsync('SELECT * FROM songs');
+      //console.log("Загрузка песен из ДБ", allRows.length)
+      
+      songsData.map(async(item)=> {
+            await my_db4.runAsync('INSERT INTO songs (favorite, font, name, number, song, song2, song_accord, song_temp, song_ton) VALUES (?,?,?,?,?,?,?,?,?)', 
+              item.favorite, 
+              item.font, 
+              item.name, 
+              item.number, 
+              item.song, 
+              item.song2,
+              item.song_accord, 
+              item.song_temp, 
+              item.song_ton
+            );
+      })
+          
+
+      const allRows = await my_db4.getAllAsync('SELECT * FROM songs');
+      console.log("Загрузка песен из ДБ", allRows.length)
+    }
+
+    fetch()
+    
+  }, [])
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   React.useEffect(() => {
@@ -62,6 +115,8 @@ const RootLayoutNav = () => {
     color: 'default',
     language: 'auto',
   })
+
+  
 
   // Load settings from the device
   React.useEffect(() => {
