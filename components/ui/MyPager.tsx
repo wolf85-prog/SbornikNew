@@ -22,6 +22,7 @@ type MyPagerProps = {
   textSize: number;
   setShowFullPage: any;
   selectedPage: number;
+  setSelectedPage: any;
 };
 
 function getColor(i: number) {
@@ -32,7 +33,7 @@ function getColor(i: number) {
 
 
 
-export default function MyPager({ numberPage, textSong, setTitleSong, setNumberSong, showSongText, textSize, setShowFullPage, selectedPage }: MyPagerProps) {
+export default function MyPager({ numberPage, textSong, setTitleSong, setNumberSong, showSongText, textSize, setShowFullPage, selectedPage, setSelectedPage }: MyPagerProps) {
   const [preset, setPreset] = useState<Preset>(Preset.SLIDE);
   const pagerRef = useRef(null);
   const [songText, setSongText] = useState<any>('');
@@ -84,6 +85,11 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
     setTitleSong(songsData[page-1]?.name)
     setNumberSong(songsData[page-1]?.number)
     console.log("change page: ", page)
+    //setSelectedPage(0)
+  }
+
+  const setPage = (index: number) => {
+    
   }
 
   return (

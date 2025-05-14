@@ -20,6 +20,8 @@ import {
   Appbar, 
   Menu, 
   Tooltip,
+  Checkbox,
+  FAB
 } from "react-native-paper";
 import { Locales, ScreenInfo, styles, TabsHeader } from '@/lib'
 
@@ -89,7 +91,10 @@ export default function DetailsScreen() {
   const [visible, setVisible] = useState(false) 
   const [visibleSnackBar, setVisibleSnackBar] = useState(false);
   
-  
+  const [checkedPlaylist, setCheckedPlaylist] = useState(false);
+
+  const [favorite, setFavorite] = useState(false);
+  const [showNote, setShowNote] = useState(true);
   
   const data = [
     {
@@ -271,12 +276,14 @@ export default function DetailsScreen() {
   };
 
   const onButtonPress = ()=> {
+    setFavorite(!favorite)
     console.log("press")
   }
 
   const onChangeSong = ()=> {
     console.log("Нажали кнопку Убрать аккорды", !showSongText)
     setShowSongText(!showSongText)
+    setShowNote(!showNote)
     
   }
 
@@ -336,12 +343,17 @@ export default function DetailsScreen() {
             </TouchableOpacity> 
 
             {/* Убрать аккорды */}
-            <TouchableOpacity
+            {/* <TouchableOpacity
                 style={styles.floatingButtonNote}
                 onPress={onChangeSong}
             >
               <Entypo name="note" size={30} color="white" />
-            </TouchableOpacity> 
+            </TouchableOpacity>  */}
+            <FAB
+              icon={showNote ? 'music-note' : 'music-note-off'}
+              style={styles.floatingButtonNote}
+              onPress={onChangeSong}
+            />
 
             {/* Добавить тон */}
             <TouchableOpacity
@@ -352,9 +364,10 @@ export default function DetailsScreen() {
             </TouchableOpacity>
 
             <View style={{height: 1000}}>
-              {selectedPage ? 
+              {selectedPage !== 0 ? 
               <MyPager
-                numberPage={selectedPage} 
+                numberPage={selectedPage}
+                //numberPage={songId}  
                 textSong={songText}
                 setTitleSong={setSongName}
                 setNumberSong={setTitle}
@@ -362,6 +375,7 @@ export default function DetailsScreen() {
                 textSize={textSize}
                 setShowFullPage={setShowFullPage}
                 selectedPage={selectedPage}
+                setSelectedPage={setSelectedPage}
               />
               :<MyPager
                 numberPage={songId} 
@@ -372,6 +386,7 @@ export default function DetailsScreen() {
                 textSize={textSize}
                 setShowFullPage={setShowFullPage}
                 selectedPage={selectedPage}
+                setSelectedPage={setSelectedPage}
               />
               }
             </View>
@@ -381,13 +396,18 @@ export default function DetailsScreen() {
           
 
           {/* Добавить в  избранное */}
-          <TouchableOpacity
+          {/* <TouchableOpacity
               style={styles.floatingButton}
               onPress={onButtonPress}
           >
             <Ionicons name="heart-circle-outline" size={60} color="#DE3163" />
-            {/* <Ionicons name="heart-circle-sharp" size={80} color="red" /> */}
-          </TouchableOpacity> 
+          </TouchableOpacity>  */}
+          <FAB
+            icon={favorite ? 'cards-heart-outline' : 'cards-heart'}
+            style={styles.fab}
+            onPress={onButtonPress}
+            size='small'
+          />
 
         {/* Переход к песне по номеру */}
           <Dialog visible={visibleNumber} onDismiss={hideDialog}>
@@ -412,7 +432,15 @@ export default function DetailsScreen() {
           <Dialog visible={visiblePlaylist} onDismiss={hideDialog}>
               <Dialog.Title>Добавить в плейлист</Dialog.Title>
               <Dialog.Content>
-                <Text>...</Text>
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                  <Checkbox
+                    status={checkedPlaylist ? 'checked' : 'unchecked'}
+                    onPress={() => {
+                      setCheckedPlaylist(!checkedPlaylist);
+                    }}
+                  /><Text>Новый плейлист</Text>
+                </View>
+                
               </Dialog.Content>
               <Dialog.Actions>
                 <Button onPress={() => {
@@ -564,6 +592,7 @@ export default function DetailsScreen() {
                 textSize={textSize}
                 setShowFullPage={setShowFullPage}
                 selectedPage={selectedPage}
+                setSelectedPage={setSelectedPage}
               />
             </View>
           </ScrollView>
