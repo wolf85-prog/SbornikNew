@@ -30,28 +30,29 @@ function getColor(i: number) {
     return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`;
   }
 
-function getTextSong(page: number) {
-    const resSong = songsData.find(item=> item._id === page)
-    return resSong ? resSong.song2 : '';
-  }
+
 
 export default function MyPager({ numberPage, textSong, setTitleSong, setNumberSong, showSongText, textSize, setShowFullPage, selectedPage }: MyPagerProps) {
   const [preset, setPreset] = useState<Preset>(Preset.SLIDE);
   const pagerRef = useRef(null);
   const [songText, setSongText] = useState<any>('');
 
+  function getTextSong(page: number, show: boolean) {
+    let text = ''
+    show ? text = songsData[page-1]?.song2
+    : text = songsData[page-1]?.song
+    return text
+  }   
 
   useEffect(()=> {
-      console.log("selectedPage: ", selectedPage)
+      //console.log("selectedPage: ", selectedPage)
       setTitleSong(songsData[selectedPage-1]?.name)
       setNumberSong(songsData[selectedPage-1]?.number)
 
   }, [selectedPage])
 
 
-  const renderPage = useCallback(({index}: {index: number}, showSongText: boolean, textSize: number) => {
-
-    //console.log("showSongText: ", showSongText)textSize
+  const renderPage = useCallback(({index}: {index: number}, showSongText: boolean, textSize: number, selectedPage: number) => {
 
     return (
       <View
@@ -65,7 +66,9 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
               // <AllText text={songsData[index-1]?.song}></AllText> 
               // : '')
               <Text onPress={()=>setShowFullPage(false)} style={{ color: 'white', fontSize: textSize }}>
-                {showSongText ? songsData[index-1]?.song2 : songsData[index-1]?.song}
+                {
+                  getTextSong(index, showSongText)
+                }
               </Text>
           
               }
@@ -89,7 +92,7 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
       <InfinitePager
         key={`infinite-pager-${preset}`}
         ref={pagerRef}
-        renderPage={(i)=>renderPage(i, showSongText, textSize)}
+        renderPage={(i)=>renderPage(i, showSongText, textSize, selectedPage)}
         style={styles.flex}
         pageWrapperStyle={styles.flex}
         preset={preset}

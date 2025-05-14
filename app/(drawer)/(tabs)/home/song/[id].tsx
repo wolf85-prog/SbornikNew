@@ -86,6 +86,7 @@ export default function DetailsScreen() {
 
   const [showFullPage, setShowFullPage] = useState(false);
 
+  const [visible, setVisible] = useState(false) 
   const [visibleSnackBar, setVisibleSnackBar] = useState(false);
   
   
@@ -169,6 +170,9 @@ export default function DetailsScreen() {
      console.log("songNumber: ", songNumber)
   }, [songNumber])
 
+  useEffect(()=> {
+     console.log("selectedPage: ", selectedPage)
+  }, [selectedPage])
   
   useEffect(() => {
       setIsLoading(true);
@@ -212,7 +216,12 @@ export default function DetailsScreen() {
   const headerRight = () => {
         return (
           <>
-
+            {/* <Tooltip title={Locales.t('search')}>
+              <Appbar.Action
+                icon="note"
+                onPress={()=>setVisiblePlaylist(true)}
+              />
+            </Tooltip> */}
             <TouchableOpacity
               // onPress={()=>router.push("/modal")}
               onPress={onChangeSong}
@@ -236,6 +245,26 @@ export default function DetailsScreen() {
             </TouchableOpacity>
 
             <PopupMenu options={data} color={"white"}/>
+
+            {/* <Menu
+              statusBarHeight={48}
+              visible={visible}
+              onDismiss={() => setVisible(false)}
+              anchor={
+                <Tooltip title={Locales.t('options')}>
+                  <Appbar.Action
+                    icon="dots-vertical"
+                    onPress={() => setVisible(true)}
+                  />
+                </Tooltip>
+              }  
+            >
+              <Menu.Item
+                title={Locales.t('titleSettings')}
+                leadingIcon="cog"
+                onPress={() => router.push('/settings')}
+              />
+            </Menu> */}
           </>
           
         );
@@ -323,7 +352,18 @@ export default function DetailsScreen() {
             </TouchableOpacity>
 
             <View style={{height: 1000}}>
+              {selectedPage ? 
               <MyPager
+                numberPage={selectedPage} 
+                textSong={songText}
+                setTitleSong={setSongName}
+                setNumberSong={setTitle}
+                showSongText={showSongText}
+                textSize={textSize}
+                setShowFullPage={setShowFullPage}
+                selectedPage={selectedPage}
+              />
+              :<MyPager
                 numberPage={songId} 
                 textSong={songText}
                 setTitleSong={setSongName}
@@ -333,6 +373,7 @@ export default function DetailsScreen() {
                 setShowFullPage={setShowFullPage}
                 selectedPage={selectedPage}
               />
+              }
             </View>
 
           </Animated.ScrollView>  
@@ -351,10 +392,13 @@ export default function DetailsScreen() {
         {/* Переход к песне по номеру */}
           <Dialog visible={visibleNumber} onDismiss={hideDialog}>
               <Dialog.Content>
-                <Text>Введите номер в данном сборнике, на который желаете перейти</Text>
+                <Text style={{color: 'white', textAlign: 'center'}}>
+                  Введите номер в данном сборнике, на который желаете перейти
+                </Text>
                       <TextInput
+                        style={{backgroundColor: 'transparent', textAlign: 'center'}}
                         label="Номер"
-                        placeholder="1-555"
+                        placeholder="1-612"
                         value={songNumber}
                         onChangeText={value => setSongNumber(value)}
                       />
