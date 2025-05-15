@@ -322,7 +322,7 @@ export function Content() {
             right={(props) => 
               <>
                 <View style={styles.right_section}>
-                  <Text>0</Text>
+                  <Text style={{color: '#f5f5f5'}}>0</Text>
                   <IconButton {...props} icon="dots-vertical" onPress={() => {}} />
                 </View>
               </>
