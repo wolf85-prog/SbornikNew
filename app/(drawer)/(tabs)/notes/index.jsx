@@ -10,7 +10,7 @@ import { Button, Dialog, Portal, Surface, FAB, Tooltip, Appbar,
   Avatar, Card, IconButton
  } from 'react-native-paper'
 import { Locales, ScreenInfo, styles, TabsHeader } from '@/lib'
-
+import * as SQLite from 'expo-sqlite';
 import filter from "lodash.filter"
 
 const NotesScreen = () => {
@@ -87,7 +87,6 @@ const NotesScreen = () => {
 export default NotesScreen
 
 export function Content() {
-  //const db = useSQLiteContext();
 
   const router = useRouter();
   
@@ -157,7 +156,7 @@ export function Content() {
     // Insert new customer into the database
     await db.withTransactionAsync(async () => {
       await db.execAsync(
-        `INSERT INTO playlists (uid, name) values (?, ?)`, 
+        `INSERT INTO notes (uid, name) values (?, ?)`, 
         [newValue.uid, newValue.name]
       );
     })
@@ -167,55 +166,57 @@ export function Content() {
   useEffect(() => {
     setIsLoading(true);
     const fetch = (async()=> {
+ 
+      try {
+        console.log("Загрузка базы данных")
 
-      const local_db = await SQLite.openDatabaseAsync('myLocalDatabase2');
+        const local_db = await SQLite.openDatabaseAsync('myLocalDatabase3');
+        await local_db.execAsync(`
+                PRAGMA journal_mode = WAL;
+                CREATE TABLE IF NOT EXISTS notes (
+                  _id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+                  id_song	INTEGER,
+                  note	TEXT,
+                  text_note	TEXT
+                )`
+        );
+
+        await db.withTransactionAsync(async () => {
+          const allRows = await db.getAllAsync('SELECT * FROM notes');
+          const notes = allRows.map((row) => ({
+            uid: row._id,
+            name: row.note,
+          }));
+
+          const sortedSongs = [...notes].sort((a, b) => {       
+            var songA = a.name, songB = b.name
+            return (songA < songB) ? -1 : (songA > songB) ? 1 : 0;  //сортировка по возрастанию 
+          })
       
-      await local_db.execAsync(`
-              PRAGMA journal_mode = WAL;
-              CREATE TABLE IF NOT EXISTS notes (
-                _id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-                id_song	INTEGER,
-                note	TEXT,
-                text_note	TEXT
-              )`
-      );
-
-      await db.withTransactionAsync(async () => {
-        const allRows = await db.getAllAsync('SELECT * FROM notes');
-        const notes = allRows.map((row) => ({
-          uid: row._id,
-          name: row.note,
-        }));
-
-        const sortedSongs = [...notes].sort((a, b) => {       
-          var songA = a.name, songB = b.name
-          return (songA < songB) ? -1 : (songA > songB) ? 1 : 0;  //сортировка по возрастанию 
-        })
-    
-        setNotes(sortedSongs);
-
-        setIsLoading(false);
-      });
+          setNotes(sortedSongs);
+          
+        });
+      } catch (error) {
+        console.log(error.messsage)
+      }
+      
+      setIsLoading(false);
     })
 
     fetch()
   }, []);
+
+  useEffect(() => {
+      console.log("Заметки: ", notes)
+    }, [notes])
   
   function Item({ item }) {
     return (
-      // <Card.Title
-      //   style={[styles.back, styles.cardNote]}
-      //           title={item.name}
-      //           subtitle="Card Subtitle"
-      //           left={(props) => <Avatar.Icon {...props} icon="folder" />}
-      //           right={(props) => <IconButton {...props} icon="dots-vertical" onPress={() => {}} />}
-      // />
-
       <Card style={[styles.back]}>
         <Card.Title 
           title={item.name} 
           subtitle="Название песни" 
-          left={(props) => <Avatar.Icon {...props} icon="folder" />}
+          left={(props) => <Avatar.Icon {...props} icon="notebook-outline" />}
           right={(props) => <IconButton {...props} icon="dots-vertical" onPress={() => {}} />}
         />
         <Card.Content>

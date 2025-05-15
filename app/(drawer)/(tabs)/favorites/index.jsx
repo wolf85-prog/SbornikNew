@@ -7,7 +7,7 @@ import { Ionicons, MaterialIcons, Entypo, AntDesign } from '@expo/vector-icons';
 import Card from '../../../../components/ui/Card';
 import PopupMenu from "./../../../../components/ui/PopupMenu.js";
 //import { SQLiteProvider, useSQLiteContext } from "expo-sqlite";
-
+import * as SQLite from 'expo-sqlite';
 import { Surface, Dialog, Tooltip, Appbar, Menu, Button } from 'react-native-paper'
 
 import { Locales, ScreenInfo, styles, TabsHeader } from '@/lib'
@@ -160,7 +160,7 @@ export function Content() {
     }, [songsData]);
 
     useEffect(() => {
-      console.log("songs: ", songs)
+      //console.log("songs: ", songs)
     }, [songs])
     
     function Item({ item }) {

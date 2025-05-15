@@ -4,7 +4,7 @@ import React from 'react'
 import { useEffect, useState } from "react";
 import { DrawerToggleButton } from "@react-navigation/drawer";
 import { Ionicons, FontAwesome, AntDesign, Entypo, MaterialIcons } from '@expo/vector-icons';
-import Card from '../../../../components/ui/Card';
+//import Card from '../../../../components/ui/Card';
 import * as SQLite from 'expo-sqlite';
 import { useSQLiteContext } from "expo-sqlite";
 import { 
@@ -12,7 +12,9 @@ import {
   Appbar, 
   Menu, 
   Tooltip,
-  FAB} from "react-native-paper";
+  FAB,
+  Avatar, 
+  Card} from "react-native-paper";
 import { Button, Dialog, Portal, IconButton } from 'react-native-paper';
 import asyncAlert from "./../../../../components/asyncAlert.js";
 
@@ -119,7 +121,7 @@ export function Content() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('')
   const [data, setData] = useState([])
-  const [playlists, setPlaylists] = useState([])
+  const [playlists, setPlaylists] = useState([{"id": "1", "name": "Тест", "uid": "1747278926882"}, {"id": "2", "name": "Тест2", "uid": "1747279082656"}, {"id": "3", "name": "Тест", "uid": "1747279201178"}])
   const [error, setError] = useState(null)
   const [fullData, setFullData] = useState([])
   const [textInputValue, setTextInputValue] = useState("");
@@ -187,7 +189,7 @@ export function Content() {
             return (songA < songB) ? -1 : (songA > songB) ? 1 : 0;  //сортировка по возрастанию 
           })
       
-          setPlaylists(sortedSongs);
+          //setPlaylists(sortedSongs);
 
           setIsLoading(false);
          });
@@ -215,6 +217,13 @@ export function Content() {
       customer,
     });
 
+  const showNewDialog = () =>
+  
+  setDialog({
+    isVisible: true,
+    customer: {},
+  });
+
   // const hideDialog = () => setVisible(false);
 
   const hideDialog = async (updatedCustomer) => {
@@ -222,6 +231,8 @@ export function Content() {
       isVisible: false,
       customer: {},
     });
+
+    setPlaylistTitle('')
 
     // Update the local state
     const newCustomers = playlists.map((customer) => {
@@ -260,19 +271,21 @@ export function Content() {
       customer: {},
     });
 
-    const local_db = await SQLite.openDatabaseAsync('myLocalDatabase4');
+    setPlaylistTitle('')
 
-    try {
-      // Insert new customer into the database
-      await local_db.withTransactionAsync(async () => {
-        await local_db.execAsync(
-          `INSERT INTO playlists (uid, nameList) values (?, ?)`, 
-          [newValue.uid, newValue.name]
-        );
-      })
-    } catch (error) {
-        console.log(error.message)
-    }
+    // const local_db = await SQLite.openDatabaseAsync('myLocalDatabase4');
+
+    // try {
+    //   // Insert new customer into the database
+    //   await local_db.withTransactionAsync(async () => {
+    //     await local_db.execAsync(
+    //       `INSERT INTO playlists (uid, nameList) values (?, ?)`, 
+    //       [newValue.uid, newValue.name]
+    //     );
+    //   })
+    // } catch (error) {
+    //     console.log(error.message)
+    // }
     
   }
 
@@ -289,7 +302,7 @@ export function Content() {
       }
   
       // Update the local state
-      const newCustomers = playlists.filter((c) => c.uid !== customer.uid);
+      const newCustomers = playlists.filter((c) => c.id !== customer.id);
       setPlaylists(newCustomers);
   
       // Delete customer from the database
@@ -300,25 +313,23 @@ export function Content() {
 
   
   function Item({ item }) {
-    return (
-      <TouchableOpacity style={styles.item} onPress={()=> {router.push(`/accords/categoryAcc/${item.id}`)}} >
-        <View style={styles.main_content}>
-          <Text style={styles.name}>{item.name}</Text>
-        </View>
-
-        <View style={styles.right_section}>
-          <View style={styles.number}>
-            <Text>0</Text>
-          </View> 
-          <IconButton
-            icon="delete"
-            size={24}
-            onPress={() => deleteCustomer(item)}
-          /> 
-          {/* <Entypo name="dots-three-vertical" size={24} color="gray" /> */}
-          <PopupMenu color={"black"} options={dataMenu} id={item.uid}/>
-        </View>
-      </TouchableOpacity> 
+    return ( 
+      <Card style={styles.back}>
+        <TouchableOpacity onPress={()=> {router.push(`/plalist/list/${item.id}`)}} >
+          <Card.Title 
+            title={item.name} 
+            left={(props) => <Avatar.Icon {...props} icon="play-box-multiple-outline" />}
+            right={(props) => 
+              <>
+                <View style={styles.right_section}>
+                  <Text>0</Text>
+                  <IconButton {...props} icon="dots-vertical" onPress={() => {}} />
+                </View>
+              </>
+            }
+          />
+        </TouchableOpacity>
+      </Card>
     );
   }
 
@@ -361,7 +372,7 @@ export function Content() {
 
   const onButtonAdd = ()=> {
     console.log("press add playlist")
-    showDialog()
+    showNewDialog()
     
   }
 
@@ -369,11 +380,11 @@ export function Content() {
     <SafeAreaView style={{ flex: 1 }}>
 
       <FlatList
-        //style={styles.listSongs}
+        style={styles.listSongs}
         data={playlists}
         renderItem={({ item }) => <Item item={item}/>}
-        keyExtractor={item => item.id}
-        ItemSeparatorComponent={renderSeparator}
+        keyExtractor={item => item.uid}
+        //ItemSeparatorComponent={renderSeparator}
         contentContainerStyle={{  flexGrow: 1,  gap: 15 }}
         // columnWrapperStyle={{ gap: GAP_BETWEEN_COLUMNS }}
         ListEmptyComponent={EmptyListMessage}
