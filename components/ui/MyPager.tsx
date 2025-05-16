@@ -62,14 +62,15 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
           <CardSong style={styles.cardSong}>
             <View style={[styles.slide] }>
               {
-              // (songsData[index-1]?.song ? 
-              // <AllText text={songsData[index-1]?.song}></AllText> 
-              // : '')
-              <Text onPress={()=>setShowFullPage(false)} style={{ color: 'white', fontSize: textSize }}>
-                {
-                  getTextSong(index, showSongText)
-                }
-              </Text>
+              (songsData[index-1]?.song ? 
+                <AllText text={songsData[index-1]?.song}></AllText> 
+              : '')
+
+              // <Text onPress={()=>setShowFullPage(false)} style={{ color: 'white', fontSize: textSize }}>
+              //   {
+              //     getTextSong(index, showSongText)
+              //   }
+              // </Text>
           
               }
 
@@ -117,15 +118,15 @@ const AllText = ({text}: any) => {
   const [separators, setSeparators] = useState([])
 
   const parsedText = text?.split("\n").map((row: any) => {
-    const rowArr = row?.split(chordRegex).map((charOrSpace: any) => {
+    const rowArr = row?.split(chordRegex).map((charOrSpace: any, index: number) => {
       if (chordRegex.test(charOrSpace)) {
         //console.log({text: charOrSpace, color: 'blue'} )
-        return {text: charOrSpace.trim(), color: 'blue', id: '1', uid: Date.now()} 
+        return {text: charOrSpace.trim(), color: 'blue', id: '1', uid: index} 
       }
-      return {text: charOrSpace, color: '', id: '', uid: Date.now(), uid2: Date.now()+1} ;
+      return {text: charOrSpace, color: 'white', id: '', uid: index} ;
     });
 
-    //console.log(row)
+    //console.log(rowArr)
     return rowArr;
   });
 
@@ -134,10 +135,10 @@ const AllText = ({text}: any) => {
       {parsedText.map((row: any) => (  
         <Text key={row.uid} style={{color: `${row[1]?.color}`, fontSize: 18}}>
            {row.map((item: any)=> (
-            
+            //console.log(item)
             item?.id ? 
               <Text key={item?.uid2} onPress={()=>router.push(`/home/song/accord/${item?.id}`)}>{item ? item.text : ''}</Text>
-              : <Text key={item?.uid2}>{item ? item.text : ''}</Text>
+              : <Text style={{color: 'white'}} key={item?.uid2}>{item ? item.text : ''}</Text>
           ))} 
         </Text>
        ) 

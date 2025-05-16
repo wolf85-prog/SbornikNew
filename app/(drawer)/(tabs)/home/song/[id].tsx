@@ -70,6 +70,9 @@ export default function DetailsScreen() {
   const [songTone, setSongTone] = useState<any>(0);
   const [separators, setSeparators] = useState<any>([])
 
+  const [playlistId, setPlaylistId] = useState<any>('');
+
+
   const [visiblePlaylist, setVisiblePlaylist] = useState(false);
   const [visibleNewPlaylist, setVisibleNewPlaylist] = useState(false);
 
@@ -295,16 +298,16 @@ export default function DetailsScreen() {
   }
 
   // Добавить песню в плейлист
-  const pressAddInPlaylist = async(songId: number, playlistId: number)=> {
+  const pressAddInPlaylist = async()=> {
     setVisiblePlaylist(false)
     const db = await SQLite.openDatabaseAsync('myLocalDatabase2');
     // Insert new customer into the database
-    await db.withTransactionAsync(async () => {
-      await db.execAsync(
-        `INSERT INTO playlist_songs (id_song, id_playlist) values (?, ?)`, 
-        [songId, playlistId]
-      );
-    })
+    // await db.withTransactionAsync(async () => {
+    //   await db.execAsync(
+    //     `INSERT INTO playlist_songs (id_song, id_playlist) values (?, ?)`, 
+    //     [songId, playlistId]
+    //   );
+    // })
   }
 
   //Добавить плейлист
@@ -318,12 +321,12 @@ export default function DetailsScreen() {
     const db = await SQLite.openDatabaseAsync('myLocalDatabase2');
 
     // Insert new customer into the database
-    await db.withTransactionAsync(async () => {
-      await db.execAsync(
-        `INSERT INTO playlists (uid, nameList) values (?, ?)`, 
-        [newValue.uid, newValue.name]
-      );
-    })
+    // await db.withTransactionAsync(async () => {
+    //   await db.execAsync(
+    //     `INSERT INTO playlists (uid, nameList) values (?, ?)`, 
+    //     [newValue.uid, newValue.name]
+    //   );
+    // })
   }
 
 
@@ -334,12 +337,12 @@ export default function DetailsScreen() {
     setVisiblePlaylist(false)
     const db = await SQLite.openDatabaseAsync('myLocalDatabase2');
     // Insert new customer into the database
-    await db.withTransactionAsync(async () => {
-      await db.execAsync(
-        `INSERT INTO categories_songs (id_song, id_playlist) values (?, ?)`, 
-        [songId, categoryId]
-      );
-    })
+    // await db.withTransactionAsync(async () => {
+    //   await db.execAsync(
+    //     `INSERT INTO categories_songs (id_song, id_playlist) values (?, ?)`, 
+    //     [songId, categoryId]
+    //   );
+    // })
   }
 
   //Добавить категорию
@@ -348,12 +351,12 @@ export default function DetailsScreen() {
     const db = await SQLite.openDatabaseAsync('myLocalDatabase2');
 
     // Insert new customer into the database
-    await db.withTransactionAsync(async () => {
-      await db.execAsync(
-        `INSERT INTO categories (nameList) values (?)`, 
-        [categoryName]
-      );
-    })
+    // await db.withTransactionAsync(async () => {
+    //   await db.execAsync(
+    //     `INSERT INTO categories (nameList) values (?)`, 
+    //     [categoryName]
+    //   );
+    // })
   }
 
 
