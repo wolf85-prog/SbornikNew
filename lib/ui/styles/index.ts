@@ -254,6 +254,7 @@ const styles = StyleSheet.create({
       fontWeight: "bold",
       textAlign: "center",
       paddingVertical: 20,
+      color: '#fff'
     },
 
     imageLogo: {
@@ -265,13 +266,13 @@ const styles = StyleSheet.create({
     customerName: {
       fontSize: 18,
       fontWeight: 700,
-      //color: '#000'
+      color: '#fff'
     },
 
     customerCount: {
       fontSize: 18,
       fontWeight: 400,
-      //color: '#000'
+      color: '#fff'
     },
 
     heightView: {

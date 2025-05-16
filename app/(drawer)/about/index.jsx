@@ -38,16 +38,12 @@ export default function AboutScreen() {
       <Stack.Screen options={{ 
           headerShown: true, 
           title: "О приложении", 
-          headerLeft: (() => <DrawerToggleButton />), 
+          headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />), 
           headerStyle: {backgroundColor: '#26489a'},  
           headerTintColor: 'white',
           header: (props) => <TabsHeader navProps={props} children={undefined} />,
         }} />
-        <Provider>
-          <SQLiteProvider databaseName="sbornik.db" assetSource={{ assetId: require('./../../../assets/sbornik.db') }}>
             <Content />
-          </SQLiteProvider>
-        </Provider>
     </Surface>
       
   );
