@@ -128,10 +128,10 @@ export default function CategoryAccordScreen() {
       <Stack.Screen options={{ 
         headerShown: true, 
         title: title, 
-        headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
-        headerStyle: {backgroundColor: '#26489a'}, 
+        //headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
+        headerStyle: {backgroundColor: '#19181c'}, 
         headerTintColor: 'white',
-        header: (props) => <TabsHeader navProps={props} children={undefined} />,
+        // header: (props) => <TabsHeader navProps={props} children={undefined} />,
       }} />
 
       <Provider>

@@ -121,7 +121,7 @@ export function Content() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('')
   const [data, setData] = useState([])
-  const [playlists, setPlaylists] = useState([{"id": "1", "name": "Тест", "uid": "1747278926882"}, {"id": "2", "name": "Тест2", "uid": "1747279082656"}, {"id": "3", "name": "Тест", "uid": "1747279201178"}])
+  const [playlists, setPlaylists] = useState([])
   const [error, setError] = useState(null)
   const [fullData, setFullData] = useState([])
   const [textInputValue, setTextInputValue] = useState("");
@@ -131,6 +131,8 @@ export function Content() {
       customer: {},
       isVisible: false,
     });
+
+  const DBNAME = 'myLocalDatabase2'
   
   const dataMenu = [
     {
@@ -155,13 +157,12 @@ export function Content() {
     const fetch = (async()=> {
 
       try {
-        const local_db = await SQLite.openDatabaseAsync('myLocalDatabase4');
+        const local_db = await SQLite.openDatabaseAsync(DBNAME);
 
         await local_db.execAsync(`
           PRAGMA journal_mode = WAL;
-          CREATE TABLE IF NOT EXISTS playlists2 (
+          CREATE TABLE IF NOT EXISTS playlists (
             _id	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-            uid	TEXT NOT NULL,
             nameList	TEXT NOT NULL
           );`
         );
@@ -176,11 +177,11 @@ export function Content() {
         );
 
         await local_db.withTransactionAsync(async () => {
-          const allRows = await local_db.getAllAsync('SELECT * FROM playlists2');
+          const allRows = await local_db.getAllAsync('SELECT * FROM playlists');
           console.log("allRows: ", allRows)
           const playlist = allRows.map((row) => ({
             id: row._id,
-            uid: row.uid,
+            //uid: row._id,
             name: row.nameList,
           }));
 
@@ -189,24 +190,25 @@ export function Content() {
             return (songA < songB) ? -1 : (songA > songB) ? 1 : 0;  //сортировка по возрастанию 
           })
       
-          //setPlaylists(sortedSongs);
+          setPlaylists(sortedSongs);
 
-          setIsLoading(false);
+          //setIsLoading(false);
          });
 
         // setPlaylists([]);
 
-        // setIsLoading(false);
+        setIsLoading(false);
 
       } catch (error) {
         console.log(error.message)
+        setIsLoading(false);
       }
       
     })
 
     fetch()
 
-    setIsLoading(false);
+    //setIsLoading(false);
   }, []);
 
   const [visible, setVisible] = useState(false);
@@ -259,8 +261,10 @@ export function Content() {
 
   // Добавить плейлист
   const addPlaylist = async (textInputValue)=> {
+    console.log("textInputValue: ", textInputValue)
     const newValue = {
-      uid: Date.now().toString(),
+      //uid: Date.now().toString(),
+      id: Date.now().toString(),
       name: textInputValue,
     };
     setPlaylists([...playlists, newValue]);
@@ -273,19 +277,21 @@ export function Content() {
 
     setPlaylistTitle('')
 
-    // const local_db = await SQLite.openDatabaseAsync('myLocalDatabase4');
+    console.log(newValue.name)
 
-    // try {
-    //   // Insert new customer into the database
-    //   await local_db.withTransactionAsync(async () => {
-    //     await local_db.execAsync(
-    //       `INSERT INTO playlists (uid, nameList) values (?, ?)`, 
-    //       [newValue.uid, newValue.name]
-    //     );
-    //   })
-    // } catch (error) {
-    //     console.log(error.message)
-    // }
+    try {
+      const local_db = await SQLite.openDatabaseAsync(DBNAME);
+
+      // Insert new customer into the database
+      await local_db.withTransactionAsync(async () => {
+        await local_db.execAsync(
+          `INSERT INTO playlists (nameList) values (?)`, 
+          [newValue.name]
+        );
+      })
+    } catch (error) {
+        console.log(error.message)
+    }
     
   }
 
@@ -315,7 +321,7 @@ export function Content() {
   function Item({ item }) {
     return ( 
       <Card style={styles.back}>
-        <TouchableOpacity onPress={()=> {router.push(`/plalist/list/${item.id}`)}} >
+        <TouchableOpacity onPress={()=> {router.push(`/playlist/list/${item.name}`)}} >
           <Card.Title 
             title={item.name} 
             left={(props) => <Avatar.Icon {...props} icon="play-box-multiple-outline" />}
@@ -383,7 +389,7 @@ export function Content() {
         style={styles.listSongs}
         data={playlists}
         renderItem={({ item }) => <Item item={item}/>}
-        keyExtractor={item => item.uid}
+        keyExtractor={item => item.id}
         //ItemSeparatorComponent={renderSeparator}
         contentContainerStyle={{  flexGrow: 1,  gap: 15 }}
         // columnWrapperStyle={{ gap: GAP_BETWEEN_COLUMNS }}

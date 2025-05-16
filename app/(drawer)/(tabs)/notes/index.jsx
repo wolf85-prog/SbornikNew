@@ -217,7 +217,7 @@ export function Content() {
           title={item.name} 
           subtitle="Название песни" 
           left={(props) => <Avatar.Icon {...props} icon="notebook-outline" />}
-          right={(props) => <IconButton {...props} icon="dots-vertical" onPress={() => {}} />}
+          right={(props) => <IconButton {...props} icon="dots-vertical" onPress={() => router.push(`/notes/note/${item.uid}`)} />}
         />
         <Card.Content>
           {/* <Text variant="titleLarge">{item.name}</Text> */}
