@@ -24,7 +24,7 @@ const Search = () => {
         value={query}
         loading={loading}
         onChangeText={(v) => setQuery(v)}
-        placeholder="Type here to search..."
+        placeholder="Введите здесь для поиска..."
         style={{ marginTop: 16, marginHorizontal: 16 }}
       />
 

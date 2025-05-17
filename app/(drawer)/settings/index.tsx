@@ -36,7 +36,7 @@ const SettingsScreen = () => {
   const [settings, setSettings] = React.useState<Setting>({
     color: 'default',
     language: 'auto',
-    theme: 'auto',
+    theme: 'dark',
   })
   const [display, setDisplay] = React.useState({
     color: false,
@@ -75,7 +75,8 @@ const SettingsScreen = () => {
               headerShown: true, 
               title: Locales.t('titleSettings'), 
               headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />), 
-              headerStyle: {backgroundColor: theme.colors.primary},  
+              //headerStyle: {backgroundColor: theme.colors.primary},  
+              headerStyle: {backgroundColor: '#19181c'},
               headerTintColor: 'white',
               }} />
       {loading ? (

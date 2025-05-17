@@ -265,13 +265,14 @@ const styles = StyleSheet.create({
 
     customerName: {
       fontSize: 18,
-      fontWeight: 700,
-      color: '#fff'
+      fontWeight: 400,
+      color: '#fff',
+      marginBottom: 15
     },
 
     customerCount: {
       fontSize: 18,
-      fontWeight: 400,
+      fontWeight: 700,
       color: '#fff'
     },
 

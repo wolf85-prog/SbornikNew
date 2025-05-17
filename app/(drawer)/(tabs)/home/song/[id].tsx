@@ -59,7 +59,7 @@ export default function DetailsScreen() {
   const [songText, setSongText] = useState<any>('');
   const [songOnlyText, setSongOnlyText] = useState<any>('');
 
-  const [showSongText, setShowSongText] = useState(true);
+  const [showSongText, setShowSongText] = useState(false);
   
   const [visibleNumber, setVisibleNumber] = useState(false);
   const [songNumber, setSongNumber] = useState<any>('');
@@ -97,7 +97,7 @@ export default function DetailsScreen() {
   const [checkedPlaylist, setCheckedPlaylist] = useState(false);
 
   const [favorite, setFavorite] = useState(false);
-  const [showNote, setShowNote] = useState(true);
+  const [showNote, setShowNote] = useState(false);
   
   const data = [
     {

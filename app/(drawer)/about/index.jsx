@@ -76,7 +76,7 @@ export function Content() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
         
-          <View style={[styles.container]}>
+          <View style={[styles.container, {paddingLeft: 20, paddingRight: 20}]}>
             <Text style={styles.titleText}>Майкопский молодежный сборник</Text>
             <Image
               style={styles.imageLogo}
@@ -90,7 +90,7 @@ export function Content() {
               <Text style={styles.customerName}>Аккордов в БД: <Text style={styles.customerCount}>{countAccords}</Text></Text>
             </View>
 
-            <Divider style={{ margin: 25}}/>
+            <Divider style={{ margin: 25, color: 'white', backgroundColor: 'white'}}/>
 
             <View style={[{flex: 1}, styles.bottom]} />
               <View style={styles.container}>

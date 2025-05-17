@@ -24,9 +24,9 @@ export default function AccordScreen() {
     <Surface style={[styles.screen, styles.containerAccords]} >
       <Stack.Screen options={{ 
         headerShown: true, 
-        title: "Аккорды", 
+        title: Locales.t("accords"), 
         headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />),
-        headerStyle: {backgroundColor: '#26489a'}, 
+        headerStyle: {backgroundColor: '#19181c'}, 
         headerTintColor: 'white',
         header: (props) => <TabsHeader navProps={props} children={undefined} />,
       }} />

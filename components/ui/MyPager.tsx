@@ -4,6 +4,9 @@ import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler
 import InfinitePager, { InfinitePagerImperativeApi, Preset } from 'react-native-infinite-pager';
 import { useSQLiteContext } from "expo-sqlite";
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import {
+  useTheme 
+} from 'react-native-paper'
 
 import CardSong from '../../components/ui/CardSong';
 
@@ -109,7 +112,7 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
 
 // это компонент для всего текста
 const AllText = ({text}: any) => {
-
+  const theme = useTheme();
   const router = useRouter();
 
   // массив слов для выделения
@@ -121,7 +124,7 @@ const AllText = ({text}: any) => {
     const rowArr = row?.split(chordRegex).map((charOrSpace: any, index: number) => {
       if (chordRegex.test(charOrSpace)) {
         //console.log({text: charOrSpace, color: 'blue'} )
-        return {text: charOrSpace.trim(), color: 'blue', id: '1', uid: index} 
+        return {text: charOrSpace.trim(), color: '#4ca1f5', id: '1', uid: index} 
       }
       return {text: charOrSpace, color: 'white', id: '', uid: index} ;
     });
@@ -133,12 +136,12 @@ const AllText = ({text}: any) => {
   return (
     <View>
       {parsedText.map((row: any) => (  
-        <Text key={row.uid} style={{color: `${row[1]?.color}`, fontSize: 18}}>
+        <Text key={row.uid} style={{color: `${row[1]?.color}`, fontSize: 18, fontWeight: 700}}>
            {row.map((item: any)=> (
             //console.log(item)
             item?.id ? 
-              <Text key={item?.uid2} onPress={()=>router.push(`/home/song/accord/${item?.id}`)}>{item ? item.text : ''}</Text>
-              : <Text style={{color: 'white'}} key={item?.uid2}>{item ? item.text : ''}</Text>
+              <Text key={item?.uid} onPress={()=>router.push(`/home/song/accord/${item?.id}`)}>{item ? item.text : ''}</Text>
+              : <Text style={{color: 'white'}} key={item?.uid}>{item ? item.text : ''}</Text>
           ))} 
         </Text>
        ) 

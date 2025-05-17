@@ -7,12 +7,7 @@ import { useLocalSearchParams } from 'expo-router';
 import React from 'react'
 import { useEffect, useState } from "react";
 import { useSQLiteContext } from "expo-sqlite";
-import { 
-  Surface, 
-  Appbar, 
-  Menu, 
-  Tooltip,
-  FAB} from "react-native-paper";
+import { Surface } from "react-native-paper";
 import { Locales, ScreenInfo, styles, TabsHeader } from '@/lib'
 
 import accordsData from './../../../../../data/accord_new.js';

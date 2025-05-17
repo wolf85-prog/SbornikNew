@@ -13,6 +13,9 @@ import {
   Appbar, 
   Menu, 
   Tooltip,
+  Dialog, 
+  Portal,
+  Button,
   FAB} from "react-native-paper";
 
 import { Locales, ScreenInfo, styles, TabsHeader } from '@/lib'
@@ -27,7 +30,6 @@ const CategoriesScreen = () => {
   const [visible, setVisible] = useState(false)
   const [visiblePlaylist, setVisiblePlaylist] = useState(false);
 
-  //const {currentTheme, toggleTheme} = useContext(ThemeContext)
 
   const headerRight = () => {
       return (
@@ -105,11 +107,16 @@ export function Content() {
   
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([])
-  const [notes, setNotes] = useState([])
+  const [categories, setCategories] = useState([])
   const [error, setError] = useState(null)
   const [fullData, setFullData] = useState([])
   const [textInputValue, setTextInputValue] = useState("");
+  const [categoryTitle, setCategoryTitle] = useState("");
 
+  const [dialog, setDialog] = useState({
+      category: {},
+      isVisible: false,
+  });
 
   useEffect(() => {
     setIsLoading(true);
@@ -137,26 +144,23 @@ export function Content() {
     setIsLoading(false);
   }, []);
   
-  function Item({ item }: any) {
+  function Item({item}) {
     return (
-      <Card>
-        <TouchableOpacity onPress={()=> {router.push(`/songs/song/${item.number}`)}} >
-          <View>
-            
-            <View>
-              <Text>{item.name}</Text>
-              {/* <Text style={styles.category}>{item.email}</Text>      */}
-            </View>
-
-            <View>
-              <View>
-                <Text>{item.number}</Text>
-              </View>  
-              <Ionicons name="star-outline" size={24} color="#feed33" />
-            </View>
-          </View>
-          
-        </TouchableOpacity >
+      <Card style={styles.back}>
+        <TouchableOpacity onPress={()=> {router.push(`/categories/details/${item.name}`)}} >
+          <Card.Title 
+            title={item.name} 
+            left={(props) => <Avatar.Icon {...props} icon="play-box-multiple-outline" />}
+            right={(props) => 
+              <>
+                <View style={styles.right_section}>
+                  <Text style={{color: '#f5f5f5'}}>0</Text>
+                  <IconButton {...props} icon="dots-vertical" onPress={() => {}} />
+                </View>
+              </>
+            }
+          />
+        </TouchableOpacity>
       </Card>
       
     );
@@ -170,27 +174,100 @@ export function Content() {
     );
   }
 
+  const showNewDialog = () => {
+  
+    setDialog({
+      isVisible: true,
+      category: {},
+    });
+  }
+
+  const hideDialog = async (updatedCustomer) => {
+    setDialog({
+      isVisible: false,
+      category: {},
+    });
+
+    setCategoryTitle('')
+
+    // Update the local state
+    const newCustomers = categories.map((customer) => {
+      if (customer.id !== updatedCustomer.id) {
+        return customer;
+      }
+
+      return updatedCustomer;
+    });
+
+    setCategories(newCustomers);
+
+  };
+
+  // Добавить категорию
+    const addCategory = async (textInputValue)=> {
+      console.log("textInputValue: ", textInputValue)
+      const newValue = {
+        //uid: Date.now().toString(),
+        id: Date.now().toString(),
+        name: textInputValue,
+      };
+      setCategories([...categories, newValue]);
+  
+      //скрыть диалоговое окно
+      setDialog({
+        isVisible: false,
+        category: {},
+      });
+  
+      setCategoryTitle('')
+  
+      console.log(newValue.name)
+  
+      // try {
+      //   const local_db = await SQLite.openDatabaseAsync(DBNAME);
+  
+      //   // Insert new customer into the database
+      //   await local_db.withTransactionAsync(async () => {
+      //     await local_db.execAsync(
+      //       `INSERT INTO playlists (nameList) values (?)`, 
+      //       [newValue.name]
+      //     );
+      //   })
+      // } catch (error) {
+      //     console.log(error.message)
+      // }
+      
+    }
+
   const onButtonAdd = ()=> {
     console.log("press add category")
-    //showDialog()
+    showNewDialog()
     
   }
+
+
 
   return (
     <SafeAreaView style={{flex:1}}>
 
       <FlatList
-        //style={styles.listSongs}
-        data={notes}
+        style={styles.listSongs}
+        data={categories}
         renderItem={({ item }) => <Item item={item}/>}
-        //keyExtractor={item => item.number}
+        keyExtractor={item => item.number}
         // ItemSeparatorComponent={() => <View style={{height: 15}} />}
         contentContainerStyle={{  flexGrow: 1, justifyContent: "center", alignItems: "center", gap: 15 }}
         // columnWrapperStyle={{ gap: GAP_BETWEEN_COLUMNS }}
         ListEmptyComponent={() =>
-          <Text>
-            Список категорий пуст
-          </Text>
+          <View style={styles.containerList}>
+            <Text style={styles.emptyListTitle}>
+                Список категорий пуст
+              </Text>
+              <Text style={styles.emptyList}>
+                Добавьте новую категорию
+              </Text>
+          </View>
+          
         }
       /> 
 
@@ -199,7 +276,30 @@ export function Content() {
         icon="plus"
         style={styles.fab}
         onPress={onButtonAdd}
-      />      
+      /> 
+
+      <Portal>
+              <Dialog visible={dialog.isVisible} onDismiss={() => hideDialog(dialog.category)}>
+                <Dialog.Title>Новая категория</Dialog.Title>
+                <Dialog.Content>
+                  <TextInput
+                    label="Название"
+                    placeholder="Введите название"
+                    value={categoryTitle}
+                    onChangeText={text => setCategoryTitle(text)}
+                  />
+                </Dialog.Content>
+                <Dialog.Actions>
+                  <Button onPress={() => hideDialog(dialog.category)}>Отмена</Button>
+                  <Button 
+                    onPress={() => addCategory(categoryTitle)}
+                  >Добавить
+                  </Button>
+                </Dialog.Actions>
+              </Dialog>
+      
+              
+      </Portal>      
     </SafeAreaView>
   );
 }

@@ -111,7 +111,7 @@ const RootLayout = () => {
 const RootLayoutNav = () => {
   const colorScheme = useColorScheme()
   const [settings, setSettings] = React.useState<Setting>({
-    theme: 'auto',
+    theme: 'dark',
     color: 'default',
     language: 'auto',
   })
@@ -139,7 +139,7 @@ const RootLayoutNav = () => {
 
   React.useEffect(() => {
     if (settings.language === 'auto') {
-      Locales.locale = Localization.getLocales()[0].languageCode ?? 'en'
+      Locales.locale = Localization.getLocales()[0].languageCode ?? 'ru'
     } else {
       Locales.locale = settings.language
     }

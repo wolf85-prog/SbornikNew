@@ -219,13 +219,13 @@ export function Content() {
       customer,
     });
 
-  const showNewDialog = () =>
+  const showNewDialog = () => {
   
-  setDialog({
-    isVisible: true,
-    customer: {},
-  });
-
+    setDialog({
+      isVisible: true,
+      customer: {},
+    });
+  }
   // const hideDialog = () => setVisible(false);
 
   const hideDialog = async (updatedCustomer) => {
