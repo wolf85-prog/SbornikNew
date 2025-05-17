@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     },
 
     floatingButtonBemol: {
-      backgroundColor:'#DE3163',
+      //backgroundColor:'#DE3163',
       borderRadius:'50%',
       position: 'absolute',
       width: 45,

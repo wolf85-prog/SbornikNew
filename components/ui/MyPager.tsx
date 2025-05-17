@@ -118,15 +118,14 @@ const AllText = ({text}: any) => {
   // массив слов для выделения
   const chordRegex = /([A-G]{1}[A-Gmjsu0-9/#]{0,4})(?!\w)/g;
 
-  const [separators, setSeparators] = useState([])
-
   const parsedText = text?.split("\n").map((row: any) => {
-    const rowArr = row?.split(chordRegex).map((charOrSpace: any, index: number) => {
+    const rowArr = row?.split(chordRegex).map((charOrSpace: any) => {
       if (chordRegex.test(charOrSpace)) {
-        //console.log({text: charOrSpace, color: 'blue'} )
-        return {text: charOrSpace.trim(), color: '#4ca1f5', id: '1', uid: index} 
+        //const accId = accordsData.find(item=> item.name === charOrSpace.trim())
+        //console.log("accId: ", charOrSpace.trim())
+        return {text: charOrSpace.trim(), color: '#4ca1f5', id: charOrSpace.trim()} 
       }
-      return {text: charOrSpace, color: 'white', id: '', uid: index} ;
+      return {text: charOrSpace, color: 'white', id: ''} ;
     });
 
     //console.log(rowArr)
@@ -135,8 +134,9 @@ const AllText = ({text}: any) => {
 
   return (
     <View>
-      {parsedText.map((row: any) => (  
-        <Text key={row.uid} style={{color: `${row[1]?.color}`, fontSize: 18, fontWeight: 700}}>
+      {parsedText.map((row: any, index: number) => ( 
+        //console.log("row: ", index, row) 
+        <Text key={index} style={{color: `${row[1]?.color}`, fontSize: 18, fontWeight: 700}}>
            {row.map((item: any)=> (
             //console.log(item)
             item?.id ? 

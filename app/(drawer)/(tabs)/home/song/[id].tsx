@@ -37,9 +37,6 @@ import Animated, { interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewO
 const { width } = Dimensions.get('window');
 const IMG_HEIGHT = 300;
 
-const MIN_HEIGHT = 10;
-const MAX_HEIGHT = 50;
-
 
 
 export default function DetailsScreen() {
