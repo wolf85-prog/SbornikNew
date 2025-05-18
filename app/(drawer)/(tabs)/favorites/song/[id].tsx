@@ -109,10 +109,10 @@ export default function DetailsScreen() {
         title: "Добавить заметку",
         action: ()=>setVisibleNewNote(true)
     },
-    {
-        title: "Тональность",
-        action: ()=>setVisibleTone(true)
-    },
+    // {
+    //     title: "Тональность",
+    //     action: ()=>setVisibleTone(true)
+    // },
     {
         title: "Размер шрифта",
         action: ()=>setVisibleFontSize(true)
