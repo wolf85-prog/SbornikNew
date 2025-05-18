@@ -89,6 +89,7 @@ export default function DetailsScreen() {
   const [showFullPage, setShowFullPage] = useState(false);
 
   const [visible, setVisible] = useState(false) 
+  const [visible2, setVisible2] = useState(false) 
   const [visibleSnackBar, setVisibleSnackBar] = useState(false);
   
   const [checkedPlaylist, setCheckedPlaylist] = useState(false);
@@ -109,10 +110,10 @@ export default function DetailsScreen() {
         title: "Добавить заметку",
         action: ()=>setVisibleNewNote(true)
     },
-    {
-        title: "Тональность",
-        action: ()=>setVisibleTone(true)
-    },
+    // {
+    //     title: "Тональность",
+    //     action: ()=>setVisibleTone(true)
+    // },
     {
         title: "Размер шрифта",
         action: ()=>setVisibleFontSize(true)
@@ -253,25 +254,6 @@ export default function DetailsScreen() {
 
             <PopupMenu options={data} color={"white"}/>
 
-            {/* <Menu
-              statusBarHeight={48}
-              visible={visible}
-              onDismiss={() => setVisible(false)}
-              anchor={
-                <Tooltip title={Locales.t('options')}>
-                  <Appbar.Action
-                    icon="dots-vertical"
-                    onPress={() => setVisible(true)}
-                  />
-                </Tooltip>
-              }  
-            >
-              <Menu.Item
-                title={Locales.t('titleSettings')}
-                leadingIcon="cog"
-                onPress={() => router.push('/settings')}
-              />
-            </Menu> */}
           </>
           
         );
