@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ActivityIndicator, TextInput } from 'react-native'
+import { SafeAreaView, StatusBar, StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ActivityIndicator, TextInput } from 'react-native'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState, useMemo } from 'react'
 import { DrawerToggleButton } from "@react-navigation/drawer";
@@ -11,7 +11,9 @@ import {
   Surface,
   Appbar, 
   Menu, 
-  Tooltip 
+  Tooltip,
+  Snackbar, 
+  Searchbar 
 } from "react-native-paper";
 
 import {
@@ -25,7 +27,7 @@ import filter from "lodash.filter"
 import songsData from './../../../../data/songsData.js';
 
 const SongsScreen = () => {
-
+  const [showSearch, setShowSearch] = useState(false);
   const [visible, setVisible] = useState(false) 
 
   const router = useRouter();
@@ -43,8 +45,8 @@ const SongsScreen = () => {
       <>
                             <Tooltip title={Locales.t('search')}>
                               <Appbar.Action
-                                icon="magnify"
-                                onPress={() => router.push('/search')}
+                                icon={showSearch ? "close" : "magnify"}
+                                onPress={() => setShowSearch(!showSearch)}
                               />
                             </Tooltip>
                             <Menu
@@ -85,14 +87,14 @@ const SongsScreen = () => {
         header: (props) => <TabsHeader navProps={props} children={undefined} />,
         }} 
       />
-        <Content />
+        <Content showSearch={showSearch}/>
     </Surface>
   )
 }
 
 export default SongsScreen
 
-export function Content() {
+export function Content(showSearch) {
   const db = useSQLiteContext();
 
   const router = useRouter();
@@ -104,7 +106,7 @@ export function Content() {
   const [error, setError] = useState(null)
   const [fullData, setFullData] = useState([])
   const [textInputValue, setTextInputValue] = useState("");
-
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     setIsLoading(true);
@@ -191,16 +193,29 @@ export function Content() {
     );
   }
 
+   // Search logic
+  // useEffect(() => {
+  //   if (searchQuery !== '') {
+  //     setLoading(true)
+  //   }
+
+  //   setTimeout(() => {
+  //     setLoading(false)
+  //   }, 1000)
+  // }, [searchQuery])
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <TextInput 
-        placeholder="Поиск..." 
-        placeholderTextColor="#f3f3f3"
-        clearButtonMode='always' 
-        style={styles.searchBox}
-        autoCapitalize="none"
+      <StatusBar
+        animated={true}
+        backgroundColor = '#060606' //'#26489a'
+      />
+      <Searchbar
         value={searchQuery}
-        onChangeText={(query)=> handleSearch(query)}
+        loading={loading}
+        onChangeText={(v) => handleSearch(v)}
+        placeholder="Введите текст для поиска песни"
+        style={{ display: showSearch.showSearch ? 'block' :'none', marginTop: 16, marginHorizontal: 16 }}
       />
 
       <FlatList

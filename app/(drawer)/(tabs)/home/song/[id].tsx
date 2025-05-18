@@ -399,20 +399,13 @@ export default function DetailsScreen() {
             </View>
 
             {/* Убрать тон */}
-            <TouchableOpacity
+            <FAB
+                icon='music-accidental-flat'
                 style={styles.floatingButtonBemol}
                 onPress={onButtonPress}
-            >
-              <MaterialCommunityIcons name="music-accidental-flat" size={30} color="white" />
-            </TouchableOpacity> 
+            />
 
             {/* Убрать аккорды */}
-            {/* <TouchableOpacity
-                style={styles.floatingButtonNote}
-                onPress={onChangeSong}
-            >
-              <Entypo name="note" size={30} color="white" />
-            </TouchableOpacity>  */}
             <FAB
               icon={showNote ? 'music-note-off' : 'music-note'}
               style={styles.floatingButtonNote}
@@ -420,12 +413,11 @@ export default function DetailsScreen() {
             />
 
             {/* Добавить тон */}
-            <TouchableOpacity
+            <FAB
+                icon="music-accidental-sharp"
                 style={styles.floatingButtonDiez}
                 onPress={onButtonPress}
-            >
-              <Fontisto name="hashtag" size={20} color="white" />
-            </TouchableOpacity>
+            />   
 
             <View style={{height: 1000}}>
               <MyPager

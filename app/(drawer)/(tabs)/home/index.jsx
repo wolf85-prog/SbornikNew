@@ -3,7 +3,6 @@ import Card from '../../../../components/ui/Card';
 import { Stack, useRouter } from 'expo-router';
 import { DrawerToggleButton } from "@react-navigation/drawer";
 import { Ionicons, FontAwesome, Entypo } from '@expo/vector-icons';
-import { Snackbar } from 'react-native-paper';
 import * as SQLite from 'expo-sqlite';
 import { useSQLiteContext } from "expo-sqlite";
 import React, { useContext, useState, useEffect, useMemo } from 'react'
@@ -12,7 +11,8 @@ import {
   Surface,
   Appbar, 
   Menu, 
-  Tooltip 
+  Tooltip,
+  Snackbar, Searchbar
 } from "react-native-paper";
 import {
   Locales,
@@ -25,7 +25,7 @@ import filter from "lodash.filter"
 import songsData from './../../../../data/songsData.js';
 
 export default function TabsHome() {
-
+  const [showSearch, setShowSearch] = useState(false);
   const [visible, setVisible] = React.useState(false) 
   const router = useRouter();
 
@@ -38,8 +38,8 @@ export default function TabsHome() {
                     <>
                       <Tooltip title={Locales.t('search')} >
                         <Appbar.Action
-                          icon="magnify"
-                          onPress={() => router.push('/search')}
+                          icon={showSearch ? "close" : "magnify"}
+                          onPress={() => setShowSearch(!showSearch)}
                         />
                       </Tooltip>
                       <Menu
@@ -71,7 +71,7 @@ export default function TabsHome() {
         }}
       />
       
-      <Content />
+      <Content showSearch={showSearch}/>
       
     </Surface>
   );
@@ -79,8 +79,10 @@ export default function TabsHome() {
 
 //---------------------------------------------------------------------------------
 
-export function Content() {
+export function Content(showSearch) {
   const db = useSQLiteContext();
+
+  console.log("showSearch: ", showSearch.showSearch)
 
   const router = useRouter();
 
@@ -89,14 +91,15 @@ export function Content() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('')
+  const [loading, setLoading] = useState(false)
   const [data, setData] = useState([])
   const [error, setError] = useState(null)
   const [fullData, setFullData] = useState([])
   const [textInputValue, setTextInputValue] = useState("");
   const [favorite, setFavorite] = useState([])
   const [numSong, setNumSong] = useState("");
-
-  const [visible, setVisible] = React.useState(false);
+  
+  const [visible, setVisible] = useState(false);
 
   const onToggleSnackBar = () => setVisible(!visible);
   const onDismissSnackBar = () => setVisible(false);
@@ -218,6 +221,17 @@ export function Content() {
     );
   }
 
+
+  // Search logic
+  // useEffect(() => {
+  //   if (searchQuery !== '') {
+  //     setLoading(true)
+  //   }
+
+  //   setTimeout(() => {
+  //     setLoading(false)
+  //   }, 1000)
+  // }, [searchQuery])
   
 
   return (
@@ -229,14 +243,12 @@ export function Content() {
         //showHideTransition={statusBarTransition}
         //hidden={hidden}
       />
-      <TextInput 
-        placeholder="Поиск..." 
-        placeholderTextColor="#f3f3f3"
-        clearButtonMode='always' 
-        style={styles.searchBox}
-        autoCapitalize="none"
+      <Searchbar
         value={searchQuery}
-        onChangeText={(query)=> handleSearch(query)}
+        loading={loading}
+        onChangeText={(v) => handleSearch(v)}
+        placeholder="Введите номер или название песни"
+        style={{ display: showSearch.showSearch ? 'block' :'none', marginTop: 16, marginHorizontal: 16 }}
       />
         <FlatList
           style={styles.listSongs}

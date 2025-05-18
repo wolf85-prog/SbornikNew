@@ -8,7 +8,7 @@ import { Button, Dialog, Portal, TextInput,  Snackbar, RadioButton } from 'react
 import Slider from '@react-native-community/slider';
 //import {Slider} from '@miblanchard/react-native-slider';
 import MyPager from './../../../../../components/ui/MyPager'
-
+import * as SQLite from 'expo-sqlite';
 
 import songsData from './../../../../../data/songsData.js';
 import { PAGES, createPage } from './../../../../../constants/utils';
@@ -20,6 +20,8 @@ import {
   Appbar, 
   Menu, 
   Tooltip,
+  Checkbox,
+  FAB
 } from "react-native-paper";
 import { Locales, ScreenInfo, styles, TabsHeader } from '@/lib'
 
@@ -34,9 +36,6 @@ import Animated, { interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewO
 
 const { width } = Dimensions.get('window');
 const IMG_HEIGHT = 300;
-
-const MIN_HEIGHT = 50;
-const MAX_HEIGHT = 250;
 
 
 
@@ -57,15 +56,19 @@ export default function DetailsScreen() {
   const [songText, setSongText] = useState<any>('');
   const [songOnlyText, setSongOnlyText] = useState<any>('');
 
-  const [showSongText, setShowSongText] = useState(true);
+  const [showSongText, setShowSongText] = useState(false);
   
   const [visibleNumber, setVisibleNumber] = useState(false);
   const [songNumber, setSongNumber] = useState<any>('');
+  const [selectedPage, setSelectedPage] = useState<number>(0);
   const [playlistName, setPlaylistName] = useState<any>('');
   const [categoryName, setCategoryName] = useState<any>('');
   const [noteText, setNoteText] = useState<any>('');
   const [songTone, setSongTone] = useState<any>(0);
   const [separators, setSeparators] = useState<any>([])
+
+  const [playlistId, setPlaylistId] = useState<any>('');
+
 
   const [visiblePlaylist, setVisiblePlaylist] = useState(false);
   const [visibleNewPlaylist, setVisibleNewPlaylist] = useState(false);
@@ -76,7 +79,8 @@ export default function DetailsScreen() {
   const [visibleTone, setVisibleTone] = useState(false);
 
   const [visibleFontSize, setVisibleFontSize] = useState(false);
-  const [textSize, setTextSize] = useState<any>(0.2);
+  const [textSize, setTextSize] = useState(15);
+  const [previewValue, setPreviewValue] = useState(15)
 
   //const sliderRef = useRef<PagerView>(null);
   const scrollRef = useAnimatedRef<Animated.ScrollView>()
@@ -84,9 +88,13 @@ export default function DetailsScreen() {
 
   const [showFullPage, setShowFullPage] = useState(false);
 
+  const [visible, setVisible] = useState(false) 
   const [visibleSnackBar, setVisibleSnackBar] = useState(false);
   
-  
+  const [checkedPlaylist, setCheckedPlaylist] = useState(false);
+
+  const [favorite, setFavorite] = useState(false);
+  const [showNote, setShowNote] = useState(false);
   
   const data = [
     {
@@ -154,10 +162,40 @@ export default function DetailsScreen() {
   
 
   useEffect(() => {
+    console.log("id: ", id)
     setTitle(id)
+    setSongId(id)
   }, [id])
 
+  useEffect(() => {
+    console.log("textSize: ", textSize)
+  }, [textSize])
+
+  useEffect(()=> {
+     console.log("songNumber: ", songNumber)
+  }, [songNumber])
+
+  useEffect(()=> {
+     console.log("selectedPage: ", selectedPage)
+  }, [selectedPage])
   
+  useEffect(() => {
+      setIsLoading(true);
+  
+      const fetch = (async()=> {
+
+        const local_db = await SQLite.openDatabaseAsync('myLocalDatabase');
+
+        const resSong = songsData.find(item => item._id === Number(id))
+        setSongName(resSong ? resSong.name : '')
+        setSongs(songsData);
+      
+      })
+  
+      setIsLoading(false);
+  
+      fetch()
+    }, []);
 
   if (isLoading) {
       return (
@@ -168,6 +206,10 @@ export default function DetailsScreen() {
   }
 
 
+  const pressFullPage = ()=> {
+    console.log("Нажили кнопку Полный экран")
+    setShowFullPage(true)
+  }
 
 
   interface Todo {
@@ -181,7 +223,12 @@ export default function DetailsScreen() {
   const headerRight = () => {
         return (
           <>
-
+            {/* <Tooltip title={Locales.t('search')}>
+              <Appbar.Action
+                icon="note"
+                onPress={()=>setVisiblePlaylist(true)}
+              />
+            </Tooltip> */}
             <TouchableOpacity
               // onPress={()=>router.push("/modal")}
               onPress={onChangeSong}
@@ -198,29 +245,116 @@ export default function DetailsScreen() {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={()=>setShowFullPage(true)}
+              onPress={pressFullPage}
               style={{marginRight: 20}}
             >
               <SimpleLineIcons name="size-fullscreen" size={20} color="white" />
             </TouchableOpacity>
 
             <PopupMenu options={data} color={"white"}/>
+
+            {/* <Menu
+              statusBarHeight={48}
+              visible={visible}
+              onDismiss={() => setVisible(false)}
+              anchor={
+                <Tooltip title={Locales.t('options')}>
+                  <Appbar.Action
+                    icon="dots-vertical"
+                    onPress={() => setVisible(true)}
+                  />
+                </Tooltip>
+              }  
+            >
+              <Menu.Item
+                title={Locales.t('titleSettings')}
+                leadingIcon="cog"
+                onPress={() => router.push('/settings')}
+              />
+            </Menu> */}
           </>
           
         );
   };
 
   const onButtonPress = ()=> {
+    setFavorite(!favorite)
     console.log("press")
   }
 
   const onChangeSong = ()=> {
-    console.log(songs[0])
+    console.log("Нажали кнопку Убрать аккорды", !showSongText)
     setShowSongText(!showSongText)
+    setShowNote(!showNote)
     
   }
 
-  
+  const selectPage = () => {
+    setSelectedPage(Number(songNumber))
+    setVisibleNumber(false)
+  }
+
+  // Добавить песню в плейлист
+  const pressAddInPlaylist = async()=> {
+    setVisiblePlaylist(false)
+    const db = await SQLite.openDatabaseAsync('myLocalDatabase2');
+    // Insert new customer into the database
+    // await db.withTransactionAsync(async () => {
+    //   await db.execAsync(
+    //     `INSERT INTO playlist_songs (id_song, id_playlist) values (?, ?)`, 
+    //     [songId, playlistId]
+    //   );
+    // })
+  }
+
+  //Добавить плейлист
+  const pressAddPlaylist = async()=> {
+    setVisibleNewPlaylist(false)
+    const newValue = {
+      uid: Date.now().toString(),
+      name: playlistName,
+    };
+
+    const db = await SQLite.openDatabaseAsync('myLocalDatabase2');
+
+    // Insert new customer into the database
+    // await db.withTransactionAsync(async () => {
+    //   await db.execAsync(
+    //     `INSERT INTO playlists (uid, nameList) values (?, ?)`, 
+    //     [newValue.uid, newValue.name]
+    //   );
+    // })
+  }
+
+
+
+
+  // Добавить песню в категорию
+  const pressAddInCategory = async(songId: number, categoryId: number)=> {
+    setVisiblePlaylist(false)
+    const db = await SQLite.openDatabaseAsync('myLocalDatabase2');
+    // Insert new customer into the database
+    // await db.withTransactionAsync(async () => {
+    //   await db.execAsync(
+    //     `INSERT INTO categories_songs (id_song, id_playlist) values (?, ?)`, 
+    //     [songId, categoryId]
+    //   );
+    // })
+  }
+
+  //Добавить категорию
+  const pressAddCategory = async()=> {
+    setVisibleNewPlaylist(false)
+    const db = await SQLite.openDatabaseAsync('myLocalDatabase2');
+
+    // Insert new customer into the database
+    // await db.withTransactionAsync(async () => {
+    //   await db.execAsync(
+    //     `INSERT INTO categories (nameList) values (?)`, 
+    //     [categoryName]
+    //   );
+    // })
+  }
 
 
   return (
@@ -228,7 +362,7 @@ export default function DetailsScreen() {
       <Stack.Screen options={{ 
         headerTransparent: true,
         headerBackground: ()=> <Animated.View style={[styles.header, headerAnimatedStyle]} />,
-        headerShown: true, 
+        headerShown: !showFullPage, 
         title: `№ ${title}` ,
         headerTintColor: '#fff',
         headerRight: headerRight,
@@ -236,10 +370,10 @@ export default function DetailsScreen() {
       />
 
 
-        <SafeAreaView style={styles.screen}> 
+        <SafeAreaView style={[styles.screen, {backgroundColor: '#000'}]}> 
           <StatusBar
             animated={true}
-            backgroundColor= {COLORS.darkBlue}
+            backgroundColor= {COLORS.black}
             //barStyle={statusBarStyle}
             //showHideTransition={statusBarTransition}
             //hidden={hidden}
@@ -265,64 +399,38 @@ export default function DetailsScreen() {
             </View>
 
             {/* Убрать тон */}
-            <TouchableOpacity
+            <FAB
+                icon='music-accidental-flat'
                 style={styles.floatingButtonBemol}
                 onPress={onButtonPress}
-            >
-              <MaterialCommunityIcons name="music-accidental-flat" size={30} color="white" />
-            </TouchableOpacity> 
+            />
 
             {/* Убрать аккорды */}
-            <TouchableOpacity
-                style={styles.floatingButtonNote}
-                onPress={onChangeSong}
-            >
-              <Entypo name="note" size={30} color="white" />
-            </TouchableOpacity> 
+            <FAB
+              icon={showNote ? 'music-note-off' : 'music-note'}
+              style={styles.floatingButtonNote}
+              onPress={onChangeSong}
+            />
 
             {/* Добавить тон */}
-            <TouchableOpacity
+            <FAB
+                icon="music-accidental-sharp"
                 style={styles.floatingButtonDiez}
                 onPress={onButtonPress}
-            >
-              <Fontisto name="hashtag" size={20} color="white" />
-            </TouchableOpacity>
+            />   
 
             <View style={{height: 1000}}>
               <MyPager
-                numberPage={songId} 
+                numberPage={songId}  
                 textSong={songText}
                 setTitleSong={setSongName}
                 setNumberSong={setTitle}
                 showSongText={showSongText}
+                textSize={textSize}
+                setShowFullPage={setShowFullPage}
+                selectedPage={selectedPage}
+                setSelectedPage={setSelectedPage}
               />
-
-              {/* <PagerView
-                ref={sliderRef}
-                testID="pager-view"
-                style={styles.pagerView}
-                initialPage={3}
-                pageMargin={10}
-                onPageScroll={onPageScroll}
-                onPageSelected={onPageSelected}
-                onPageScrollStateChanged={onPageScrollStateChanged}
-              > */}
-                {/* {songs.map((page: any) => (
-                  <View key={page.uid} collapsable={false}>      
-                    <ScrollView style={styles.scrollStyle}>       
-                      <CardSong>
-                        <View style={[styles.slide] }>
-                         {showSongText ?
-                          <AllText text={page.text}></AllText>
-                          :<Text style={[styles.text, {fontSize: 18}]}>{page.onlytext}</Text>
-                         }
-                        </View>
-                      </CardSong>        
-                    </ScrollView>
-                  </View>
-                  )
-                )} */}
-              {/* </PagerView> */}
             </View>
 
           </Animated.ScrollView>  
@@ -330,34 +438,57 @@ export default function DetailsScreen() {
           
 
           {/* Добавить в  избранное */}
-          <TouchableOpacity
+          {/* <TouchableOpacity
               style={styles.floatingButton}
               onPress={onButtonPress}
           >
             <Ionicons name="heart-circle-outline" size={60} color="#DE3163" />
-            {/* <Ionicons name="heart-circle-sharp" size={80} color="red" /> */}
-          </TouchableOpacity> 
+          </TouchableOpacity>  */}
+          <FAB
+            icon={favorite ? 'cards-heart-outline' : 'cards-heart'}
+            style={styles.fab}
+            onPress={onButtonPress}
+            size='small'
+          />
 
+        {/* Переход к песне по номеру */}
           <Dialog visible={visibleNumber} onDismiss={hideDialog}>
               <Dialog.Content>
-                <Text>Введите номер в данном сборнике, на который желаете перейти</Text>
+                <Text style={{color: 'white', textAlign: 'center'}}>
+                  Введите номер в данном сборнике, на который желаете перейти
+                </Text>
                       <TextInput
+                        style={{backgroundColor: 'transparent', textAlign: 'center'}}
                         label="Номер"
-                        placeholder="1-555"
+                        placeholder="1-612"
                         value={songNumber}
-                        onChangeText={text => setSongNumber(text)}
+                        onChangeText={value => setSongNumber(value)}
                       />
               </Dialog.Content>
               <Dialog.Actions>
                 <Button onPress={() => setVisibleNumber(false)}>Отмена</Button>
-                <Button onPress={() => setVisibleNumber(false)}>ОК</Button>
+                <Button onPress={selectPage}>ОК</Button>
               </Dialog.Actions>
           </Dialog>
  
           <Dialog visible={visiblePlaylist} onDismiss={hideDialog}>
               <Dialog.Title>Добавить в плейлист</Dialog.Title>
               <Dialog.Content>
-                <Text>...</Text>
+                <Checkbox.Item 
+                  label="Новый плейлист" 
+                  status={checkedPlaylist ? 'checked' : 'unchecked'} 
+                  onPress={() => {
+                      setCheckedPlaylist(!checkedPlaylist);
+                    }}
+                />
+                <Checkbox.Item 
+                  label="Новый плейлист 2" 
+                  status={checkedPlaylist ? 'checked' : 'unchecked'} 
+                  onPress={() => {
+                      setCheckedPlaylist(!checkedPlaylist);
+                    }}
+                />
+                
               </Dialog.Content>
               <Dialog.Actions>
                 <Button onPress={() => {
@@ -366,12 +497,12 @@ export default function DetailsScreen() {
                 }}>Новый</Button>
 
                 <Button onPress={() => setVisiblePlaylist(false)}>Отмена</Button>
-                <Button onPress={() => setVisiblePlaylist(false)}>ОК</Button>
+                <Button onPress={pressAddInPlaylist}>ОК</Button>
               </Dialog.Actions>
           </Dialog>
 
           <Dialog visible={visibleNewPlaylist} onDismiss={hideDialogNewPlaylst}>
-              <Dialog.Title>Новый</Dialog.Title>
+              <Dialog.Title>Новый плейлист</Dialog.Title>
               <Dialog.Content>
                 <TextInput
                   label="Введите название"
@@ -382,7 +513,7 @@ export default function DetailsScreen() {
               </Dialog.Content>
               <Dialog.Actions>
                 <Button onPress={() => setVisibleNewPlaylist(false)}>Отмена</Button>
-                <Button onPress={() => setVisibleNewPlaylist(false)}>Добавить</Button>
+                <Button onPress={pressAddPlaylist}>Добавить</Button>
               </Dialog.Actions>
           </Dialog>
 
@@ -471,30 +602,23 @@ export default function DetailsScreen() {
               </Dialog.Actions>
           </Dialog>
   
-          <Dialog visible={visibleFontSize} onDismiss={hideDialog} style={{backgroundColor: '#fff'}}>
+          <Dialog visible={visibleFontSize} onDismiss={hideDialog}>
               <Dialog.Title>Размер текста</Dialog.Title>
               <Dialog.Content>
                 <View style={{alignItems: 'center'}}>
-                  <Text style={styles.text}>{textSize}</Text>
-                  {/* <Slider
+                  <Text style={styles.text}>{previewValue}</Text>
+                  <Slider
                     style={styles.slider}
-                    minimumValue={MIN_HEIGHT}
-                    maximumValue={MAX_HEIGHT}
+                    minimumValue={10}
+                    maximumValue={50}
                     minimumTrackTintColor="#9a5871"
                     maximumTrackTintColor="#000000"
-                    onValueChange={(value) => setTextSize(Math.round(value))}
-                    value={textSize}
-                  /> */}
-                  {/* <Slider
-                    minimumValue={0}
-                    maximumValue={50}
-                    minimumTrackTintColor="#3f3f3f"
-                    maximumTrackTintColor="#000"
                     step={1}
-                    value={textSize}
-                    onValueChange={value => setTextSize(value)}
-                  /> */}
-                  {/* <Slider style={{width: 200, height: 40}} minimumValue={0} maximumValue={1}/> */}
+                    //onValueChange={(value) => setTextSize(value)}
+                    onValueChange={value => setPreviewValue(value)}
+                    onSlidingComplete={value => setTextSize(value)}
+                    value={15}
+                  />   
                 </View>
               </Dialog.Content>
               <Dialog.Actions>
@@ -504,15 +628,19 @@ export default function DetailsScreen() {
           </Dialog>
           </>
 
-          // Текст песни без аккордов
+          // Текст песни на весь экран
           :<ScrollView>
-            <View style={{height: 1000}}>
+            <View style={{height: 1000, marginTop: 50}}>
               <MyPager
                 numberPage={songId} 
                 textSong={songText}
                 setTitleSong={setSongName}
                 setNumberSong={setTitle}
                 showSongText={showSongText}
+                textSize={textSize}
+                setShowFullPage={setShowFullPage}
+                selectedPage={selectedPage}
+                setSelectedPage={setSelectedPage}
               />
             </View>
           </ScrollView>
@@ -536,114 +664,3 @@ export default function DetailsScreen() {
     </Surface>
   );
 }
-
-
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//   },
-//   page: {
-//     justifyContent: 'center',
-//     alignItems: 'center'
-//   },
-//   header: {
-//     backgroundColor: COLORS.darkBlue,
-//     height: 100,
-//   },
-//   scrollStyle: {
-//     padding: 5,
-//   },
-//   slide: {
-//     flex: 1,
-//     alignItems: 'flex-start',
-//     justifyContent: 'flex-start',
-//     backgroundColor: 'white',
-//   },
-//   image: {
-//     width: width, 
-//     height: IMG_HEIGHT,
-//     //marginVertical: 32,
-//   },
-//   text: {
-//     color: 'rgba(0, 0, 0, 0.8)',
-//     textAlign: 'left',
-//   },
-//   title: {
-//     fontSize: 22,
-//     color: 'rgba(255, 255, 255, 0.8)',
-//     textAlign: 'center',
-//   },
-
-//   floatingButton: {
-//     position: 'absolute',
-//     width: 100,
-//     height: 100,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     bottom: 0,
-//     right: 0,
-//   },
-
-//   floatingButtonNote: {
-//     backgroundColor:'#DE3163',
-//     borderRadius:'50%',
-//     position: 'absolute',
-//     width: 60,
-//     height: 60,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     top: 270,
-//     right: 90,
-//     zIndex: 100,
-//   },
-
-//   floatingButtonBemol: {
-//     backgroundColor:'#DE3163',
-//     borderRadius:'50%',
-//     position: 'absolute',
-//     width: 45,
-//     height: 45,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     top: 280,
-//     right: 170,
-//     zIndex: 100,
-//   },
-
-//   floatingButtonDiez: {
-//     backgroundColor:'#DE3163',
-//     borderRadius:'50%',
-//     position: 'absolute',
-//     width: 45,
-//     height: 45,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     top: 280,
-//     right: 20,
-//     zIndex: 100,
-//   },
-
-//   chordName: {
-//     color: 'red',
-//   },
-
-//   rowTone: {
-//     display: 'flex',
-//     justifyContent: 'space-between',
-//     alignItems: 'center',
-//     flexDirection: 'row',
-//     width: '90%',
-//     marginLeft: 25,
-//   },
-
-//   textTone: {
-//     color: '#fff',
-//   },
-
-//   slider: {
-//     width: 300,
-//     opacity: 1,
-//     marginTop: 10,
-//   },
-// });

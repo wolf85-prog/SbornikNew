@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     },
 
     floatingButtonNote: {
-      backgroundColor:'#DE3163',
+      //backgroundColor:'#DE3163',
       borderRadius:'50%',
       position: 'absolute',
       width: 60,
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     },
 
     floatingButtonDiez: {
-      backgroundColor:'#DE3163',
+      //backgroundColor:'#DE3163',
       borderRadius:'50%',
       position: 'absolute',
       width: 45,
