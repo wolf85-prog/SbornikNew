@@ -11,7 +11,7 @@ import {
   IconButton,
   Snackbar,
   Icon,
-  useTheme 
+  useTheme
 } from 'react-native-paper'
 
 import {
@@ -24,6 +24,7 @@ import {
   ScreenInfo,
   Setting,
   styles,
+  TabsHeader
 } from '@/lib'
 
 
@@ -77,6 +78,7 @@ const SettingsScreen = () => {
               headerLeft: (() => <DrawerToggleButton tintColor={'#fff'} />), 
               //headerStyle: {backgroundColor: theme.colors.primary},  
               headerStyle: {backgroundColor: '#19181c'},
+              header: (props) => <TabsHeader navProps={props} children={undefined} />,
               headerTintColor: 'white',
               }} />
       {loading ? (
