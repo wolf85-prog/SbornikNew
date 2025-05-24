@@ -22,10 +22,11 @@ type MyPagerProps = {
   setShowFullPage: any;
   selectedPage: number;
   setSelectedPage: any;
+  setMainTon: any;
 };
 
 
-export default function MyPager({ numberPage, textSong, setTitleSong, setNumberSong, showSongText, textSize, setShowFullPage, selectedPage, setSelectedPage }: MyPagerProps) {
+export default function MyPager({ numberPage, textSong, setTitleSong, setNumberSong, showSongText, textSize, setShowFullPage, selectedPage, setSelectedPage, setMainTon }: MyPagerProps) {
   const [preset, setPreset] = useState<Preset>(Preset.SLIDE);
   const pagerRef = useRef<InfinitePagerImperativeApi>(null);
   const [songText, setSongText] = useState<any>('');
@@ -51,6 +52,7 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
       
       setTitleSong(songsData[selectedPage-1]?.name)
       setNumberSong(songsData[selectedPage-1]?.number)
+
 
   }, [selectedPage])
 
@@ -89,6 +91,10 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
     setNumberSong(songsData[page-1]?.number)
     console.log("change page: ", page)
     //setSelectedPage(0)
+
+    console.log("ton2: ", songsData[page-1]?.song2.split('\n')[0])
+
+    setMainTon(songsData[page-1]?.song2.split('\n')[0])
   }
 
   return (
@@ -119,10 +125,10 @@ const AllText = ({text}: any) => {
   const chordRegex = /([A-G]{1}[A-Gmjsu0-9/#]{0,4})(?!\w)/g;
 
   const parsedText = text?.split("\n").map((row: any) => {
-    const rowArr = row?.split(chordRegex).map((charOrSpace: any) => {
+    const rowArr = row?.split(chordRegex).map((charOrSpace: any, index: number) => {
       if (chordRegex.test(charOrSpace)) {
         //const accId = accordsData.find(item=> item.name === charOrSpace.trim())
-        //console.log("accId: ", charOrSpace.trim())
+        //console.log("accId: ", charOrSpace.trim(), index)
         return {text: charOrSpace.trim(), color: '#4ca1f5', id: charOrSpace.trim()} 
       }
       return {text: charOrSpace, color: 'white', id: ''} ;

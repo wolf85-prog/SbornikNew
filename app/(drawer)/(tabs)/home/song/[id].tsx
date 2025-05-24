@@ -96,6 +96,8 @@ export default function DetailsScreen() {
 
   const [favorite, setFavorite] = useState(false);
   const [showNote, setShowNote] = useState(false);
+
+  const [mainTon, setMainTon] = useState('');
   
   const data = [
     {
@@ -110,10 +112,10 @@ export default function DetailsScreen() {
         title: "Добавить заметку",
         action: ()=>setVisibleNewNote(true)
     },
-    // {
-    //     title: "Тональность",
-    //     action: ()=>setVisibleTone(true)
-    // },
+    {
+        title: "Тональность",
+        action: ()=>setVisibleTone(true)
+    },
     {
         title: "Размер шрифта",
         action: ()=>setVisibleFontSize(true)
@@ -412,6 +414,7 @@ export default function DetailsScreen() {
                 setShowFullPage={setShowFullPage}
                 selectedPage={selectedPage}
                 setSelectedPage={setSelectedPage}
+                setMainTon={setMainTon}
               />
             </View>
 
@@ -558,7 +561,7 @@ export default function DetailsScreen() {
               <Dialog.Content>
                 <ScrollView>
                   <View style={styles.rowTone}>
-                    <Text style={styles.textTone}>0 Dm</Text>
+                    <Text style={styles.textTone}>0 {mainTon}</Text>
                     <RadioButton
                       value="0"
                       status={ songTone === '0' ? 'checked' : 'unchecked' }
@@ -567,7 +570,7 @@ export default function DetailsScreen() {
                   </View>
 
                   <View style={styles.rowTone}>
-                    <Text style={styles.textTone}>+1 D#m</Text>
+                    <Text style={styles.textTone}>+1</Text>
                     <RadioButton
                       value="1"
                       status={ songTone === '1' ? 'checked' : 'unchecked' }
@@ -623,6 +626,7 @@ export default function DetailsScreen() {
                 setShowFullPage={setShowFullPage}
                 selectedPage={selectedPage}
                 setSelectedPage={setSelectedPage}
+                setMainTon={setMainTon}
               />
             </View>
           </ScrollView>
