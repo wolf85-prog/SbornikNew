@@ -189,17 +189,20 @@ export default function DetailsScreen() {
     let beginTon = -1;
     let beginTonMinor = -1;
 
-    console.log("mainTon: ", mainTon)
+    console.log("mainTon: ", mainTon.trim())
 
     for (let i = 0; i < 12; i++) {
       console.log(tonData[12][i])
-      if (mainTon === tonData[0][i]) {
+      if (mainTon.trim() === tonData[0][i]) {
         beginTon = i;  // --> true
-      }else if (mainTon === tonData[12][i]) {
+      }else if (mainTon.trim() === tonData[12][i]) {
         beginTonMinor = i;  // --> true
       }
     }
-    console.log("beginTon: ", beginTon, beginTonMinor)
+    //setTimeout(()=> {
+      console.log("beginTon: ", beginTon, beginTonMinor)
+    //}, 3000)
+    
 
     if (beginTon !== -1) {
       array[0] = " -5 " + tonData[7][beginTon];
@@ -395,6 +398,28 @@ export default function DetailsScreen() {
     //     [categoryName]
     //   );
     // })
+  }
+
+  const pressSelectTon = (position: number)=> {
+    if (position < 5) {
+      //ton = position + 7;
+      console.log(position)
+    }else if (position > 5){
+      //ton = position  - 5;
+      console.log(position)
+    }
+
+    let accordTon = 0;
+    let accordTonMinor = 0;
+    if (mainTon.includes("m")) {
+      accordTonMinor = 1;  // --> true
+    }else {
+      accordTon = 1;  // --> true
+    }
+
+    console.log(accordTonMinor, accordTon)
+
+    hideDialogTone()
   }
 
 
@@ -623,7 +648,7 @@ export default function DetailsScreen() {
                     <RadioButton
                       value="0"
                       status={ index === 5 ? 'checked' : 'unchecked' }
-                      onPress={() => setSongTone('0')}
+                      onPress={() => pressSelectTon(index)}
                     />
                   </View>
                   ))
