@@ -11,6 +11,7 @@ import MyPager from './../../../../../components/ui/MyPager'
 import * as SQLite from 'expo-sqlite';
 
 import songsData from './../../../../../data/songsData.js';
+import tonData from './../../../../../data/tonData.js';
 import { PAGES, createPage } from './../../../../../constants/utils';
 import { images } from "../../../../../constants";
 import { COLORS } from '../../../../../constants/colors.js';
@@ -66,6 +67,7 @@ export default function DetailsScreen() {
   const [noteText, setNoteText] = useState<any>('');
   const [songTone, setSongTone] = useState<any>(0);
   const [separators, setSeparators] = useState<any>([])
+  const [tonNameArray, setTonNameArray] = useState<any>([])
 
   const [playlistId, setPlaylistId] = useState<any>('');
 
@@ -98,7 +100,7 @@ export default function DetailsScreen() {
   const [showNote, setShowNote] = useState(false);
 
   const [mainTon, setMainTon] = useState('');
-  
+
   const data = [
     {
       title: "Добавить в плейлист",
@@ -181,6 +183,61 @@ export default function DetailsScreen() {
   useEffect(()=> {
      console.log("selectedPage: ", selectedPage)
   }, [selectedPage])
+
+  useEffect(()=> {
+    let array = [];
+    let beginTon = -1;
+    let beginTonMinor = -1;
+
+    console.log("mainTon: ", mainTon)
+
+    for (let i = 0; i < 12; i++) {
+      console.log(tonData[12][i])
+      if (mainTon === tonData[0][i]) {
+        beginTon = i;  // --> true
+      }else if (mainTon === tonData[12][i]) {
+        beginTonMinor = i;  // --> true
+      }
+    }
+    console.log("beginTon: ", beginTon, beginTonMinor)
+
+    if (beginTon !== -1) {
+      array[0] = " -5 " + tonData[7][beginTon];
+      array[1] = " -4 " + tonData[8][beginTon];
+      array[2] = " -3 " + tonData[9][beginTon];
+      array[3] = " -2 " + tonData[10][beginTon];
+      array[4] = " -1 " + tonData[11][beginTon];
+
+      array[5] = " 0 " + mainTon;
+
+      array[6] = " +1 " + tonData[1][beginTon];
+      array[7] = " +2 " + tonData[2][beginTon];
+      array[8] = " +3 " + tonData[3][beginTon];
+      array[9] = " +4 " + tonData[4][beginTon];
+      array[10] = " +5 " + tonData[5][beginTon];
+      array[11] = " +6 " + tonData[6][beginTon];
+    }
+    else if (beginTonMinor !== -1) {
+      array[0] = " -5 " + tonData[19][beginTonMinor];
+      array[1] = " -4 " + tonData[20][beginTonMinor];
+      array[2] = " -3 " + tonData[21][beginTonMinor];
+      array[3] = " -2 " + tonData[22][beginTonMinor];
+      array[4] = " -1 " + tonData[23][beginTonMinor];
+
+      array[5] = " 0 " + mainTon;
+
+      array[6] = " +1 " + tonData[13][beginTonMinor];
+      array[7] = " +2 " + tonData[14][beginTonMinor];
+      array[8] = " +3 " + tonData[15][beginTonMinor];
+      array[9] = " +4 " + tonData[16][beginTonMinor];
+      array[10] = " +5 " + tonData[17][beginTonMinor];
+      array[11] = " +6 " + tonData[18][beginTonMinor];
+    }
+
+    console.log("tonNameArray: ", array)
+    setTonNameArray(array)
+
+  }, [mainTon])
   
   useEffect(() => {
       setIsLoading(true);
@@ -560,23 +617,17 @@ export default function DetailsScreen() {
               <Dialog.Title>Выберите тональность</Dialog.Title>
               <Dialog.Content>
                 <ScrollView>
+                  {tonNameArray && tonNameArray.map((item: string, index: number)=> (
                   <View style={styles.rowTone}>
-                    <Text style={styles.textTone}>0 {mainTon}</Text>
+                    <Text style={styles.textTone}>{item}</Text>
                     <RadioButton
                       value="0"
-                      status={ songTone === '0' ? 'checked' : 'unchecked' }
+                      status={ index === 5 ? 'checked' : 'unchecked' }
                       onPress={() => setSongTone('0')}
                     />
                   </View>
-
-                  <View style={styles.rowTone}>
-                    <Text style={styles.textTone}>+1</Text>
-                    <RadioButton
-                      value="1"
-                      status={ songTone === '1' ? 'checked' : 'unchecked' }
-                      onPress={() => setSongTone('1')}
-                    />
-                  </View>   
+                  ))
+                }
                 </ScrollView>
               </Dialog.Content>
               <Dialog.Actions>
