@@ -440,6 +440,8 @@ export default function DetailsScreen() {
 
     }
 
+    setSongText('')
+
     hideDialogTone()
   }
 

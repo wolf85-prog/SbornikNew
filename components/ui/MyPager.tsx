@@ -37,7 +37,8 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
     show ? text = songsData[page-1]?.song2
     : text = songsData[page-1]?.song
     return text
-  }   
+  }  
+  
 
   useEffect(()=> {
       console.log("selectedPage: ", selectedPage)
@@ -68,7 +69,7 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
             <View style={[styles.slide] }>
               {
               (songsData[index-1]?.song ? 
-                <AllText text={songsData[index-1]?.song}></AllText> 
+                <AllText text={songsData[index-1]?.song} textSize={textSize}></AllText> 
               : '')
 
               // <Text onPress={()=>setShowFullPage(false)} style={{ color: 'white', fontSize: textSize }}>
@@ -117,7 +118,7 @@ export default function MyPager({ numberPage, textSong, setTitleSong, setNumberS
 }
 
 // это компонент для всего текста
-const AllText = ({text}: any) => {
+const AllText = ({text}: any, textSize: number) => {
   const theme = useTheme();
   const router = useRouter();
 
@@ -142,12 +143,12 @@ const AllText = ({text}: any) => {
     <View>
       {parsedText.map((row: any, index: number) => ( 
         //console.log("row: ", index, row) 
-        <Text key={index} style={{color: `${row[1]?.color}`, fontSize: 18, fontWeight: 700}}>
+        <Text key={index} style={{color: `${row[1]?.color}`, fontSize: textSize, fontWeight: 700}}>
            {row.map((item: any)=> (
             //console.log(item)
             item?.id ? 
-              <Text key={item?.uid} onPress={()=>router.push(`/home/song/accord/${item?.id}`)}>{item ? item.text : ''}</Text>
-              : <Text style={{color: 'white'}} key={item?.uid}>{item ? item.text : ''}</Text>
+              <Text style={{fontSize: textSize}} key={item?.uid} onPress={()=>router.push(`/home/song/accord/${item?.id}`)}>{item ? item.text : ''}</Text>
+              : <Text style={{color: 'white', fontSize: textSize}} key={item?.uid}>{item ? item.text : ''}</Text>
           ))} 
         </Text>
        ) 
