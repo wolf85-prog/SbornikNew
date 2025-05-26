@@ -192,7 +192,7 @@ export default function DetailsScreen() {
     console.log("mainTon: ", mainTon.trim())
 
     for (let i = 0; i < 12; i++) {
-      console.log(tonData[12][i])
+      //console.log(tonData[12][i])
       if (mainTon.trim() === tonData[0][i]) {
         beginTon = i;  // --> true
       }else if (mainTon.trim() === tonData[12][i]) {
@@ -403,10 +403,10 @@ export default function DetailsScreen() {
   const pressSelectTon = (position: number)=> {
     if (position < 5) {
       //ton = position + 7;
-      console.log(position)
+      console.log("position: ", position)
     }else if (position > 5){
       //ton = position  - 5;
-      console.log(position)
+      console.log("position: ", position)
     }
 
     let accordTon = 0;
@@ -417,7 +417,28 @@ export default function DetailsScreen() {
       accordTon = 1;  // --> true
     }
 
-    console.log(accordTonMinor, accordTon)
+    console.log("accordTon: ", accordTonMinor, accordTon)
+
+    for (let i=0; i<10; i++ ) {
+                            
+      //копируем аккорды в новый массив                    
+      //newArrayAccords.add(arrayFromIntent.get(i));
+                            
+      //минорный или мажорный аккорд                            
+      accordTon = 0;                        
+      accordTonMinor = 0;
+                            
+      // if ((arrayFromIntent.get(i)).contains("m")) {                               
+      //   accordTonMinor = 1;  // --> true                          
+      // }else {                                
+      //   accordTon = 1;  // --> true                           
+      // }
+
+      let flag = 0;
+      let j = 0;
+
+
+    }
 
     hideDialogTone()
   }
